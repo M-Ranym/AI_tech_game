@@ -1,0 +1,603 @@
+fileFormatVersion: 2
+guid: a465e8d27d84cfc4ea9a8ef7365a2357
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 0
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Liquid fill bar infographic design_9
+      rect:
+        serializedVersion: 2
+        x: 69
+        y: 550
+        width: 131
+        height: 293
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 51b81ffdc7641c44995d08a3009a6429
+      internalID: 878697680
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Liquid fill bar infographic design_10
+      rect:
+        serializedVersion: 2
+        x: 214
+        y: 553
+        width: 124
+        height: 287
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cc219ad404bb75945ba8fd909668a901
+      internalID: 504176876
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Liquid fill bar infographic design_11
+      rect:
+        serializedVersion: 2
+        x: 350
+        y: 553
+        width: 131
+        height: 287
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 563ba08295f558d448ecb387c410a785
+      internalID: -446319584
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Liquid fill bar infographic design_12
+      rect:
+        serializedVersion: 2
+        x: 491
+        y: 552
+        width: 134
+        height: 288
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1617757f54d31134bbcb38e146b7363c
+      internalID: 1475127027
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Liquid fill bar infographic design_13
+      rect:
+        serializedVersion: 2
+        x: 629
+        y: 553
+        width: 134
+        height: 287
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cdbe1a60fcef71e48ac37f270d31ecc6
+      internalID: 1087157939
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Liquid fill bar infographic design_14
+      rect:
+        serializedVersion: 2
+        x: 775
+        y: 553
+        width: 131
+        height: 285
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 00c86e108aad48e4dad0d767b51f7c1b
+      internalID: -1923498694
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Liquid fill bar infographic design_15
+      rect:
+        serializedVersion: 2
+        x: 911
+        y: 553
+        width: 136
+        height: 287
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 76952d834f17572448f3a94bfecadae9
+      internalID: -728841676
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Liquid fill bar infographic design_16
+      rect:
+        serializedVersion: 2
+        x: 1058
+        y: 554
+        width: 126
+        height: 286
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 89f5830a9635dd946b5da5ee0b05c43f
+      internalID: -561409633
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Liquid fill bar infographic design_17
+      rect:
+        serializedVersion: 2
+        x: 1187
+        y: 553
+        width: 135
+        height: 287
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 582e83d684d75834f9fc6d5c81c337c8
+      internalID: 1779129722
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Liquid fill bar infographic design_18
+      rect:
+        serializedVersion: 2
+        x: 1336
+        y: 557
+        width: 129
+        height: 282
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aeb25d58006ad904495ff5ea2620f81d
+      internalID: -610433164
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Liquid fill bar infographic design_19
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 188
+        width: 132
+        height: 295
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9d22702cba8768c45b558c991565f637
+      internalID: 1040286294
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Liquid fill bar infographic design_20
+      rect:
+        serializedVersion: 2
+        x: 202
+        y: 191
+        width: 143
+        height: 296
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 94101308bf5bebe4d8d6a75af4fd2d9b
+      internalID: 1991660400
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Liquid fill bar infographic design_21
+      rect:
+        serializedVersion: 2
+        x: 350
+        y: 192
+        width: 130
+        height: 296
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6b44a1081bdc4d5459ae334d79bea06e
+      internalID: 1466183881
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Liquid fill bar infographic design_22
+      rect:
+        serializedVersion: 2
+        x: 487
+        y: 190
+        width: 139
+        height: 293
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 526e1bc4b23389042b1e709dc86fd88d
+      internalID: -1607537092
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Liquid fill bar infographic design_23
+      rect:
+        serializedVersion: 2
+        x: 636
+        y: 189
+        width: 128
+        height: 299
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a1246f4fcdccf0d46917bb0fc1ccbfdd
+      internalID: -1538297028
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Liquid fill bar infographic design_24
+      rect:
+        serializedVersion: 2
+        x: 774
+        y: 190
+        width: 130
+        height: 298
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 96b9220a675e8b747b12205706287320
+      internalID: 797288656
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Liquid fill bar infographic design_25
+      rect:
+        serializedVersion: 2
+        x: 913
+        y: 189
+        width: 131
+        height: 298
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 04b6c87fb8bc4004f9413697f4d1c0ed
+      internalID: 53835359
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Liquid fill bar infographic design_27
+      rect:
+        serializedVersion: 2
+        x: 1055
+        y: 191
+        width: 130
+        height: 290
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 040d10f742238bf41b629608a1a419ea
+      internalID: 612515835
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Liquid fill bar infographic design_28
+      rect:
+        serializedVersion: 2
+        x: 1198
+        y: 188
+        width: 124
+        height: 299
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f5d3c5d1f4f407f49b0d605ca6dc8010
+      internalID: 609716539
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Liquid fill bar infographic design_29
+      rect:
+        serializedVersion: 2
+        x: 1335
+        y: 184
+        width: 131
+        height: 296
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 046b2a56b06637b449ac067a2f01ef66
+      internalID: -1455635347
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Liquid fill bar infographic design_32
+      rect:
+        serializedVersion: 2
+        x: 1460
+        y: 213
+        width: 4
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ae0344394dd64f2458f3962d1dd95fc2
+      internalID: 1891112366
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 0f0cfe74965fce741822e5c560c363f6
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      Liquid fill bar infographic design_0: 1597403288
+      Liquid fill bar infographic design_1: 384927273
+      Liquid fill bar infographic design_10: 504176876
+      Liquid fill bar infographic design_11: -446319584
+      Liquid fill bar infographic design_12: 1475127027
+      Liquid fill bar infographic design_13: 1087157939
+      Liquid fill bar infographic design_14: -1923498694
+      Liquid fill bar infographic design_15: -728841676
+      Liquid fill bar infographic design_16: -561409633
+      Liquid fill bar infographic design_17: 1779129722
+      Liquid fill bar infographic design_18: -610433164
+      Liquid fill bar infographic design_19: 1040286294
+      Liquid fill bar infographic design_2: -605788886
+      Liquid fill bar infographic design_20: 1991660400
+      Liquid fill bar infographic design_21: 1466183881
+      Liquid fill bar infographic design_22: -1607537092
+      Liquid fill bar infographic design_23: -1538297028
+      Liquid fill bar infographic design_24: 797288656
+      Liquid fill bar infographic design_25: 53835359
+      Liquid fill bar infographic design_26: 208983873
+      Liquid fill bar infographic design_27: 612515835
+      Liquid fill bar infographic design_28: 609716539
+      Liquid fill bar infographic design_29: -1455635347
+      Liquid fill bar infographic design_3: -579760096
+      Liquid fill bar infographic design_30: 84462693
+      Liquid fill bar infographic design_31: 754864603
+      Liquid fill bar infographic design_32: 1891112366
+      Liquid fill bar infographic design_33: -971351407
+      Liquid fill bar infographic design_34: -1383405301
+      Liquid fill bar infographic design_4: -1633592582
+      Liquid fill bar infographic design_5: 1992100950
+      Liquid fill bar infographic design_6: 1474793102
+      Liquid fill bar infographic design_7: 751286089
+      Liquid fill bar infographic design_8: 1418034350
+      Liquid fill bar infographic design_9: 878697680
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
