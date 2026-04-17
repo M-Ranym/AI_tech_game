@@ -2497,7 +2497,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spacing: -25
-  topPaddingBlocks: 1
+  verticalPaddingCanvas: 10
+  slideSpeed: 12
 --- !u!1 &1772611188
 GameObject:
   m_ObjectHideFlags: 0
