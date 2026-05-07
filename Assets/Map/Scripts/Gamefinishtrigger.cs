@@ -1,27 +1,44 @@
 ﻿using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class GameFinishTrigger : MonoBehaviour
 {
-    public string mapSceneName = "Map";
+    [SerializeField] public int gameIndex = 0;
+    [SerializeField] private int totalLevels = 1;
+    [SerializeField] private string mapSceneName = "Map";
 
-    bool waitingForTap = false;
+    private int _currentLevel = 0;
 
-    void Update()
+    void Awake()
     {
-        if (!waitingForTap) return;
-
-        bool tapped = Input.GetMouseButtonDown(0)
-                   || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began);
-
-        if (tapped)
-            SceneManager.LoadScene(mapSceneName);
+        _currentLevel = PlayerPrefs.GetInt($"Game_{gameIndex}_SelectedLevel", 0);
+        Debug.Log($"[GameFinishTrigger] reading Game_{gameIndex}_SelectedLevel = {_currentLevel}");
     }
 
-    public void FinishGame()
-    {
-        if (waitingForTap) return;
+    public int GetStartLevel() => _currentLevel;
 
-        waitingForTap = true;
+    public void FinishLevel(int levelIndex)
+    {
+        Debug.Log($"[GameFinishTrigger] FinishLevel({levelIndex}) gameIndex={gameIndex} totalLevels={totalLevels}");
+
+        if (GameProgressManager.Instance != null)
+        {
+            GameProgressManager.Instance.OnLevelFinished(
+                gameIndex, levelIndex, totalLevels, mapSceneName);
+        }
+        else
+        {
+            Debug.LogError("[GameFinishTrigger] GameProgressManager.Instance is null!");
+            int next = levelIndex + 1;
+            bool allDone = next >= totalLevels;
+            PlayerPrefs.SetInt($"Game_{gameIndex}_NextLevel", allDone ? 0 : next);
+            PlayerPrefs.SetInt("JustFinished", allDone ? 1 : 0);
+            PlayerPrefs.SetInt("DroneOnLevel", gameIndex);
+            PlayerPrefs.SetInt("JustFinishedGame", gameIndex);
+            PlayerPrefs.Save();
+            UnityEngine.SceneManagement.SceneManager.LoadScene(mapSceneName);
+        }
     }
+
+    // Alias — EvaluationManager calls this
+    public void CompleteRound(int roundIndex) => FinishLevel(roundIndex);
 }

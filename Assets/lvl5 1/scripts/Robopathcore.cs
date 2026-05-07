@@ -108,8 +108,6 @@ public class RoboPathCore : MonoBehaviour
                     ui.ShowAllLevelsComplete();
 
                     var returnToMap = FindObjectOfType<GameFinishTrigger>();
-                    if (returnToMap != null)
-                        returnToMap.FinishGame();
                 }
                 else
                     ui.ShowLevelComplete(currentLevelIndex);

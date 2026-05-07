@@ -271,8 +271,6 @@ public class FaceDetectorManager : MonoBehaviour
         resultsText.text = "النهاية";
 
         var returnToMap = FindObjectOfType<GameFinishTrigger>();
-        if (returnToMap != null)
-            returnToMap.FinishGame();
     }
 
     private void SetupSquareDrag()

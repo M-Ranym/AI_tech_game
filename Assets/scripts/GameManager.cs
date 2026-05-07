@@ -1,5 +1,4 @@
-﻿using TMPro;
-using UnityEngine;
+﻿using UnityEngine;
 using UPersian.Components;
 
 public class GameManager : MonoBehaviour
@@ -15,9 +14,9 @@ public class GameManager : MonoBehaviour
 
     public int totalCatsNeeded = 3;
     public int totalDogsNeeded = 3;
-    public int totalBirdsNeeded = 2;
+    public int totalBirdsNeeded = 3;
 
-    private GameFinishTrigger returnToMap;
+    private GameFinishTrigger _trigger;
 
     void Awake()
     {
@@ -28,52 +27,49 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         if (successPanel != null) successPanel.SetActive(false);
-
-        returnToMap = FindObjectOfType<GameFinishTrigger>();
-        if (returnToMap == null)
-            Debug.LogWarning("ReturnToMap not found!");
+        _trigger = FindObjectOfType<GameFinishTrigger>();
     }
 
-    public void ItemPlaced()
-    {
-        CheckIfComplete();
-    }
+    public void ItemPlaced() => CheckIfComplete();
 
-    private void CheckIfComplete()
+    void CheckIfComplete()
     {
-        int catsInBox = catBox != null ? catBox.GetItemCount() : 0;
-        int dogsInBox = dogBox != null ? dogBox.GetItemCount() : 0;
-        int birdsInBox = birdBox != null ? birdBox.GetItemCount() : 0;
+        int cats = catBox != null ? catBox.GetItemCount() : 0;
+        int dogs = dogBox != null ? dogBox.GetItemCount() : 0;
+        int birds = birdBox != null ? birdBox.GetItemCount() : 0;
 
-        if (catsInBox >= totalCatsNeeded && dogsInBox >= totalDogsNeeded && birdsInBox >= totalBirdsNeeded)
-        {
+        if (cats >= totalCatsNeeded && dogs >= totalDogsNeeded && birds >= totalBirdsNeeded)
             ShowSuccessPanel();
-        }
     }
 
-    private void ShowSuccessPanel()
+    private bool _gameFinished = false;
+
+    void ShowSuccessPanel()
     {
-        if (successPanel != null)
+        if (successPanel == null) return;
+        successPanel.SetActive(true);
+        if (resultText != null)
+            resultText.text = "ممتاز! لقد قمت بفرز جميع الحيوانات بشكل صحيح!";
+        _gameFinished = true; // enable tap detection
+    }
+
+    void Update()
+    {
+        if (!_gameFinished) return;
+
+        if (Input.GetMouseButtonDown(0) || (Input.touchCount > 0
+            && Input.GetTouch(0).phase == TouchPhase.Began))
         {
-            successPanel.SetActive(true);
-
-            if (resultText != null)
-                resultText.text = "ممتاز! لقد قمت بفرز جميع الحيوانات بشكل صحيح!";
-
-            // ✅ trigger tap-to-map
-            if (returnToMap != null)
-                returnToMap.FinishGame();
+            _gameFinished = false; // prevent double-trigger
+            OnSuccessTapped();
         }
     }
 
-    public void ResetGame()
+    public void OnSuccessTapped()
     {
-        if (catBox != null) catBox.ClearBox();
-        if (dogBox != null) dogBox.ClearBox();
-        if (birdBox != null) birdBox.ClearBox();
-
-        ItemMover[] allItems = FindObjectsOfType<ItemMover>();
-        foreach (ItemMover item in allItems)
-            item.ResetPosition();
+        if (_trigger != null)
+            _trigger.FinishLevel(0);  // level 0 of 1 total, game done
+        else
+            Debug.LogError("[GameManager] No GameFinishTrigger in scene!");
     }
 }

@@ -20,43 +20,68 @@ public class KidGameManager : MonoBehaviour
 
     [SerializeField] private float delayBeforeResult = 1.5f;
 
-    // Level structure: each level has 3 sub-levels
-    // Value = how many animals AND fruits per zone
-    // Level 1: 2,3,3 | Level 2: 3,4,4 | Level 3: 4,5,5
+    // ============================================================
+    // LEVEL STRUCTURE: 3 LEVELS, EACH WITH 3 SUB-LEVELS
+    // Level 0: [2, 3, 3] = items per sub-level
+    // Level 1: [3, 4, 4] = items per sub-level
+    // Level 2: [4, 5, 5] = items per sub-level
+    // ============================================================
     private int[][] levelStructure = new int[][]
     {
-        new int[] { 2, 3, 3 }, // Level 1
-        new int[] { 3, 4, 4 }, // Level 2
-        new int[] { 4, 5, 5 }, // Level 3
+        new int[] { 2, 3, 3 },  // LEVEL 0: Sub-levels 0, 1, 2
+        new int[] { 3, 4, 4 },  // LEVEL 1: Sub-levels 0, 1, 2
+        new int[] { 4, 5, 5 },  // LEVEL 2: Sub-levels 0, 1, 2
     };
 
-    // Current level (0-2) and sub-level (0-2)
-    private int currentLevel = 0;
-    private int currentSubLevel = 0;
-    private bool isChecked = false;
+    // ============================================================
+    // STATE VARIABLES - TRACK WHERE WE ARE IN THE GAME
+    // ============================================================
+    private int currentLevel = 0;        // Which level (0, 1, or 2)
+    private int currentSubLevel = 0;     // Which sub-level within that level (0, 1, or 2)
+    private bool isChecked = false;      // Has the player clicked "Check"?
 
-    private GameFinishTrigger returnToMap;
+    private GameFinishTrigger _trigger;
 
-    private void Start()
+    // Quick property to get how many sub-levels are in the current level
+    private int SubsPerLevel => levelStructure[currentLevel].Length;
+
+    void Start()
     {
+        _trigger = FindObjectOfType<GameFinishTrigger>();
+
+        // ============================================================
+        // CRITICAL: Get the level from the GameFinishTrigger
+        // This ensures we start the CORRECT LEVEL when linked from map
+        // ============================================================
+        int requestedLevel = _trigger != null ? _trigger.GetStartLevel() : 0;
+        currentLevel = Mathf.Clamp(requestedLevel, 0, levelStructure.Length - 1);
+        currentSubLevel = 0;  // ALWAYS start at sub-level 0 of the requested level
+
+        Debug.Log($"[KidGameManager] STARTING GAME");
+        Debug.Log($"  Requested Level: {requestedLevel}");
+        Debug.Log($"  Clamped Level: {currentLevel}");
+        Debug.Log($"  Starting Sub-Level: {currentSubLevel}");
+        Debug.Log($"  Total Sub-Levels in Level {currentLevel}: {SubsPerLevel}");
+
         resultPanel.SetActive(false);
         buttonText.text = "تحقق";
-
-        returnToMap = FindObjectOfType<GameFinishTrigger>();
-        if (returnToMap == null)
-            Debug.LogWarning("ReturnToMap not found!");
 
         StartCoroutine(InitAfterLayout());
     }
 
-    private IEnumerator InitAfterLayout()
+    IEnumerator InitAfterLayout()
     {
         yield return null;
         SetupRound();
     }
 
-    private void SetupRound()
+    // ============================================================
+    // SETUP ROUND: Initialize items for current level/sub-level
+    // ============================================================
+    void SetupRound()
     {
+        Debug.Log($"[KidGameManager] SETUP ROUND - Level {currentLevel}, Sub-Level {currentSubLevel}");
+
         isChecked = false;
         buttonText.text = "تحقق";
         resultPanel.SetActive(false);
@@ -64,15 +89,21 @@ public class KidGameManager : MonoBehaviour
         animalZone.ResetZone();
         fruitZone.ResetZone();
 
-        int count = levelStructure[currentLevel][currentSubLevel];
+        // Get item count for this specific level/sub-level
+        int itemCount = levelStructure[currentLevel][currentSubLevel];
 
-        // Disable all items first
-        foreach (var item in allAnimals) if (item != null) item.SetActive(false);
-        foreach (var item in allFruits) if (item != null) item.SetActive(false);
+        Debug.Log($"[KidGameManager]   Items to spawn: {itemCount}");
 
-        List<GameObject> roundItems = new List<GameObject>();
+        // Deactivate all items
+        foreach (var item in allAnimals)
+            if (item != null) item.SetActive(false);
+        foreach (var item in allFruits)
+            if (item != null) item.SetActive(false);
 
-        for (int i = 0; i < count && i < allAnimals.Count; i++)
+        var roundItems = new List<GameObject>();
+
+        // Activate animals for this round
+        for (int i = 0; i < itemCount && i < allAnimals.Count; i++)
         {
             if (allAnimals[i] == null) continue;
             allAnimals[i].SetActive(true);
@@ -80,7 +111,8 @@ public class KidGameManager : MonoBehaviour
             roundItems.Add(allAnimals[i]);
         }
 
-        for (int i = 0; i < count && i < allFruits.Count; i++)
+        // Activate fruits for this round
+        for (int i = 0; i < itemCount && i < allFruits.Count; i++)
         {
             if (allFruits[i] == null) continue;
             allFruits[i].SetActive(true);
@@ -88,99 +120,130 @@ public class KidGameManager : MonoBehaviour
             roundItems.Add(allFruits[i]);
         }
 
-        // Shuffle and distribute — guarantee a mix so it's never all correct at start
-        List<GameObject> shuffled = ShuffledCopy(roundItems);
-
-        // Make sure at least one item is in the wrong zone
-        // by forcing first half into animalZone and second half into fruitZone (shuffled)
+        // Shuffle items and distribute to zones
+        var shuffled = ShuffledCopy(roundItems);
         int half = shuffled.Count / 2;
+
         for (int i = 0; i < shuffled.Count; i++)
         {
-            KidDropZone target = (i < half) ? animalZone : fruitZone;
+            KidDropZone targetZone = (i < half) ? animalZone : fruitZone;
             if (shuffled[i].TryGetComponent(out KidDraggable drag))
-                target.AddItem(drag);
+                targetZone.AddItem(drag);
         }
+
+        Debug.Log($"[KidGameManager]   Round setup complete!");
     }
 
+    // ============================================================
+    // BUTTON PRESSED: Either Check answers or go to next level
+    // ============================================================
     public void OnButtonPressed()
     {
         if (!isChecked)
+        {
+            Debug.Log("[KidGameManager] Button pressed - CHECKING answers");
             StartCoroutine(CheckRoutine());
+        }
         else
+        {
+            Debug.Log("[KidGameManager] Button pressed - HANDLING next action");
             HandleNextAction();
+        }
     }
 
-    private IEnumerator CheckRoutine()
+    // ============================================================
+    // CHECK ROUTINE: Validate answers and show result
+    // ============================================================
+    IEnumerator CheckRoutine()
     {
         isChecked = true;
 
         bool animalCorrect = animalZone.ValidateItems();
         bool fruitCorrect = fruitZone.ValidateItems();
 
+        Debug.Log($"[KidGameManager] CHECKING ANSWERS");
+        Debug.Log($"  Animals Correct: {animalCorrect}");
+        Debug.Log($"  Fruits Correct: {fruitCorrect}");
+
         yield return new WaitForSeconds(delayBeforeResult);
 
         if (animalCorrect && fruitCorrect)
         {
+            Debug.Log($"[KidGameManager] ✓ CORRECT! Moving on...");
             resultPanel.SetActive(true);
             resultText.text = "أحسنت";
 
-            bool isLastSubLevel = currentSubLevel >= levelStructure[currentLevel].Length - 1;
-            bool isLastLevel = currentLevel >= levelStructure.Length - 1;
+            // Determine button text for next action
+            bool isLastSubLevel = currentSubLevel >= SubsPerLevel - 1;
+            buttonText.text = isLastSubLevel ? "العودة للخريطة" : "المرحلة التالية";
 
-            if (!isLastSubLevel)
-                buttonText.text = "المرحلة التالية";   // next sub-level
-            else if (!isLastLevel)
-                buttonText.text = "المستوى التالي";    // next level
-            else
-            {
-                buttonText.text = "إعادة اللعبة";      // game finished
-                if (returnToMap != null)
-                    returnToMap.FinishGame();
-            }
+            Debug.Log($"  Current Sub-Level: {currentSubLevel}");
+            Debug.Log($"  Total Sub-Levels: {SubsPerLevel}");
+            Debug.Log($"  Is Last Sub-Level: {isLastSubLevel}");
+            Debug.Log($"  Next Button Text: {buttonText.text}");
         }
         else
         {
-            // Wrong — reshuffle same sub-level
+            Debug.Log($"[KidGameManager] ✗ INCORRECT! Resetting round...");
             isChecked = false;
             resultPanel.SetActive(false);
-            SetupRound();
+            SetupRound();  // Try again
         }
     }
 
-    private void HandleNextAction()
+    // ============================================================
+    // HANDLE NEXT ACTION: Go to next sub-level or finish level
+    // ============================================================
+    void HandleNextAction()
     {
-        bool isLastSubLevel = currentSubLevel >= levelStructure[currentLevel].Length - 1;
-        bool isLastLevel = currentLevel >= levelStructure.Length - 1;
+        bool isLastSubLevel = currentSubLevel >= SubsPerLevel - 1;
+
+        Debug.Log($"[KidGameManager] HANDLE NEXT ACTION");
+        Debug.Log($"  Current Level: {currentLevel}");
+        Debug.Log($"  Current Sub-Level: {currentSubLevel}");
+        Debug.Log($"  Is Last Sub-Level: {isLastSubLevel}");
 
         if (!isLastSubLevel)
         {
+            // Go to next sub-level within same level
             currentSubLevel++;
-        }
-        else if (!isLastLevel)
-        {
-            currentLevel++;
-            currentSubLevel = 0;
+            Debug.Log($"  → Moving to Sub-Level {currentSubLevel}");
+            SetupRound();
         }
         else
         {
-            // Reset everything back to start
-            currentLevel = 0;
-            currentSubLevel = 0;
-        }
+            // Level is complete! Call the trigger to handle map return
+            Debug.Log($"[KidGameManager] ★ LEVEL {currentLevel} COMPLETE!");
 
-        SetupRound();
+            if (_trigger == null)
+            {
+                Debug.LogError("[KidGameManager] FATAL ERROR: No GameFinishTrigger in scene!");
+                return;
+            }
+
+            Debug.Log($"[KidGameManager] Calling _trigger.FinishLevel({currentLevel})");
+            _trigger.FinishLevel(currentLevel);
+        }
     }
 
-    private List<GameObject> ShuffledCopy(List<GameObject> original)
+    // ============================================================
+    // HELPER: Shuffle items
+    // ============================================================
+    List<GameObject> ShuffledCopy(List<GameObject> original)
     {
-        List<GameObject> copy = new List<GameObject>(original);
+        var copy = new List<GameObject>(original);
         for (int i = copy.Count - 1; i > 0; i--)
         {
             int j = Random.Range(0, i + 1);
-            GameObject temp = copy[i];
-            copy[i] = copy[j];
-            copy[j] = temp;
+            (copy[i], copy[j]) = (copy[j], copy[i]);
         }
         return copy;
     }
+
+    // ============================================================
+    // PUBLIC GETTERS: For debugging or external systems
+    // ============================================================
+    public int GetCurrentLevel() => currentLevel;
+    public int GetCurrentSubLevel() => currentSubLevel;
+    public int GetTotalSubLevelsInLevel() => SubsPerLevel;
 }

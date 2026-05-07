@@ -1,16 +1,13 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
 using UPersian.Components;
 
 public class MazeGenerator : MonoBehaviour
 {
     private static readonly int[] LEVEL_SIZES = { 2, 3, 4, 5 };
-
-    // Robot pixel size per level
     private static readonly float[] LEVEL_ROBOT_SIZES = { 200f, 150f, 100f, 90f };
-
     private static readonly Vector2Int[] LEVEL_GOALS = {
         new Vector2Int(1, 0),
         new Vector2Int(1, 1),
@@ -64,7 +61,13 @@ public class MazeGenerator : MonoBehaviour
     private Vector2 robotStartPos;
     private bool lastRunFailed = false;
 
-    void Start() => LoadLevel(0);
+    private GameFinishTrigger _trigger;
+
+    void Start()
+    {
+        _trigger = FindObjectOfType<GameFinishTrigger>();
+
+    }
 
     void LoadLevel(int index)
     {
@@ -155,24 +158,21 @@ public class MazeGenerator : MonoBehaviour
     {
         int[,] grid = new int[11, 11]
         {
-            {  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-            {  1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1 },
-            {  1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1 },
-            {  1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1 },
-            {  1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1 },
-            {  1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1 },
-            {  1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1 },
-            {  1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1 },
-            {  1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-            {  1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-            {  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+            { 1,1,1,1,1,1,1,1,1,1,1 },
+            { 1,0,1,0,1,0,0,0,0,0,1 },
+            { 1,0,1,0,1,1,1,1,1,0,1 },
+            { 1,0,0,0,0,0,1,0,0,0,1 },
+            { 1,1,1,1,1,0,1,0,1,0,1 },
+            { 1,0,0,0,1,0,0,0,1,0,1 },
+            { 1,0,1,0,1,1,1,1,1,0,1 },
+            { 1,0,1,0,0,0,0,0,0,0,1 },
+            { 1,0,1,1,1,1,1,1,1,1,1 },
+            { 1,0,0,0,0,0,0,0,0,0,1 },
+            { 1,1,1,1,1,1,1,1,1,1,1 },
         };
-
         mazeGrid = grid;
-        startGCol = 1;
-        startGRow = 9;
-        goalGCol = 5;
-        goalGRow = 1;
+        startGCol = 1; startGRow = 9;
+        goalGCol = 5; goalGRow = 1;
     }
 
     IEnumerator InitAfterLayout()
@@ -190,15 +190,13 @@ public class MazeGenerator : MonoBehaviour
 
         corridorPx = Mathf.Min(
             (availW - nWC * wt) / nCC,
-            (availH - nWC * wt) / nCC
-        );
+            (availH - nWC * wt) / nCC);
 
         colPos = BuildPositions(cols);
         rowPos = BuildPositions(rows);
 
         DrawMaze();
 
-        // Per-level robot size
         float rSize = LEVEL_ROBOT_SIZES[currentLevel];
         robotTransform.SetParent(mazePanel, false);
         robotTransform.sizeDelta = new Vector2(rSize, rSize);
@@ -242,8 +240,7 @@ public class MazeGenerator : MonoBehaviour
                     var rt = go.AddComponent<RectTransform>();
                     rt.sizeDelta = new Vector2(
                         (c % 2 == 0) ? wt : corridorPx,
-                        (r % 2 == 0) ? wt : corridorPx
-                    );
+                        (r % 2 == 0) ? wt : corridorPx);
                     rt.anchoredPosition = CellPos(c, r);
                     go.AddComponent<Image>().color = wallColor;
                 }
@@ -258,7 +255,6 @@ public class MazeGenerator : MonoBehaviour
         goal.AddComponent<Image>().color = goalColor;
     }
 
-    // ── Button logic ──────────────────────────────────────────────────────────
     public void OnPlayResetPressed()
     {
         if (isRunning)
@@ -313,39 +309,23 @@ public class MazeGenerator : MonoBehaviour
                 FindObjectOfType<UIManager>()?.SetRepeatLabel();
                 yield break;
             }
-
             yield return SlideRobot(CellPos(robotCol, robotRow));
-
-            // ── Passing through the goal mid-sequence does NOT end the level ──
-            // The robot simply continues executing remaining blocks.
         }
 
-        // ── All blocks finished ───────────────────────────────────────────────
         isRunning = false;
 
-        // Win only if the robot's final position is the goal
         if (robotCol == goalGCol && robotRow == goalGRow)
         {
-            if (currentLevel + 1 < LEVEL_SIZES.Length)
-            {
-                ShowResult(msgNext, failed: false);
-                FindObjectOfType<UIManager>()?.SetPlayLabel();
-                yield return new WaitForSeconds(1.5f);
-                if (resultPanel) resultPanel.SetActive(false);
-                programPanel.ClearProgram();
-                LoadLevel(currentLevel + 1);
-            }
-            else
-            {
-                ShowResult(msgWinAll, failed: false);
-                FindObjectOfType<UIManager>()?.SetPlayLabel();
-                var returnToMap = FindObjectOfType<GameFinishTrigger>();
-                if (returnToMap != null) returnToMap.FinishGame();
-            }
+            bool isLast = currentLevel + 1 >= LEVEL_SIZES.Length;
+            ShowResult(isLast ? msgWinAll : msgNext, failed: false);
+            FindObjectOfType<UIManager>()?.SetPlayLabel();
+
+            yield return new WaitForSeconds(1.5f);
+            if (resultPanel) resultPanel.SetActive(false);
+            programPanel.ClearProgram();
         }
         else
         {
-            // Robot did not end on the goal
             ShowResult(msgNoGoal, failed: true);
             FindObjectOfType<UIManager>()?.SetRepeatLabel();
         }

@@ -3,7 +3,6 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-
 public class EvaluationManager : MonoBehaviour
 {
     [Header(" CANVASES ")]
@@ -43,10 +42,12 @@ public class EvaluationManager : MonoBehaviour
     private int _p2Index = 0;
     private int _honestCount = 0;
 
+    // Each "round" (1–6) is treated as one level for the map system
+    private const int TOTAL_ROUNDS = 6;
+    private GameFinishTrigger _trigger;
 
-void Awake()
+    void Awake()
     {
-        // Hide all labels and evaluate button before first frame renders
         foreach (var lbl in labelObjects)
             if (lbl != null) lbl.SetActive(false);
         if (evaluateButton != null)
@@ -55,10 +56,15 @@ void Awake()
 
     void Start()
     {
+        _trigger = FindObjectOfType<GameFinishTrigger>();
+
+        // Initialize accuracy
         EvaluationData.accuracy = 30f;
         EvaluationData.previousAccuracy = 30f;
-        EvaluationData.currentRound = 0;
         EvaluationData.initialized = true;
+
+        Debug.Log($"[START] Set accuracy to {EvaluationData.accuracy}f");
+        Debug.Log($"[START] correctCount property returns: {EvaluationData.correctCount}");
 
         evaluateButton.onClick.RemoveAllListeners();
         evaluateButton.onClick.AddListener(OnEvaluateClicked);
@@ -71,33 +77,32 @@ void Awake()
         p2Canvas.SetActive(false);
         if (resultsPanel != null) resultsPanel.SetActive(false);
 
-        // Snap bar to 30% on start
         if (healthBar != null)
             healthBar.SnapTo(EvaluationData.accuracy / 100f);
 
         StartRound();
     }
 
-
     void StartRound()
     {
         EvaluationData.currentRound++;
+        Debug.Log($"\n╔════════════════════════════════════════════╗");
+        Debug.Log($"║ ROUND {EvaluationData.currentRound} STARTED");
+        Debug.Log($"║ Current Accuracy: {EvaluationData.accuracy}%");
+        Debug.Log($"║ Correct Count: {EvaluationData.correctCount}");
+        Debug.Log($"╚════════════════════════════════════════════╝\n");
+
         GenerateLabels();
 
         mainCanvas.SetActive(true);
         p2Canvas.SetActive(false);
         if (resultsPanel != null) resultsPanel.SetActive(false);
 
-        // Hide labels and button IMMEDIATELY — before any animation
         foreach (var lbl in labelObjects)
             if (lbl != null) lbl.SetActive(false);
         evaluateButton.gameObject.SetActive(false);
 
         UpdateGradientImage();
-
-        Debug.Log($"══ الجولة {EvaluationData.currentRound}/6 | الدقة: {EvaluationData.accuracy:0.0}% | صحيح: {EvaluationData.correctCount}/5");
-        for (int i = 0; i < 5; i++)
-            Debug.Log($"  [{i + 1}] {EvaluationData.correctAnswers[i]} → '{EvaluationData.labelTexts[i]}' [{(EvaluationData.robotWasRight[i] ? "صحيح ✓" : "خطأ ✗")}]");
 
         StartCoroutine(AnimateBarThenStart());
     }
@@ -106,93 +111,96 @@ void Awake()
     {
         if (EvaluationData.currentRound > 1 && healthBar != null)
         {
-            // Animate bar from previous accuracy to new accuracy
             healthBar.AnimateFromTo(
                 EvaluationData.previousAccuracy / 100f,
-                EvaluationData.accuracy / 100f
-            );
-            // Wait for animation to finish before robot starts
+                EvaluationData.accuracy / 100f);
             yield return new WaitForSeconds(healthBar.animDuration + 0.3f);
         }
-        else
-        {
-            yield return null;
-        }
+        else yield return null;
 
         robotController.StartRound(EvaluationData.labelTexts);
     }
 
     void GenerateLabels()
     {
-        int total = EvaluationData.correctAnswers.Length;
+        int total = 5; // 5 animals to label
         int correctCount = EvaluationData.correctCount;
-        int[] indices = { 0, 1, 2, 3, 4 };
 
-        for (int i = total - 1; i > 0; i--)
+        Debug.Log($"[GenerateLabels] Accuracy: {EvaluationData.accuracy}% | correctCount: {correctCount}");
+
+        // Step 1: Decide which positions (0-4) will have CORRECT labels
+        bool[] isCorrect = new bool[total];
+        for (int i = 0; i < correctCount; i++)
         {
-            int j = Random.Range(0, i + 1);
-            (indices[i], indices[j]) = (indices[j], indices[i]);
+            int randomPos = Random.Range(0, total);
+            // Skip if already marked as correct
+            while (isCorrect[randomPos])
+                randomPos = (randomPos + 1) % total;
+            isCorrect[randomPos] = true;
         }
 
-        bool[] correct = new bool[total];
-        for (int i = 0; i < correctCount; i++)
-            correct[indices[i]] = true;
+        Debug.Log($"[GenerateLabels] Correct positions: {string.Join(", ", System.Array.ConvertAll(isCorrect, b => b ? 1 : 0))}");
 
-        // Track ALL used words (correct + wrong) so no word appears twice in one round
-        System.Collections.Generic.List<string> usedWords = new System.Collections.Generic.List<string>();
+        // Step 2: Track used words to avoid duplicates
+        var usedWords = new System.Collections.Generic.List<string>();
 
-        // First add all correct answers that will be shown this round
-        for (int i = 0; i < total; i++)
-            if (correct[i]) usedWords.Add(EvaluationData.correctAnswers[i]);
-
+        // Step 3: Fill labelTexts array
         for (int i = 0; i < total; i++)
         {
-            string right = EvaluationData.correctAnswers[i];
-            if (correct[i])
+            if (isCorrect[i])
             {
-                EvaluationData.labelTexts[i] = right;
+                // Position i gets the CORRECT animal name
+                string correctName = EvaluationData.correctAnswers[i];
+                EvaluationData.labelTexts[i] = correctName;
                 EvaluationData.robotWasRight[i] = true;
+                usedWords.Add(correctName);
+                Debug.Log($"  [Pos {i}] CORRECT: {correctName}");
             }
             else
             {
-                string wrong;
+                // Position i gets a WRONG animal name
+                string wrongName = null;
                 int tries = 0;
+
                 do
                 {
-                    wrong = _wrongPool[Random.Range(0, _wrongPool.Length)];
+                    wrongName = _wrongPool[Random.Range(0, _wrongPool.Length)];
                     tries++;
-                }
-                while (usedWords.Contains(wrong) && tries < 30);
-                usedWords.Add(wrong);
-                EvaluationData.labelTexts[i] = wrong;
+                } while ((usedWords.Contains(wrongName) || wrongName == EvaluationData.correctAnswers[i]) && tries < 50);
+
+                EvaluationData.labelTexts[i] = wrongName;
                 EvaluationData.robotWasRight[i] = false;
+                usedWords.Add(wrongName);
+                Debug.Log($"  [Pos {i}] WRONG:   {wrongName} (actual: {EvaluationData.correctAnswers[i]})");
             }
         }
+
+        Debug.Log($"[GenerateLabels] Final robot labels: {string.Join(", ", EvaluationData.labelTexts)}");
+        Debug.Log($"[GenerateLabels] Correct answers:  {string.Join(", ", EvaluationData.correctAnswers)}");
+        Debug.Log($"[GenerateLabels] Robot was right:  {string.Join(", ", System.Array.ConvertAll(EvaluationData.robotWasRight, b => b ? "Y" : "N"))}");
     }
 
     void UpdateGradientImage()
     {
         if (gradientImages == null || gradientImages.Length == 0) return;
-        foreach (var g in gradientImages)
-            if (g != null) g.SetActive(false);
+        foreach (var g in gradientImages) if (g != null) g.SetActive(false);
 
         float t = Mathf.InverseLerp(10f, 100f, EvaluationData.accuracy);
         int total = gradientImages.Length;
         int idx = Mathf.Clamp((total - 1) - Mathf.FloorToInt(t * total), 0, total - 1);
-        if (gradientImages[idx] != null)
-            gradientImages[idx].SetActive(true);
+        if (gradientImages[idx] != null) gradientImages[idx].SetActive(true);
     }
 
     void OnEvaluateClicked()
     {
+        Debug.Log("[OnEvaluateClicked] Moving to evaluation phase");
         mainCanvas.SetActive(false);
         p2Canvas.SetActive(true);
 
         _p2Index = 0;
         _honestCount = 0;
 
-        foreach (var img in p2Images)
-            if (img != null) img.SetActive(false);
+        foreach (var img in p2Images) if (img != null) img.SetActive(false);
         if (p2LabelImage != null) p2LabelImage.SetActive(false);
         if (p2LabelText != null) p2LabelText.text = "";
 
@@ -207,8 +215,7 @@ void Awake()
         correctButton.interactable = false;
         wrongButton.interactable = false;
 
-        foreach (var img in p2Images)
-            if (img != null) img.SetActive(false);
+        foreach (var img in p2Images) if (img != null) img.SetActive(false);
         if (p2LabelImage != null) p2LabelImage.SetActive(false);
         if (p2LabelText != null) p2LabelText.text = "";
 
@@ -219,8 +226,10 @@ void Awake()
         yield return new WaitForSeconds(0.2f);
 
         if (p2LabelImage != null) p2LabelImage.SetActive(true);
-        if (p2LabelText != null)
-            p2LabelText.text = EvaluationData.labelTexts[_p2Index];
+        if (p2LabelText != null) p2LabelText.text = EvaluationData.labelTexts[_p2Index];
+
+        Debug.Log($"[ShowP2Current] Index {_p2Index}: Robot said '{EvaluationData.labelTexts[_p2Index]}' (correct: {EvaluationData.correctAnswers[_p2Index]}, was right: {EvaluationData.robotWasRight[_p2Index]})");
+
         yield return StartCoroutine(FadeIn(p2LabelImage));
 
         correctButton.interactable = true;
@@ -233,16 +242,17 @@ void Awake()
         bool kidIsHonest = (kidSaysCorrect == robotWasRight);
         if (kidIsHonest) _honestCount++;
 
-        Debug.Log($"  [{_p2Index + 1}/5] '{EvaluationData.correctAnswers[_p2Index]}' | " +
-                  $"الروبوت='{EvaluationData.labelTexts[_p2Index]}' ({(robotWasRight ? "صحيح" : "خطأ")}) | " +
-                  $"الطفل={(kidSaysCorrect ? "صحيح" : "خطأ")} | " +
-                  $"{(kidIsHonest ? "أمين ✓" : "مخطئ ✗")}");
+        Debug.Log($"[OnVerdict] Index {_p2Index}: Robot was right: {robotWasRight}, Kid said correct: {kidSaysCorrect}, Honest: {kidIsHonest}");
 
         correctButton.interactable = false;
         wrongButton.interactable = false;
 
         _p2Index++;
-        if (_p2Index >= 5) FinishEvaluation();
+        if (_p2Index >= 5)
+        {
+            Debug.Log($"[OnVerdict] Evaluation complete. Honest answers: {_honestCount}/5");
+            FinishEvaluation();
+        }
         else StartCoroutine(ShowP2Current());
     }
 
@@ -251,26 +261,49 @@ void Awake()
         EvaluationData.previousAccuracy = EvaluationData.accuracy;
 
         if (_honestCount >= 3)
+        {
             EvaluationData.accuracy += EvaluationData.DeltaPerRound;
+            Debug.Log($"[FinishEvaluation] Kid was honest (≥3), INCREASE accuracy by {EvaluationData.DeltaPerRound}");
+        }
         else
+        {
             EvaluationData.accuracy -= EvaluationData.DeltaPerRound;
+            Debug.Log($"[FinishEvaluation] Kid was dishonest (<3), DECREASE accuracy by {EvaluationData.DeltaPerRound}");
+        }
 
         EvaluationData.accuracy = Mathf.Clamp(
             EvaluationData.accuracy,
             EvaluationData.minAccuracy,
-            EvaluationData.maxAccuracy
-        );
+            EvaluationData.maxAccuracy);
 
-        float delta = EvaluationData.accuracy - EvaluationData.previousAccuracy;
-        Debug.Log($"══ الجولة {EvaluationData.currentRound}/6 انتهت | " +
-                  $"أمين: {_honestCount}/5 | " +
-                  $"{EvaluationData.previousAccuracy:0.0}% → {EvaluationData.accuracy:0.0}% " +
-                  $"({(delta >= 0 ? "+" : "")}{delta:0.0}%)");
+        Debug.Log($"[FinishEvaluation] New accuracy: {EvaluationData.accuracy}%");
 
-        if (EvaluationData.currentRound >= 6)
+        int roundIndex = EvaluationData.currentRound - 1;
+
+        if (EvaluationData.currentRound >= TOTAL_ROUNDS)
+        {
+            Debug.Log($"[FinishEvaluation] All rounds complete! Showing results...");
             ShowResults();
+            StartCoroutine(DelayedFinish(roundIndex));
+        }
         else
-            StartRound();
+        {
+            Debug.Log($"[FinishEvaluation] Moving to next round...");
+            StartCoroutine(DelayedNextRound());
+        }
+    }
+
+    IEnumerator DelayedFinish(int roundIndex)
+    {
+        yield return new WaitForSeconds(2.5f);
+        if (_trigger != null)
+            _trigger.CompleteRound(roundIndex);
+    }
+
+    IEnumerator DelayedNextRound()
+    {
+        yield return new WaitForSeconds(2.5f);
+        StartRound();
     }
 
     void ShowResults()
@@ -289,8 +322,6 @@ void Awake()
             healthBar.AnimateFromTo(EvaluationData.previousAccuracy / 100f, acc / 100f);
 
         UpdateGradientImage();
-
-        Debug.Log($"══ انتهت اللعبة | النتيجة النهائية: {acc:0.0}% | {grade}");
     }
 
     string GetGrade(float acc)

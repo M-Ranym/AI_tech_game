@@ -16,18 +16,19 @@ public class ProgramPanel : MonoBehaviour
     private List<GameObject> blocks = new List<GameObject>();
     private RectTransform panelRect;
 
-    // Natural block world-height, measured once from the first block dropped
     private float naturalBlockWorldH = -1f;
 
-    // Cached target world positions per block for smooth lerping
     private Dictionary<GameObject, Vector3> targetPositions = new Dictionary<GameObject, Vector3>();
 
-    // The block currently being dragged (excluded from smooth positioning)
     private GameObject draggingBlock = null;
+
+    // 🔥 NEW (for Excel-like behavior)
+    private int insertIndex = -1;
 
     void Awake()
     {
         panelRect = GetComponent<RectTransform>();
+
         Destroy(GetComponent<UnityEngine.UI.VerticalLayoutGroup>());
         Destroy(GetComponent<UnityEngine.UI.HorizontalLayoutGroup>());
         Destroy(GetComponent<UnityEngine.UI.ContentSizeFitter>());
@@ -35,8 +36,6 @@ public class ProgramPanel : MonoBehaviour
 
     void Update()
     {
-        // Each frame, smoothly lerp every block (except the one being dragged)
-        // toward its target position
         foreach (var block in blocks)
         {
             if (block == null) continue;
@@ -51,14 +50,26 @@ public class ProgramPanel : MonoBehaviour
         }
     }
 
-    // ── Called by ScratchBlock to set which block is being dragged ────────────
     public void SetDragging(GameObject block) => draggingBlock = block;
-    public void ClearDragging() => draggingBlock = null;
+
+    public void ClearDragging()
+    {
+        draggingBlock = null;
+        insertIndex = -1;
+    }
+
+    // 🔥 NEW
+    public void SetInsertIndex(int idx)
+    {
+        insertIndex = idx;
+        ComputeTargets();
+    }
 
     public void AddBlock(GameObject block)
     {
         if (!blocks.Contains(block))
             blocks.Add(block);
+
         ComputeTargets();
     }
 
@@ -69,29 +80,46 @@ public class ProgramPanel : MonoBehaviour
         ComputeTargets();
     }
 
-    // Returns which slot index the cursor Y maps to
     public int GetInsertIndex(float worldY)
     {
         blocks.RemoveAll(b => b == null);
+
+        int visualIndex = 0;
+
         for (int i = 0; i < blocks.Count; i++)
         {
+            if (blocks[i] == draggingBlock)
+                continue;
+
             if (!targetPositions.ContainsKey(blocks[i])) continue;
-            if (worldY > targetPositions[blocks[i]].y) return i;
+
+            float targetY = targetPositions[blocks[i]].y;
+
+            // 🔥 BIG FIX: use a "zone" instead of exact line
+            float threshold = 80f; // you can tweak this (20–60)
+
+            if (worldY > targetY - threshold)
+                return visualIndex;
+
+            visualIndex++;
         }
-        return blocks.Count;
+
+        return visualIndex;
     }
 
-    // Reorder a block to a new index, update targets (others will slide smoothly)
-    public void ReorderBlock(GameObject block, int newIndex)
+    // 🔥 FINAL reorder ONLY on drop
+    public void FinalizeReorder(GameObject block)
     {
-        if (!blocks.Contains(block)) blocks.Add(block);
         blocks.Remove(block);
-        newIndex = Mathf.Clamp(newIndex, 0, blocks.Count);
-        blocks.Insert(newIndex, block);
+
+        int idx = Mathf.Clamp(insertIndex, 0, blocks.Count);
+        blocks.Insert(idx, block);
+
+        insertIndex = -1;
+
         ComputeTargets();
     }
 
-    // ── Core: compute where every block SHOULD be, store as targets ──────────
     void ComputeTargets()
     {
         blocks.RemoveAll(b => b == null);
@@ -99,17 +127,17 @@ public class ProgramPanel : MonoBehaviour
 
         Vector3[] panelCorners = new Vector3[4];
         panelRect.GetWorldCorners(panelCorners);
-        // 0=BL 1=TL 2=TR 3=BR
+
         Vector3 topLeft = panelCorners[1];
         float panelWorldH = panelCorners[1].y - panelCorners[0].y;
         float panelWorldW = panelCorners[2].x - panelCorners[1].x;
 
         Canvas canvas = GetComponentInParent<Canvas>();
         float scale = canvas != null ? canvas.transform.localScale.y : 1f;
-        float wSpacing = spacing * scale;
-        float wPad = verticalPaddingCanvas * scale; // same top AND bottom
 
-        // Measure natural block height once
+        float wSpacing = spacing * scale;
+        float wPad = verticalPaddingCanvas * scale;
+
         if (naturalBlockWorldH < 0f)
         {
             Vector3[] bc = new Vector3[4];
@@ -119,56 +147,65 @@ public class ProgramPanel : MonoBehaviour
 
         float blockH = naturalBlockWorldH;
 
-        // Available height between top-pad and bottom-pad (equal on both sides)
         float availH = panelWorldH - wPad * 2f;
-
-        // Total height needed at natural size
         float totalNeeded = blocks.Count * blockH + (blocks.Count - 1) * wSpacing;
 
-        // Shrink if needed so everything fits inside the padded area
         if (totalNeeded > availH && blocks.Count > 0)
         {
             float shrunk = (availH - (blocks.Count - 1) * wSpacing) / blocks.Count;
             blockH = Mathf.Max(shrunk, 4f * scale);
         }
 
-        // Apply the (possibly shrunk) height to each block's RectTransform
         float blockCanvasH = blockH / scale;
+
         foreach (var b in blocks)
         {
             if (b == null) continue;
+
             var rt = b.GetComponent<RectTransform>();
             var sd = rt.sizeDelta;
             sd.y = blockCanvasH;
             rt.sizeDelta = sd;
         }
 
-        // Compute total occupied height and centre it vertically within the padded area
         float totalOccupied = blocks.Count * blockH + (blocks.Count - 1) * wSpacing;
-        // Top of the first block, centred between top-pad and bottom-pad
         float firstBlockTop = topLeft.y - wPad - (availH - totalOccupied) * 0.5f;
+
+        int visualIndex = 0;
 
         for (int i = 0; i < blocks.Count; i++)
         {
             if (blocks[i] == null) continue;
 
+            if (blocks[i] == draggingBlock)
+                continue;
+
             float x = topLeft.x + panelWorldW * 0.5f;
-            float y = firstBlockTop - blockH * 0.5f - i * (blockH + wSpacing);
+
+            float y = firstBlockTop - blockH * 0.5f - visualIndex * (blockH + wSpacing);
+
+            // 🔥 THIS is the Excel gap
+            if (draggingBlock != null && insertIndex >= 0 && visualIndex >= insertIndex)
+            {
+                y -= (blockH + wSpacing) * 1.2f;
+            }
 
             Vector3 target = new Vector3(x, y, topLeft.z);
             targetPositions[blocks[i]] = target;
 
             ScratchBlock sb = blocks[i].GetComponent<ScratchBlock>();
             if (sb != null) sb.SetPuzzleShape(i, blocks.Count);
+
+            visualIndex++;
         }
     }
 
-    // Instantly snap all blocks to their targets (used on drop)
     public void SnapToTargets()
     {
         foreach (var block in blocks)
         {
             if (block == null || block == draggingBlock) continue;
+
             if (targetPositions.ContainsKey(block))
                 block.transform.position = targetPositions[block];
         }
@@ -176,26 +213,37 @@ public class ProgramPanel : MonoBehaviour
 
     public void RefreshLayout() => ComputeTargets();
 
+    // ✅ RESTORED (your MazeGenerator needs this)
     public List<BlockType> GetProgram()
     {
         blocks.RemoveAll(b => b == null);
+
         var program = new List<BlockType>();
+
         foreach (var block in blocks)
         {
             ScratchBlock sb = block.GetComponent<ScratchBlock>();
-            if (sb != null) program.Add(sb.blockType);
+            if (sb != null)
+                program.Add(sb.blockType);
         }
+
         return program;
     }
 
+    // ✅ RESTORED
     public void ClearProgram()
     {
         foreach (var block in blocks)
-            if (block != null) Destroy(block);
+        {
+            if (block != null)
+                Destroy(block);
+        }
+
         blocks.Clear();
         targetPositions.Clear();
         naturalBlockWorldH = -1f;
         draggingBlock = null;
+        insertIndex = -1;
     }
 
     public void SoftReset() { }
