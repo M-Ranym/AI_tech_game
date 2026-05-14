@@ -24,8 +24,11 @@ public class MapManager : MonoBehaviour
 
     [Header("Drone Positions")]
     public Vector2 droneGroundPosition = new Vector2(-427f, -300f);
-    public float droneFlightHeight = 173f;
-    public float[] levelXPositions = { -427f, 170f, 769f };
+    public Vector2[] levelPositions = {
+        new Vector2(-427f, 173f),
+        new Vector2(170f,  173f),
+        new Vector2(769f,  173f)
+    };
 
     [Header("Flight Speed")]
     public float riseSpeed = 350f;
@@ -55,8 +58,8 @@ public class MapManager : MonoBehaviour
         int unlockedCount = PlayerPrefs.GetInt("UnlockedLevels", 0);
         int droneOnLevel = PlayerPrefs.GetInt("DroneOnLevel", -1);
         bool justFinished = PlayerPrefs.GetInt("JustFinished", 0) == 1;
-
         int justFinishedGame = PlayerPrefs.GetInt("JustFinishedGame", -1);
+
         PlayerPrefs.SetInt("JustFinishedGame", -1);
         PlayerPrefs.SetInt("JustFinished", 0);
         PlayerPrefs.Save();
@@ -72,11 +75,13 @@ public class MapManager : MonoBehaviour
 
         SetupVisuals(unlockedCount);
 
+        // Auto-open board only if game is not fully done
         if (justFinishedGame >= 0
-       && justFinishedGame < levelBoards.Length
-       && levelBoards[justFinishedGame] != null
-       && !justFinished)  
+            && justFinishedGame < levelBoards.Length
+            && levelBoards[justFinishedGame] != null
+            && !justFinished)
         {
+            Debug.Log($"[MapManager] Opening board for game {justFinishedGame}");
             levelBoards[justFinishedGame].Show();
         }
 
@@ -87,16 +92,19 @@ public class MapManager : MonoBehaviour
         }
         else if (justFinished)
         {
-            drone.anchoredPosition = new Vector2(levelXPositions[droneOnLevel], droneFlightHeight);
+            drone.anchoredPosition = levelPositions[droneOnLevel];
             int next = droneOnLevel + 1;
-            if (next < levelXPositions.Length)
+            int nextUnlocked = PlayerPrefs.GetInt("UnlockedLevels", 0);
+            bool nextIsLocked = next < levelPositions.Length && next >= nextUnlocked;
+
+            if (nextIsLocked)
                 StartCoroutine(FlyToAndUnlock(next));
             else
                 StartHover(drone.anchoredPosition);
         }
         else
         {
-            drone.anchoredPosition = new Vector2(levelXPositions[droneOnLevel], droneFlightHeight);
+            drone.anchoredPosition = levelPositions[droneOnLevel];
             StartHover(drone.anchoredPosition);
         }
     }
@@ -139,7 +147,7 @@ public class MapManager : MonoBehaviour
 
     IEnumerator FirstTimeSequence()
     {
-        yield return MoveTo(new Vector2(droneGroundPosition.x, droneFlightHeight), riseSpeed);
+        yield return MoveTo(new Vector2(droneGroundPosition.x, levelPositions[0].y), riseSpeed);
         yield return new WaitForSeconds(0.25f);
         yield return FlyToAndUnlock(0);
     }
@@ -148,7 +156,7 @@ public class MapManager : MonoBehaviour
     {
         isHovering = false;
 
-        Vector2 target = new Vector2(levelXPositions[levelIndex], droneFlightHeight);
+        Vector2 target = levelPositions[levelIndex];
         yield return MoveTo(target, flySpeed);
 
         PlayerPrefs.SetInt("DroneOnLevel", levelIndex);

@@ -3,9 +3,8 @@
 public class GameFinishTrigger : MonoBehaviour
 {
     [SerializeField] public int gameIndex = 0;
-    [SerializeField] private int totalLevels = 1;
+    [SerializeField] public int totalLevels = 1;  // CHANGED: Make public so GameManagers can set it
     [SerializeField] private string mapSceneName = "Map";
-
     private int _currentLevel = 0;
 
     void Awake()
@@ -18,8 +17,7 @@ public class GameFinishTrigger : MonoBehaviour
 
     public void FinishLevel(int levelIndex)
     {
-        Debug.Log($"[GameFinishTrigger] FinishLevel({levelIndex}) gameIndex={gameIndex} totalLevels={totalLevels}");
-
+        Debug.Log($"[GameFinishTrigger] FinishLevel({levelIndex}) gameIndex={gameIndex} totalLevels={totalLevels} GPM={GameProgressManager.Instance != null}");
         if (GameProgressManager.Instance != null)
         {
             GameProgressManager.Instance.OnLevelFinished(

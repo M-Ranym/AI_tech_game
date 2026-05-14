@@ -5,26 +5,31 @@ using UnityEngine.UI;
 
 public class EvaluationManager : MonoBehaviour
 {
-    [Header(" CANVASES ")]
-    [SerializeField] private GameObject mainCanvas;
-    [SerializeField] private GameObject p2Canvas;
+    [System.Serializable]
+    public class P2LevelSetup
+    {
+        public GameObject[] p2Images;
+    }
 
-    [Header(" RESULTS PANEL ")]
+    [Header("LEVEL GAMEPLAY CANVASES")]
+    [SerializeField] private GameObject[] levelCanvases;
+
+    [Header("P2 LEVEL SETUPS")]
+    [SerializeField] private P2LevelSetup[] p2LevelSetups;
+
+    [Header("RESULTS PANEL")]
     [SerializeField] private GameObject resultsPanel;
     [SerializeField] private RtlText resultPercentageText;
     [SerializeField] private RtlText resultGradeText;
 
-    [Header(" MAIN CANVAS ")]
+    [Header("MAIN SYSTEM")]
     [SerializeField] private RobotController robotController;
     [SerializeField] private Button evaluateButton;
     [SerializeField] private HealthBar healthBar;
     [SerializeField] private GameObject[] gradientImages;
 
-    [Header("Labels (Label_1 to Label_5) — to hide at round start")]
-    [SerializeField] private GameObject[] labelObjects;
-
-    [Header(" P2 CANVAS ")]
-    [SerializeField] private GameObject[] p2Images;
+    [Header("P2 CANVAS")]
+    [SerializeField] private GameObject p2Canvas;
     [SerializeField] private GameObject p2LabelImage;
     [SerializeField] private RtlText p2LabelText;
     [SerializeField] private Button correctButton;
@@ -34,37 +39,34 @@ public class EvaluationManager : MonoBehaviour
     [SerializeField] private float delayBetween = 0.5f;
     [SerializeField] private float fadeDuration = 0.35f;
 
-    private readonly string[] _wrongPool = {
-        "كلب", "قطة", "طائر", "أرنب", "ثعلب",
-        "هامستر", "سمكة", "دب", "ذئب", "غزال"
-    };
+    private const int TOTAL_LEVELS = 3;
+    private const int ROUNDS_PER_LEVEL = 4;
 
+    private int currentLevel = 0;
+    private int currentRound = 0;
+    private bool _verdictGiven = false;
+
+    private GameObject[] currentP2Images;
     private int _p2Index = 0;
     private int _honestCount = 0;
 
-    // Each "round" (1–6) is treated as one level for the map system
-    private const int TOTAL_ROUNDS = 6;
     private GameFinishTrigger _trigger;
-
-    void Awake()
-    {
-        foreach (var lbl in labelObjects)
-            if (lbl != null) lbl.SetActive(false);
-        if (evaluateButton != null)
-            evaluateButton.gameObject.SetActive(false);
-    }
 
     void Start()
     {
         _trigger = FindObjectOfType<GameFinishTrigger>();
 
-        // Initialize accuracy
+        // Resume from the level the player clicked on the board
+        int requestedLevel = _trigger != null ? _trigger.GetStartLevel() : 0;
+        currentLevel = Mathf.Clamp(requestedLevel, 0, TOTAL_LEVELS - 1);
+        currentRound = 0;
+
+        Debug.Log($"[EvaluationManager] starting level={currentLevel}");
+
+        EvaluationData.currentRound = 0;
         EvaluationData.accuracy = 30f;
         EvaluationData.previousAccuracy = 30f;
-        EvaluationData.initialized = true;
-
-        Debug.Log($"[START] Set accuracy to {EvaluationData.accuracy}f");
-        Debug.Log($"[START] correctCount property returns: {EvaluationData.correctCount}");
+        EvaluationData.LoadLevel(currentLevel);
 
         evaluateButton.onClick.RemoveAllListeners();
         evaluateButton.onClick.AddListener(OnEvaluateClicked);
@@ -73,118 +75,97 @@ public class EvaluationManager : MonoBehaviour
         correctButton.onClick.AddListener(() => OnVerdict(true));
         wrongButton.onClick.AddListener(() => OnVerdict(false));
 
-        mainCanvas.SetActive(true);
-        p2Canvas.SetActive(false);
         if (resultsPanel != null) resultsPanel.SetActive(false);
-
-        if (healthBar != null)
-            healthBar.SnapTo(EvaluationData.accuracy / 100f);
+        if (healthBar != null) healthBar.SnapTo(EvaluationData.accuracy / 100f);
 
         StartRound();
     }
 
     void StartRound()
     {
-        EvaluationData.currentRound++;
-        Debug.Log($"\n╔════════════════════════════════════════════╗");
-        Debug.Log($"║ ROUND {EvaluationData.currentRound} STARTED");
-        Debug.Log($"║ Current Accuracy: {EvaluationData.accuracy}%");
-        Debug.Log($"║ Correct Count: {EvaluationData.correctCount}");
-        Debug.Log($"╚════════════════════════════════════════════╝\n");
+        currentRound++;
+
+        Debug.Log($"[EvaluationManager] StartRound level={currentLevel} round={currentRound}/{ROUNDS_PER_LEVEL}");
 
         GenerateLabels();
+        ShowCurrentLevelCanvas();
 
-        mainCanvas.SetActive(true);
         p2Canvas.SetActive(false);
-        if (resultsPanel != null) resultsPanel.SetActive(false);
-
-        foreach (var lbl in labelObjects)
-            if (lbl != null) lbl.SetActive(false);
         evaluateButton.gameObject.SetActive(false);
 
         UpdateGradientImage();
-
         StartCoroutine(AnimateBarThenStart());
+    }
+
+    void ShowCurrentLevelCanvas()
+    {
+        for (int i = 0; i < levelCanvases.Length; i++)
+            if (levelCanvases[i] != null)
+                levelCanvases[i].SetActive(i == currentLevel);
     }
 
     IEnumerator AnimateBarThenStart()
     {
-        if (EvaluationData.currentRound > 1 && healthBar != null)
+        if (currentRound > 1 && healthBar != null)
         {
             healthBar.AnimateFromTo(
                 EvaluationData.previousAccuracy / 100f,
                 EvaluationData.accuracy / 100f);
             yield return new WaitForSeconds(healthBar.animDuration + 0.3f);
         }
-        else yield return null;
 
         robotController.StartRound(EvaluationData.labelTexts);
     }
 
     void GenerateLabels()
     {
-        int total = 5; // 5 animals to label
+        int total = EvaluationData.currentItemCount;
         int correctCount = EvaluationData.correctCount;
 
-        Debug.Log($"[GenerateLabels] Accuracy: {EvaluationData.accuracy}% | correctCount: {correctCount}");
-
-        // Step 1: Decide which positions (0-4) will have CORRECT labels
-        bool[] isCorrect = new bool[total];
-        for (int i = 0; i < correctCount; i++)
+        int[] indices = new int[total];
+        for (int i = 0; i < total; i++) indices[i] = i;
+        for (int i = total - 1; i > 0; i--)
         {
-            int randomPos = Random.Range(0, total);
-            // Skip if already marked as correct
-            while (isCorrect[randomPos])
-                randomPos = (randomPos + 1) % total;
-            isCorrect[randomPos] = true;
+            int j = Random.Range(0, i + 1);
+            int temp = indices[i]; indices[i] = indices[j]; indices[j] = temp;
         }
 
-        Debug.Log($"[GenerateLabels] Correct positions: {string.Join(", ", System.Array.ConvertAll(isCorrect, b => b ? 1 : 0))}");
+        bool[] correct = new bool[total];
+        for (int i = 0; i < correctCount; i++) correct[indices[i]] = true;
 
-        // Step 2: Track used words to avoid duplicates
         var usedWords = new System.Collections.Generic.List<string>();
+        for (int i = 0; i < total; i++)
+            if (correct[i]) usedWords.Add(EvaluationData.currentCorrectAnswers[i]);
 
-        // Step 3: Fill labelTexts array
         for (int i = 0; i < total; i++)
         {
-            if (isCorrect[i])
+            string right = EvaluationData.currentCorrectAnswers[i];
+            if (correct[i])
             {
-                // Position i gets the CORRECT animal name
-                string correctName = EvaluationData.correctAnswers[i];
-                EvaluationData.labelTexts[i] = correctName;
+                EvaluationData.labelTexts[i] = right;
                 EvaluationData.robotWasRight[i] = true;
-                usedWords.Add(correctName);
-                Debug.Log($"  [Pos {i}] CORRECT: {correctName}");
             }
             else
             {
-                // Position i gets a WRONG animal name
-                string wrongName = null;
-                int tries = 0;
-
+                string wrong; int tries = 0;
                 do
                 {
-                    wrongName = _wrongPool[Random.Range(0, _wrongPool.Length)];
+                    wrong = EvaluationData.currentWrongPool[
+                        Random.Range(0, EvaluationData.currentWrongPool.Length)];
                     tries++;
-                } while ((usedWords.Contains(wrongName) || wrongName == EvaluationData.correctAnswers[i]) && tries < 50);
-
-                EvaluationData.labelTexts[i] = wrongName;
+                }
+                while (usedWords.Contains(wrong) && tries < 30);
+                usedWords.Add(wrong);
+                EvaluationData.labelTexts[i] = wrong;
                 EvaluationData.robotWasRight[i] = false;
-                usedWords.Add(wrongName);
-                Debug.Log($"  [Pos {i}] WRONG:   {wrongName} (actual: {EvaluationData.correctAnswers[i]})");
             }
         }
-
-        Debug.Log($"[GenerateLabels] Final robot labels: {string.Join(", ", EvaluationData.labelTexts)}");
-        Debug.Log($"[GenerateLabels] Correct answers:  {string.Join(", ", EvaluationData.correctAnswers)}");
-        Debug.Log($"[GenerateLabels] Robot was right:  {string.Join(", ", System.Array.ConvertAll(EvaluationData.robotWasRight, b => b ? "Y" : "N"))}");
     }
 
     void UpdateGradientImage()
     {
         if (gradientImages == null || gradientImages.Length == 0) return;
         foreach (var g in gradientImages) if (g != null) g.SetActive(false);
-
         float t = Mathf.InverseLerp(10f, 100f, EvaluationData.accuracy);
         int total = gradientImages.Length;
         int idx = Mathf.Clamp((total - 1) - Mathf.FloorToInt(t * total), 0, total - 1);
@@ -193,19 +174,17 @@ public class EvaluationManager : MonoBehaviour
 
     void OnEvaluateClicked()
     {
-        Debug.Log("[OnEvaluateClicked] Moving to evaluation phase");
-        mainCanvas.SetActive(false);
+        _verdictGiven = false;
+        currentP2Images = p2LevelSetups[currentLevel].p2Images;
+
+        foreach (var c in levelCanvases) if (c != null) c.SetActive(false);
         p2Canvas.SetActive(true);
 
         _p2Index = 0;
         _honestCount = 0;
 
-        foreach (var img in p2Images) if (img != null) img.SetActive(false);
         if (p2LabelImage != null) p2LabelImage.SetActive(false);
         if (p2LabelText != null) p2LabelText.text = "";
-
-        correctButton.interactable = false;
-        wrongButton.interactable = false;
 
         StartCoroutine(ShowP2Current());
     }
@@ -215,20 +194,24 @@ public class EvaluationManager : MonoBehaviour
         correctButton.interactable = false;
         wrongButton.interactable = false;
 
-        foreach (var img in p2Images) if (img != null) img.SetActive(false);
+        foreach (var img in currentP2Images) if (img != null) img.SetActive(false);
         if (p2LabelImage != null) p2LabelImage.SetActive(false);
         if (p2LabelText != null) p2LabelText.text = "";
 
         yield return new WaitForSeconds(delayBetween);
 
-        p2Images[_p2Index].SetActive(true);
-        yield return StartCoroutine(FadeIn(p2Images[_p2Index]));
+        GameObject currentImage = currentP2Images[_p2Index];
+        currentImage.SetActive(true);
+
+        CanvasGroup cg = currentImage.GetComponent<CanvasGroup>();
+        if (cg == null) cg = currentImage.AddComponent<CanvasGroup>();
+        cg.alpha = 1f;
+
         yield return new WaitForSeconds(0.2f);
 
         if (p2LabelImage != null) p2LabelImage.SetActive(true);
-        if (p2LabelText != null) p2LabelText.text = EvaluationData.labelTexts[_p2Index];
-
-        Debug.Log($"[ShowP2Current] Index {_p2Index}: Robot said '{EvaluationData.labelTexts[_p2Index]}' (correct: {EvaluationData.correctAnswers[_p2Index]}, was right: {EvaluationData.robotWasRight[_p2Index]})");
+        if (p2LabelText != null)
+            p2LabelText.text = EvaluationData.labelTexts[_p2Index];
 
         yield return StartCoroutine(FadeIn(p2LabelImage));
 
@@ -238,86 +221,79 @@ public class EvaluationManager : MonoBehaviour
 
     void OnVerdict(bool kidSaysCorrect)
     {
-        bool robotWasRight = EvaluationData.robotWasRight[_p2Index];
-        bool kidIsHonest = (kidSaysCorrect == robotWasRight);
-        if (kidIsHonest) _honestCount++;
-
-        Debug.Log($"[OnVerdict] Index {_p2Index}: Robot was right: {robotWasRight}, Kid said correct: {kidSaysCorrect}, Honest: {kidIsHonest}");
+        if (_verdictGiven) return;
+        _verdictGiven = true;
 
         correctButton.interactable = false;
         wrongButton.interactable = false;
 
+        bool robotWasRight = EvaluationData.robotWasRight[_p2Index];
+        bool kidIsHonest = (kidSaysCorrect == robotWasRight);
+        if (kidIsHonest) _honestCount++;
+
         _p2Index++;
-        if (_p2Index >= 5)
-        {
-            Debug.Log($"[OnVerdict] Evaluation complete. Honest answers: {_honestCount}/5");
-            FinishEvaluation();
-        }
-        else StartCoroutine(ShowP2Current());
-    }
 
-    void FinishEvaluation()
-    {
-        EvaluationData.previousAccuracy = EvaluationData.accuracy;
-
-        if (_honestCount >= 3)
-        {
-            EvaluationData.accuracy += EvaluationData.DeltaPerRound;
-            Debug.Log($"[FinishEvaluation] Kid was honest (≥3), INCREASE accuracy by {EvaluationData.DeltaPerRound}");
-        }
+        if (_p2Index >= EvaluationData.currentItemCount)
+            FinishRound();
         else
         {
-            EvaluationData.accuracy -= EvaluationData.DeltaPerRound;
-            Debug.Log($"[FinishEvaluation] Kid was dishonest (<3), DECREASE accuracy by {EvaluationData.DeltaPerRound}");
+            _verdictGiven = false;
+            StartCoroutine(ShowP2Current());
         }
+    }
+
+    void FinishRound()
+    {
+        _verdictGiven = false;
+
+        EvaluationData.previousAccuracy = EvaluationData.accuracy;
+
+        if (_honestCount >= Mathf.CeilToInt(EvaluationData.currentItemCount / 2f))
+            EvaluationData.accuracy += EvaluationData.DeltaPerRound;
+        else
+            EvaluationData.accuracy -= EvaluationData.DeltaPerRound;
 
         EvaluationData.accuracy = Mathf.Clamp(
             EvaluationData.accuracy,
             EvaluationData.minAccuracy,
             EvaluationData.maxAccuracy);
 
-        Debug.Log($"[FinishEvaluation] New accuracy: {EvaluationData.accuracy}%");
+        bool isLastRound = currentRound >= ROUNDS_PER_LEVEL;
 
-        int roundIndex = EvaluationData.currentRound - 1;
+        Debug.Log($"[EvaluationManager] FinishRound level={currentLevel} round={currentRound}/{ROUNDS_PER_LEVEL} isLastRound={isLastRound}");
 
-        if (EvaluationData.currentRound >= TOTAL_ROUNDS)
+        if (isLastRound)
         {
-            Debug.Log($"[FinishEvaluation] All rounds complete! Showing results...");
+            // All rounds in this level done — show results then go to map
+            Debug.Log($"[EvaluationManager] Level {currentLevel} complete");
             ShowResults();
-            StartCoroutine(DelayedFinish(roundIndex));
+            StartCoroutine(DelayedLevelComplete(currentLevel));
         }
         else
         {
-            Debug.Log($"[FinishEvaluation] Moving to next round...");
-            StartCoroutine(DelayedNextRound());
+            // More rounds remaining — stay in scene
+            StartRound();
         }
     }
 
-    IEnumerator DelayedFinish(int roundIndex)
+    IEnumerator DelayedLevelComplete(int levelIndex)
     {
         yield return new WaitForSeconds(2.5f);
         if (_trigger != null)
-            _trigger.CompleteRound(roundIndex);
-    }
-
-    IEnumerator DelayedNextRound()
-    {
-        yield return new WaitForSeconds(2.5f);
-        StartRound();
+            _trigger.FinishLevel(levelIndex);
+        else
+            Debug.LogError("[EvaluationManager] No GameFinishTrigger in scene!");
     }
 
     void ShowResults()
     {
-        mainCanvas.SetActive(true);
+        foreach (var c in levelCanvases) if (c != null) c.SetActive(false);
         p2Canvas.SetActive(false);
         if (resultsPanel != null) resultsPanel.SetActive(true);
 
         float acc = EvaluationData.accuracy;
-        string grade = GetGrade(acc);
-
         if (resultPercentageText != null) resultPercentageText.text = $"{acc:0}%";
-        if (resultGradeText != null) resultGradeText.text = grade;
-
+        if (resultGradeText != null) resultGradeText.text = GetGrade(acc);
         if (healthBar != null)
             healthBar.AnimateFromTo(EvaluationData.previousAccuracy / 100f, acc / 100f);
 
@@ -338,7 +314,6 @@ public class EvaluationManager : MonoBehaviour
         CanvasGroup cg = obj.GetComponent<CanvasGroup>();
         if (cg == null) cg = obj.AddComponent<CanvasGroup>();
         cg.alpha = 0f;
-
         float elapsed = 0f;
         while (elapsed < fadeDuration)
         {
@@ -348,4 +323,9 @@ public class EvaluationManager : MonoBehaviour
         }
         cg.alpha = 1f;
     }
+
+    public int GetCurrentLevel() => currentLevel;
+    public int GetCurrentRound() => currentRound;
+    public int GetTotalRoundsInLevel() => ROUNDS_PER_LEVEL;
+    public int GetTotalLevels() => TOTAL_LEVELS;
 }

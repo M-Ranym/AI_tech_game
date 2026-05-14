@@ -16451,8 +16451,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e61dfd06fba7a984e9b63b2a194ff399, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameIndex: 0
-  totalSubLevels: 1
+  gameIndex: 6
+  totalLevels: 6
   mapSceneName: Map
 --- !u!4 &1788647511
 Transform:

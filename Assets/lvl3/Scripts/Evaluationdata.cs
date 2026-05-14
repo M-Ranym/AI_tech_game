@@ -3,63 +3,105 @@
 public static class EvaluationData
 {
     public static bool initialized = false;
+
     public static int currentRound = 0;
+
+    public static int currentLevel = 0;
+
     public static float accuracy = 30f;
+
     public static float previousAccuracy = 30f;
+
     public static float minAccuracy = 10f;
+
     public static float maxAccuracy = 100f;
-    public const float DeltaPerRound = (100f - 30f) / 6f;
 
-    // correctAnswers = the ACTUAL names of the 5 animals shown in order
-    // IMPORTANT: Must match RobotController.animalImages order in inspector
-    public static string[] correctAnswers = { "قطة", "كلب", "ببغاء", "أرنب", "ثعلب" };
+    public const int ROUNDS_PER_LEVEL = 4;
 
-    // labelTexts = what the ROBOT says each round (generated mix of correct/wrong)
-    public static string[] labelTexts = new string[5];
+    public const int TOTAL_LEVELS = 3;
 
-    // robotWasRight = tracks if each label was correct
-    public static bool[] robotWasRight = new bool[5];
+    // same strong progression feeling as old system
+    public const float DeltaPerRound =
+        (100f - 30f) / 4f;
 
-    // Wrong pool for generating incorrect labels
-    public static string[] wrongPool = {
-        "كلب", "قطة", "طائر", "أرنب", "ثعلب",
-        "هامستر", "سمكة", "دب", "ذئب", "غزال"
+    public static string[] currentCorrectAnswers;
+
+    public static string[] currentWrongPool;
+
+    public static string[] labelTexts =
+        new string[5];
+
+    public static bool[] robotWasRight =
+        new bool[5];
+
+    public static int currentItemCount = 3;
+
+    // LEVEL 1 : EMOTIONS
+    // LEVEL 2 : DIRECTIONS
+    // LEVEL 3 : ANIMALS
+    public static readonly string[][] levelCorrectAnswers =
+    {
+        new string[] { "يبكي", "سعيد ", "حزين" },
+
+        new string[] { "أعلى", "أسفل", " يسار", "يمين" },
+
+        new string[] { "ثعلب", "أرنب", "ببغاء", "كلب", "قطة" }
     };
+
+    public static readonly string[][] levelWrongPools =
+    {
+        new string[]
+        {
+            "غاضب", "متعب", "خائف", "نعسان", "مندهش"
+        },
+
+        new string[]
+        {
+            "دوران", "قفز", "أمام", "خلف", "توقف"
+        },
+
+        new string[]
+        {
+            "كلب", "قطة", "طائر", "أرنب", "ثعلب",
+            "هامستر", "سمكة", "دب", "ذئب", "غزال"
+        }
+    };
+
+    public static void LoadLevel(int level)
+    {
+        currentLevel = level;
+
+        currentCorrectAnswers =
+            levelCorrectAnswers[level];
+
+        currentWrongPool =
+            levelWrongPools[level];
+
+        currentItemCount =
+            currentCorrectAnswers.Length;
+    }
 
     public static int correctCount
     {
         get
         {
-            Debug.Log($"[correctCount getter] accuracy={accuracy}, checking thresholds...");
+            float t =
+                Mathf.InverseLerp(
+                    30f,
+                    100f,
+                    accuracy);
 
-            if (accuracy >= 90f)
-            {
-                Debug.Log($"[correctCount] >= 90% → returning 5");
-                return 5;
-            }
-            if (accuracy >= 80f)
-            {
-                Debug.Log($"[correctCount] >= 80% → returning 4");
-                return 4;
-            }
-            if (accuracy >= 65f)
-            {
-                Debug.Log($"[correctCount] >= 65% → returning 3");
-                return 3;
-            }
-            if (accuracy >= 50f)
-            {
-                Debug.Log($"[correctCount] >= 50% → returning 2");
-                return 2;
-            }
-            if (accuracy >= 30f)
-            {
-                Debug.Log($"[correctCount] >= 30% → returning 1");
-                return 1;
-            }
+            int count =
+                Mathf.RoundToInt(
+                    Mathf.Lerp(
+                        1,
+                        currentItemCount,
+                        t));
 
-            Debug.Log($"[correctCount] < 30% → returning 0");
-            return 0;
+            return Mathf.Clamp(
+                count,
+                1,
+                currentItemCount);
         }
     }
 }

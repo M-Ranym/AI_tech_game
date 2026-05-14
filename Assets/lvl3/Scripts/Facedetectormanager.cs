@@ -9,25 +9,20 @@ public class FaceDetectorManager : MonoBehaviour
 {
     [SerializeField] private RectTransform robot;
     [SerializeField] private RectTransform square;
-
     [SerializeField] private RectTransform squareStartPosition;
-
     [SerializeField] private GameObject[] roundImages;
     [SerializeField] private RectTransform[] faceMarkers;
-
     [SerializeField] private Button correctButton;
     [SerializeField] private Button wrongButton;
     [SerializeField] private Button confirmButton;
-
     [SerializeField] private GameObject feedbackPanel;
     [SerializeField] private RtlText feedbackText;
     [SerializeField] private GameObject resultsPanel;
     [SerializeField] private RtlText resultsText;
-
     [SerializeField] private RectTransform robotTargetSlot;
 
     [Header("Safe Area")]
-    [SerializeField] private RectTransform safeArea; // 👈 NEW
+    [SerializeField] private RectTransform safeArea;
 
     [SerializeField] private float farOffset = 220f;
     [SerializeField] private float nearOffset = 80f;
@@ -46,10 +41,14 @@ public class FaceDetectorManager : MonoBehaviour
     private Vector2 _currentFaceCenter;
     private Canvas _canvas;
 
+    private GameFinishTrigger _trigger;
+
     private enum Zone { Far, Near, OnFace }
 
     private void Start()
     {
+        _trigger = FindObjectOfType<GameFinishTrigger>();
+
         _canvas = FindObjectOfType<Canvas>();
         _robotHome = robot.anchoredPosition;
         _robotGroundY = robot.anchoredPosition.y;
@@ -75,7 +74,8 @@ public class FaceDetectorManager : MonoBehaviour
     {
         if (feedbackPanel.activeSelf && !_panelDismissed)
         {
-            if (Input.GetMouseButtonDown(0) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began))
+            if (Input.GetMouseButtonDown(0) || (Input.touchCount > 0
+                && Input.GetTouch(0).phase == TouchPhase.Began))
             {
                 _panelDismissed = true;
                 feedbackPanel.SetActive(false);
@@ -96,13 +96,12 @@ public class FaceDetectorManager : MonoBehaviour
             if (roundImages[i] != null) roundImages[i].SetActive(i == _currentRound - 1);
 
         _currentFaceCenter = faceMarkers[_currentRound - 1].anchoredPosition;
-
         square.anchoredPosition = squareStartPosition.anchoredPosition;
 
         Zone zone = GetZoneForRound();
         _robotWasCorrect = (zone == Zone.OnFace);
 
-        Vector2 targetPlacement = ClampInsideSafeArea(GetPlacementPosition(zone)); // 👈 FIX
+        Vector2 targetPlacement = ClampInsideSafeArea(GetPlacementPosition(zone));
 
         Vector2 robotTarget = robotTargetSlot != null
             ? new Vector2(robotTargetSlot.anchoredPosition.x, _robotGroundY)
@@ -110,14 +109,12 @@ public class FaceDetectorManager : MonoBehaviour
 
         yield return StartCoroutine(MoveRobot(robotTarget));
         yield return new WaitForSeconds(pauseDuration);
-
         yield return StartCoroutine(MoveSquare(targetPlacement));
         yield return new WaitForSeconds(pauseDuration);
-
         yield return StartCoroutine(MoveRobot(_robotHome));
         yield return new WaitForSeconds(pauseDuration);
 
-        Debug.Log($"Round {_currentRound}/6 | Score: {_trainingScore} | Zone: {zone} | FaceCenter: {_currentFaceCenter}");
+        Debug.Log($"Round {_currentRound}/6 | Score: {_trainingScore} | Zone: {zone}");
 
         if (_currentRound >= 6)
         {
@@ -141,55 +138,40 @@ public class FaceDetectorManager : MonoBehaviour
 
     private Vector2 GetPlacementPosition(Zone zone)
     {
-        Vector2 pos;
         switch (zone)
         {
             case Zone.OnFace:
-                pos = _currentFaceCenter;
-                break;
+                return _currentFaceCenter;
             case Zone.Near:
-                pos = _currentFaceCenter + (Vector2)Random.insideUnitCircle.normalized * nearOffset;
-                break;
+                return _currentFaceCenter + (Vector2)Random.insideUnitCircle.normalized * nearOffset;
             default:
-                pos = _currentFaceCenter + (Vector2)Random.insideUnitCircle.normalized * farOffset;
-                break;
+                return _currentFaceCenter + (Vector2)Random.insideUnitCircle.normalized * farOffset;
         }
-
-        return pos;
     }
 
-    // ✅ SAFE AREA CLAMP
     private Vector2 ClampInsideSafeArea(Vector2 pos)
     {
         if (safeArea == null) return pos;
-
         float halfW = safeArea.rect.width / 2f - square.rect.width / 2f;
         float halfH = safeArea.rect.height / 2f - square.rect.height / 2f;
-
         pos.x = Mathf.Clamp(pos.x, -halfW, halfW);
         pos.y = Mathf.Clamp(pos.y, -halfH, halfH);
-
         return pos;
     }
 
     private void OnSquareDrag(PointerEventData eventData)
     {
         if (!_draggingEnabled) return;
-
         RectTransform canvasRect = _canvas.GetComponent<RectTransform>();
         Camera cam = _canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : _canvas.worldCamera;
-
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            canvasRect, eventData.position, cam, out Vector2 localPoint
-        );
-
-        square.anchoredPosition = ClampInsideSafeArea(localPoint); // 👈 FIX
+            canvasRect, eventData.position, cam, out Vector2 localPoint);
+        square.anchoredPosition = ClampInsideSafeArea(localPoint);
     }
 
     private IEnumerator MoveSquare(Vector2 target)
     {
-        target = ClampInsideSafeArea(target); // 👈 FIX
-
+        target = ClampInsideSafeArea(target);
         Vector2 start = square.anchoredPosition;
         float dist = Vector2.Distance(start, target);
         float duration = dist / squareMoveSpeed;
@@ -199,17 +181,11 @@ public class FaceDetectorManager : MonoBehaviour
         {
             elapsed += Time.deltaTime;
             float t = Mathf.SmoothStep(0f, 1f, elapsed / duration);
-
-            Vector2 pos = Vector2.Lerp(start, target, t);
-            square.anchoredPosition = ClampInsideSafeArea(pos); // 👈 FIX
-
+            square.anchoredPosition = ClampInsideSafeArea(Vector2.Lerp(start, target, t));
             yield return null;
         }
-
         square.anchoredPosition = ClampInsideSafeArea(target);
     }
-
-    // -------- REST OF YOUR ORIGINAL CODE --------
 
     private void OnVerdict(bool kidSaysCorrect)
     {
@@ -250,9 +226,7 @@ public class FaceDetectorManager : MonoBehaviour
         confirmButton.gameObject.SetActive(false);
 
         float dist = Vector2.Distance(square.anchoredPosition, _currentFaceCenter);
-
-        if (dist <= closeThreshold)
-            _trainingScore += 2;
+        if (dist <= closeThreshold) _trainingScore += 2;
 
         StartCoroutine(WaitForDismissThenContinue());
     }
@@ -270,15 +244,25 @@ public class FaceDetectorManager : MonoBehaviour
         resultsPanel.SetActive(true);
         resultsText.text = "النهاية";
 
-        var returnToMap = FindObjectOfType<GameFinishTrigger>();
+        // 1 level, finish it = go to map, drone unlocks next game
+        StartCoroutine(DelayedFinish());
+    }
+
+    private IEnumerator DelayedFinish()
+    {
+        yield return new WaitForSeconds(2.5f);
+        if (_trigger != null)
+            _trigger.FinishLevel(0); // level 0 of 1 total
+        else
+            Debug.LogError("[FaceDetectorManager] No GameFinishTrigger in scene!");
     }
 
     private void SetupSquareDrag()
     {
         EventTrigger trigger = square.GetComponent<EventTrigger>();
         if (trigger == null) trigger = square.gameObject.AddComponent<EventTrigger>();
-
-        EventTrigger.Entry dragEntry = new EventTrigger.Entry { eventID = EventTriggerType.Drag };
+        EventTrigger.Entry dragEntry = new EventTrigger.Entry
+        { eventID = EventTriggerType.Drag };
         dragEntry.callback.AddListener((data) => OnSquareDrag((PointerEventData)data));
         trigger.triggers.Add(dragEntry);
     }
@@ -296,11 +280,9 @@ public class FaceDetectorManager : MonoBehaviour
             float t = Mathf.SmoothStep(0f, 1f, elapsed / duration);
             robot.anchoredPosition = new Vector2(
                 Mathf.Lerp(start.x, target.x, t),
-                _robotGroundY + Mathf.Sin(t * Mathf.PI) * 15f
-            );
+                _robotGroundY + Mathf.Sin(t * Mathf.PI) * 15f);
             yield return null;
         }
-
         robot.anchoredPosition = new Vector2(target.x, _robotGroundY);
     }
 }

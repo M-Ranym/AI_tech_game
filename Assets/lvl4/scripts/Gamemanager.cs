@@ -67,8 +67,6 @@ public class AgentManager : MonoBehaviour
     {
         _trigger = FindObjectOfType<GameFinishTrigger>();
 
-        // Resume from saved round (0-based from trigger → 1-based internally)
-
         if (feedbackPanel != null) feedbackPanel.SetActive(false);
 
         SaveOriginalPositions();
@@ -218,18 +216,23 @@ public class AgentManager : MonoBehaviour
         if (feedbackPanel != null) feedbackPanel.SetActive(false);
         feedbackShowing = false;
 
-        // ── Finish this round → go to map ─────────────────────────────────────
-        int roundIndex = currentRound - 1; // convert to 0-based for trigger
-        currentRound++;
+        int roundJustFinished = currentRound - 1; // 0-based index
 
-        // GameFinishTrigger handles whether more rounds remain or game is fully done
-    }
-
-    void ShowGameOver()
-    {
-        if (feedbackText != null) feedbackText.text = "انتهت اللعبة احسنت تعلمت الكثير";
-        if (feedbackPanel != null) feedbackPanel.SetActive(true);
-        feedbackShowing = true;
+        if (currentRound >= totalRounds)
+        {
+            // All 6 rounds done — go to map, drone unlocks next game
+            Debug.Log($"[AgentManager] All rounds done. Calling FinishLevel(0)");
+            if (_trigger != null)
+                _trigger.FinishLevel(0); // 1 level total
+            else
+                Debug.LogError("[AgentManager] No GameFinishTrigger in scene!");
+        }
+        else
+        {
+            // More rounds remain — continue playing
+            currentRound++;
+            ResetRound();
+        }
     }
 
     void ResetRound()
