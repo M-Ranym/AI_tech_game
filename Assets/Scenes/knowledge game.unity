@@ -2644,7 +2644,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71a3a600d69cf614f91a072fd6f5ad43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actionType: 0
+  actionType: 5
   answerPanel: {fileID: 0}
   isPlacedInSlot: 0
 --- !u!225 &326993377
@@ -3797,7 +3797,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71a3a600d69cf614f91a072fd6f5ad43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actionType: 4
+  actionType: 5
   answerPanel: {fileID: 0}
   isPlacedInSlot: 0
 --- !u!225 &421900525
@@ -7386,6 +7386,13 @@ MonoBehaviour:
   jumpDownPrepX: 0.3
   jumpDownPrepY: 0.15
   jumpDownPrepDuration: 0.12
+  rockDuckY: -0.4
+  rockDuckDuration: 0.15
+  rockHoldDuration: 0.5
+  rockRiseDuration: 0.15
+  zipSlideX: 1.5
+  zipSlideY: 0.3
+  zipDuration: 0.35
   actionDuration: 0.8
   shakeDuration: 0.5
   shakeMagnitude: 6
@@ -9313,6 +9320,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1045284863}
   m_CullTransparentMesh: 1
+--- !u!1 &1047908510
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1047908512}
+  - component: {fileID: 1047908511}
+  m_Layer: 0
+  m_Name: GameProgressManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1047908511
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1047908510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca3ef4a9565c9d84ab7dd6b3402938c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1047908512
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1047908510}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1200, y: -615, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1060908259
 GameObject:
   m_ObjectHideFlags: 0
@@ -10014,7 +10065,7 @@ MonoBehaviour:
     - {fileID: 1720427533}
     decisionPoints:
     - slotIndex: 2
-      correctAction: 0
+      correctAction: 4
     - slotIndex: 8
       correctAction: 0
   - levelRoot: {fileID: 350689500}
@@ -10068,7 +10119,7 @@ MonoBehaviour:
     - {fileID: 1893683682}
     decisionPoints:
     - slotIndex: 2
-      correctAction: 0
+      correctAction: 5
     - slotIndex: 8
       correctAction: 0
   - levelRoot: {fileID: 1347768641}
@@ -10139,13 +10190,13 @@ MonoBehaviour:
     - {fileID: 29543568}
     decisionPoints:
     - slotIndex: 2
-      correctAction: 0
+      correctAction: 4
     - slotIndex: 9
       correctAction: 2
     - slotIndex: 12
       correctAction: 1
     - slotIndex: 15
-      correctAction: 0
+      correctAction: 5
 --- !u!4 &1103485834
 Transform:
   m_ObjectHideFlags: 0
@@ -14948,7 +14999,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71a3a600d69cf614f91a072fd6f5ad43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actionType: 0
+  actionType: 4
   answerPanel: {fileID: 0}
   isPlacedInSlot: 0
 --- !u!225 &1647314273
@@ -18417,7 +18468,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71a3a600d69cf614f91a072fd6f5ad43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actionType: 0
+  actionType: 4
   answerPanel: {fileID: 0}
   isPlacedInSlot: 0
 --- !u!225 &1972238231
@@ -20097,3 +20148,4 @@ SceneRoots:
   - {fileID: 134418320}
   - {fileID: 1934160039}
   - {fileID: 1788647511}
+  - {fileID: 1047908512}

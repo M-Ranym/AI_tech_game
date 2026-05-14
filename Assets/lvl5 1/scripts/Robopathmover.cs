@@ -19,6 +19,17 @@ public class RoboPathMover : MonoBehaviour
     public float jumpDownPrepY = 0.15f;
     public float jumpDownPrepDuration = 0.12f;
 
+    [Header("Rock (duck and hold)")]
+    public float rockDuckY = -0.4f;  // how far down to duck
+    public float rockDuckDuration = 0.15f;  // time to duck
+    public float rockHoldDuration = 0.5f;   // time held low
+    public float rockRiseDuration = 0.15f;  // time to rise back
+
+    [Header("Zip (fast slide forward)")]
+    public float zipSlideX = 1.5f;   // how far forward
+    public float zipSlideY = 0.3f;   // slight upward arc
+    public float zipDuration = 0.35f;  // total zip time
+
     [Header("Action Duration")]
     public float actionDuration = 0.5f;
 
@@ -48,11 +59,53 @@ public class RoboPathMover : MonoBehaviour
             case RoboPathCore.RobotAction.JumpDown:
                 yield return DoJumpDown();
                 break;
+            case RoboPathCore.RobotAction.Rock:
+                yield return DoRock();
+                break;
+            case RoboPathCore.RobotAction.Zip:
+                yield return DoZip();
+                break;
             case RoboPathCore.RobotAction.Climb:
             case RoboPathCore.RobotAction.Crouch:
                 yield return new WaitForSeconds(actionDuration);
                 break;
         }
+    }
+
+    // Duck down, hold, rise back up
+    private IEnumerator DoRock()
+    {
+        Vector3 origin = transform.position;
+        Vector3 ducked = origin + new Vector3(0f, rockDuckY, 0f);
+
+        // Duck down
+        yield return LerpTo(origin, ducked, rockDuckDuration);
+
+        // Hold low
+        yield return new WaitForSeconds(rockHoldDuration);
+
+        // Rise back
+        yield return LerpTo(ducked, origin, rockRiseDuration);
+    }
+
+    // Fast forward slide with slight arc
+    private IEnumerator DoZip()
+    {
+        Vector3 origin = transform.position;
+        Vector3 end = origin + new Vector3(zipSlideX, 0f, 0f);
+
+        float t = 0f;
+        while (t < zipDuration)
+        {
+            t += Time.deltaTime;
+            float p = t / zipDuration;
+            transform.position = new Vector3(
+                Mathf.Lerp(origin.x, end.x, p),
+                origin.y + Mathf.Sin(p * Mathf.PI) * zipSlideY,
+                origin.z);
+            yield return null;
+        }
+        transform.position = end;
     }
 
     private IEnumerator DoJumpUp()

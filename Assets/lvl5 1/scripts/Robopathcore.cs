@@ -5,12 +5,12 @@ public class RoboPathCore : MonoBehaviour
 {
     public static RoboPathCore Instance;
 
-    public enum RobotAction { Jump, JumpDown, Climb, Crouch, None }
+    public enum RobotAction { Jump, JumpDown, Climb, Crouch, Rock, Zip, None }
 
     [System.Serializable]
     public struct DecisionPoint
     {
-        public int slotIndex; // 1-based
+        public int slotIndex;
         public RobotAction correctAction;
     }
 
@@ -30,6 +30,8 @@ public class RoboPathCore : MonoBehaviour
         public DecisionPoint[] decisionPoints;
     }
 
+    private const int TOTAL_LEVELS = 6;
+
     [Header("References")]
     public RoboPathMover mover;
     public RoboPathUI ui;
@@ -41,6 +43,8 @@ public class RoboPathCore : MonoBehaviour
     private bool isRunning = false;
     private Vector3 startPos;
 
+    private GameFinishTrigger _trigger;
+
     void Awake()
     {
         if (Instance == null) Instance = this;
@@ -49,48 +53,59 @@ public class RoboPathCore : MonoBehaviour
 
     void Start()
     {
+        _trigger = FindObjectOfType<GameFinishTrigger>();
+
+        // Resume from the level the player clicked on the board
+        int requestedLevel = _trigger != null ? _trigger.GetStartLevel() : 0;
+        currentLevelIndex = Mathf.Clamp(requestedLevel, 0, TOTAL_LEVELS - 1);
+
+        Debug.Log($"[RoboPathCore] starting level={currentLevelIndex}");
+
         startPos = mover.transform.position;
-        LoadLevel(0);
+        LoadLevel(currentLevelIndex);
     }
 
     public void StartRun()
     {
         if (isRunning) return;
+        Debug.Log($"[RoboPathCore] StartRun level={currentLevelIndex}");
         StartCoroutine(RunLevel(levels[currentLevelIndex]));
     }
 
+    // Called by UI button after level complete message
     public void GoToNextLevel()
     {
-        currentLevelIndex++;
+        Debug.Log($"[RoboPathCore] GoToNextLevel currentLevelIndex={currentLevelIndex}");
 
-        if (currentLevelIndex >= levels.Length)
-        {
-            ui.ShowAllLevelsComplete();
-            return;
-        }
-
-        LoadLevel(currentLevelIndex);
+        // Always go back to map — GameProgressManager unlocks next level
+        if (_trigger != null)
+            _trigger.FinishLevel(currentLevelIndex);
+        else
+            Debug.LogError("[RoboPathCore] No GameFinishTrigger in scene!");
     }
 
     private void LoadLevel(int index)
     {
-        for (int i = 0; i < levels.Length; i++)
-        {
-            if (levels[i].levelRoot != null)
-                levels[i].levelRoot.SetActive(i == index);
-        }
+        currentLevelIndex = Mathf.Clamp(index, 0, TOTAL_LEVELS - 1);
 
-        RoboPathSlotManager.Instance.SetSlots(levels[index].slots);
+        Debug.Log($"[RoboPathCore] LoadLevel {currentLevelIndex}");
+
+        for (int i = 0; i < levels.Length; i++)
+            if (levels[i].levelRoot != null)
+                levels[i].levelRoot.SetActive(i == currentLevelIndex);
+
+        RoboPathSlotManager.Instance.SetSlots(levels[currentLevelIndex].slots);
 
         mover.transform.position = startPos;
-
-        ui.OnLevelLoaded(index);
+        ui.OnLevelLoaded(currentLevelIndex);
     }
 
     IEnumerator RunLevel(LevelData lvl)
     {
         isRunning = true;
         RoboPathSlotManager.Instance.ResetAllColors();
+
+        Debug.Log($"[RoboPathCore] RunLevel {currentLevelIndex}");
 
         int[][] paths = BuildAutoPaths(lvl);
 
@@ -103,30 +118,39 @@ public class RoboPathCore : MonoBehaviour
 
             if (phase == paths.Length - 1)
             {
-                if (currentLevelIndex == levels.Length - 1)
-                {
-                    ui.ShowAllLevelsComplete();
+                bool isLastLevel = currentLevelIndex >= TOTAL_LEVELS - 1;
 
-                    var returnToMap = FindObjectOfType<GameFinishTrigger>();
+                Debug.Log($"[RoboPathCore] Level {currentLevelIndex} complete isLastLevel={isLastLevel}");
+
+                if (isLastLevel)
+                {
+                    // Last level — show all complete then go to map
+                    ui.ShowAllLevelsComplete();
+                    if (_trigger != null)
+                        _trigger.FinishLevel(currentLevelIndex);
+                    else
+                        Debug.LogError("[RoboPathCore] No GameFinishTrigger in scene!");
                 }
                 else
+                {
+                    // Not last level — show complete message
+                    // UI button calls GoToNextLevel() which goes to map
                     ui.ShowLevelComplete(currentLevelIndex);
+                }
 
                 isRunning = false;
                 yield break;
             }
 
             RobotAction needed = lvl.decisionPoints[phase].correctAction;
-
             int foundIndex = -1;
 
             yield return RoboPathSlotManager.Instance.ScanForAction(
-                needed,
-                result => foundIndex = result
-            );
+                needed, result => foundIndex = result);
 
             if (foundIndex == -1)
             {
+                Debug.Log($"[RoboPathCore] Wrong answer level={currentLevelIndex}");
                 yield return mover.Shake();
                 ui.ShowWrongAnswer();
 
@@ -139,8 +163,8 @@ public class RoboPathCore : MonoBehaviour
                 yield break;
             }
 
+            Debug.Log($"[RoboPathCore] Correct action={needed}");
             yield return mover.PlayAction(needed);
-
             RoboPathSlotManager.Instance.ResetFoundSlot(foundIndex);
         }
 
@@ -153,7 +177,6 @@ public class RoboPathCore : MonoBehaviour
         int dp = lvl.decisionPoints.Length;
 
         int[][] result = new int[dp + 1][];
-
         int prev = 1;
 
         for (int i = 0; i < dp; i++)
@@ -163,7 +186,10 @@ public class RoboPathCore : MonoBehaviour
         }
 
         result[dp] = new int[] { prev, total };
-
         return result;
     }
+
+    public int GetCurrentLevel() => currentLevelIndex;
+    public int GetTotalLevels() => TOTAL_LEVELS;
+    public bool IsRunning() => isRunning;
 }

@@ -15,6 +15,7 @@ public class MazeGenerator : MonoBehaviour
         new Vector2Int(3, 3),
     };
 
+    private const int TOTAL_LEVELS = 4;
     private int currentLevel = 0;
 
     [Header("References")]
@@ -67,12 +68,21 @@ public class MazeGenerator : MonoBehaviour
     {
         _trigger = FindObjectOfType<GameFinishTrigger>();
 
+        // Resume from the level the player clicked on the board
+        int requestedLevel = _trigger != null ? _trigger.GetStartLevel() : 0;
+        currentLevel = Mathf.Clamp(requestedLevel, 0, TOTAL_LEVELS - 1);
+
+        Debug.Log($"[MazeGenerator] starting level={currentLevel}");
+
+        LoadLevel(currentLevel);
     }
 
     void LoadLevel(int index)
     {
-        currentLevel = Mathf.Clamp(index, 0, LEVEL_SIZES.Length - 1);
+        currentLevel = Mathf.Clamp(index, 0, TOTAL_LEVELS - 1);
         width = height = LEVEL_SIZES[currentLevel];
+
+        Debug.Log($"[MazeGenerator] LoadLevel {currentLevel} size={width}x{height}");
 
         UpdateLevelLabel();
         ClearMazeCells();
@@ -103,7 +113,7 @@ public class MazeGenerator : MonoBehaviour
 
     void GenerateMaze()
     {
-        if (currentLevel == 3) { GenerateLevel4Maze(); return; }
+        if (currentLevel == 3) { GenerateLevel3Maze(); return; }
 
         Random.InitState(currentLevel);
 
@@ -154,7 +164,7 @@ public class MazeGenerator : MonoBehaviour
         goalGRow = g.y * 2 + 1;
     }
 
-    void GenerateLevel4Maze()
+    void GenerateLevel3Maze()
     {
         int[,] grid = new int[11, 11]
         {
@@ -278,6 +288,7 @@ public class MazeGenerator : MonoBehaviour
 
         var prog = programPanel.GetProgram();
         if (prog.Count == 0) { ShowResult(msgNoGoal, failed: true); return; }
+
         StartCoroutine(ExecuteProgram(prog));
     }
 
@@ -316,13 +327,21 @@ public class MazeGenerator : MonoBehaviour
 
         if (robotCol == goalGCol && robotRow == goalGRow)
         {
-            bool isLast = currentLevel + 1 >= LEVEL_SIZES.Length;
+            bool isLast = currentLevel + 1 >= TOTAL_LEVELS;
+
+            Debug.Log($"[MazeGenerator] Level {currentLevel} complete isLast={isLast}");
+
             ShowResult(isLast ? msgWinAll : msgNext, failed: false);
             FindObjectOfType<UIManager>()?.SetPlayLabel();
 
             yield return new WaitForSeconds(1.5f);
             if (resultPanel) resultPanel.SetActive(false);
             programPanel.ClearProgram();
+
+            if (_trigger != null)
+                _trigger.FinishLevel(currentLevel);
+            else
+                Debug.LogError("[MazeGenerator] No GameFinishTrigger in scene!");
         }
         else
         {
@@ -368,4 +387,6 @@ public class MazeGenerator : MonoBehaviour
     public bool IsResultShowing() => resultPanel != null && resultPanel.activeSelf;
     public bool IsRunning() => isRunning;
     public bool LastRunFailed() => lastRunFailed;
+    public int GetCurrentLevel() => currentLevel;
+    public int GetTotalLevels() => TOTAL_LEVELS;
 }
