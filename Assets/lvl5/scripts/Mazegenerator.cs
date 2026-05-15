@@ -16,7 +16,10 @@ public class MazeGenerator : MonoBehaviour
     };
 
     private const int TOTAL_LEVELS = 4;
+    private const int ROUNDS_PER_LEVEL = 2;
+
     private int currentLevel = 0;
+    private int currentRound = 0;
 
     [Header("References")]
     public RectTransform mazePanel;
@@ -44,6 +47,7 @@ public class MazeGenerator : MonoBehaviour
 
     private readonly string msgWall = "اصطدم الروبوت بجدار";
     private readonly string msgNoGoal = "لم يصل الروبوت الى الهدف";
+    private readonly string msgNextRound = "ممتاز! الجولة التالية";
     private readonly string msgNext = "ممتاز! المستوى التالي";
     private readonly string msgWinAll = "رائع! اكملت جميع المستويات";
 
@@ -68,21 +72,21 @@ public class MazeGenerator : MonoBehaviour
     {
         _trigger = FindObjectOfType<GameFinishTrigger>();
 
-        // Resume from the level the player clicked on the board
         int requestedLevel = _trigger != null ? _trigger.GetStartLevel() : 0;
         currentLevel = Mathf.Clamp(requestedLevel, 0, TOTAL_LEVELS - 1);
+        currentRound = 0;
 
         Debug.Log($"[MazeGenerator] starting level={currentLevel}");
-
-        LoadLevel(currentLevel);
+        LoadLevel(currentLevel, currentRound);
     }
 
-    void LoadLevel(int index)
+    void LoadLevel(int index, int round)
     {
         currentLevel = Mathf.Clamp(index, 0, TOTAL_LEVELS - 1);
+        currentRound = Mathf.Clamp(round, 0, ROUNDS_PER_LEVEL - 1);
         width = height = LEVEL_SIZES[currentLevel];
 
-        Debug.Log($"[MazeGenerator] LoadLevel {currentLevel} size={width}x{height}");
+        Debug.Log($"[MazeGenerator] LoadLevel {currentLevel} round={currentRound} size={width}x{height}");
 
         UpdateLevelLabel();
         ClearMazeCells();
@@ -113,77 +117,164 @@ public class MazeGenerator : MonoBehaviour
 
     void GenerateMaze()
     {
-        if (currentLevel == 3) { GenerateLevel3Maze(); return; }
-
-        Random.InitState(currentLevel);
-
-        int w = width * 2 + 1;
-        int h = height * 2 + 1;
-
-        mazeGrid = new int[h, w];
-        for (int r = 0; r < h; r++)
-            for (int c = 0; c < w; c++)
-                mazeGrid[r, c] = 1;
-
-        var stack = new Stack<Vector2Int>();
-        var seed = new Vector2Int(1, 1);
-        mazeGrid[seed.y, seed.x] = 0;
-        stack.Push(seed);
-
-        Vector2Int[] dirs = {
-            new Vector2Int(0,  2), new Vector2Int(2,  0),
-            new Vector2Int(0, -2), new Vector2Int(-2,  0)
-        };
-
-        while (stack.Count > 0)
+        if (currentRound == 0)
         {
-            var cur = stack.Peek();
-            var neighbors = new List<Vector2Int>();
-            foreach (var d in dirs)
+            Random.InitState(currentLevel);
+
+            int w = width * 2 + 1;
+            int h = height * 2 + 1;
+
+            mazeGrid = new int[h, w];
+            for (int r = 0; r < h; r++)
+                for (int c = 0; c < w; c++)
+                    mazeGrid[r, c] = 1;
+
+            var stack = new Stack<Vector2Int>();
+            var seed = new Vector2Int(1, 1);
+            mazeGrid[seed.y, seed.x] = 0;
+            stack.Push(seed);
+
+            Vector2Int[] dirs = {
+                new Vector2Int(0,  2), new Vector2Int(2,  0),
+                new Vector2Int(0, -2), new Vector2Int(-2,  0)
+            };
+
+            while (stack.Count > 0)
             {
-                var n = cur + d;
-                if (n.x > 0 && n.x < w - 1 && n.y > 0 && n.y < h - 1 && mazeGrid[n.y, n.x] == 1)
-                    neighbors.Add(n);
+                var cur = stack.Peek();
+                var neighbors = new List<Vector2Int>();
+                foreach (var d in dirs)
+                {
+                    var n = cur + d;
+                    if (n.x > 0 && n.x < w - 1 && n.y > 0 && n.y < h - 1 && mazeGrid[n.y, n.x] == 1)
+                        neighbors.Add(n);
+                }
+                if (neighbors.Count > 0)
+                {
+                    var next = neighbors[Random.Range(0, neighbors.Count)];
+                    var wall = (cur + next) / 2;
+                    mazeGrid[next.y, next.x] = 0;
+                    mazeGrid[wall.y, wall.x] = 0;
+                    stack.Push(next);
+                }
+                else stack.Pop();
             }
-            if (neighbors.Count > 0)
-            {
-                var next = neighbors[Random.Range(0, neighbors.Count)];
-                var wall = (cur + next) / 2;
-                mazeGrid[next.y, next.x] = 0;
-                mazeGrid[wall.y, wall.x] = 0;
-                stack.Push(next);
-            }
-            else stack.Pop();
+
+            startGCol = 1;
+            startGRow = h - 2;
+
+            Vector2Int g = LEVEL_GOALS[currentLevel];
+            goalGCol = g.x * 2 + 1;
+            goalGRow = g.y * 2 + 1;
         }
-
-        startGCol = 1;
-        startGRow = h - 2;
-
-        Vector2Int g = LEVEL_GOALS[currentLevel];
-        goalGCol = g.x * 2 + 1;
-        goalGRow = g.y * 2 + 1;
-    }
-
-    void GenerateLevel3Maze()
-    {
-        int[,] grid = new int[11, 11]
+        else
         {
-            { 1,1,1,1,1,1,1,1,1,1,1 },
-            { 1,0,1,0,1,0,0,0,0,0,1 },
-            { 1,0,1,0,1,1,1,1,1,0,1 },
-            { 1,0,0,0,0,0,1,0,0,0,1 },
-            { 1,1,1,1,1,0,1,0,1,0,1 },
-            { 1,0,0,0,1,0,0,0,1,0,1 },
-            { 1,0,1,0,1,1,1,1,1,0,1 },
-            { 1,0,1,0,0,0,0,0,0,0,1 },
-            { 1,0,1,1,1,1,1,1,1,1,1 },
-            { 1,0,0,0,0,0,0,0,0,0,1 },
-            { 1,1,1,1,1,1,1,1,1,1,1 },
-        };
-        mazeGrid = grid;
-        startGCol = 1; startGRow = 9;
-        goalGCol = 5; goalGRow = 1;
+            GenerateRound2Maze();
+        }
     }
+
+    // ═════════════════════════════════════════════════════════════════════════
+    // ROUND 2 MAZES — edit freely
+    //
+    //   1 = wall    0 = open corridor
+    //   Robot slides ALL THE WAY in a direction until it hits a wall.
+    //
+    //   startGCol / startGRow  = where the robot spawns  (must land on a 0 cell)
+    //   goalGCol  / goalGRow   = where the yellow goal is (must land on a 0 cell)
+    // ═════════════════════════════════════════════════════════════════════════
+    void GenerateRound2Maze()
+    {
+        switch (currentLevel)
+        {
+            case 0: GenerateLevel0Round2(); break;
+            case 1: GenerateLevel1Round2(); break;
+            case 2: GenerateLevel2Round2(); break;
+            case 3: GenerateLevel3Round2(); break;
+        }
+    }
+
+    // ── LEVEL 0  ROUND 2  (grid: 5×5) ────────────────────────────────────────
+    // Corridor cells are at odd col/row indices: (1,1) (1,3) (3,1) (3,3)
+    // goalGCol/goalGRow must be odd indices too.
+    //         col→  0 1 2 3 4
+    void GenerateLevel0Round2()
+    {
+        mazeGrid = new int[5, 5]
+        {
+            { 1,1,1,1,1 },  // row 0
+            { 1,0,1,0,1 },  // row 1
+            { 1,0,1,1,1 },  // row 2
+            { 1,0,0,0,1 },  // row 3
+            { 1,1,1,1,1 },  // row 4
+        };
+        startGCol = 1; startGRow = 1;   // robot starts here  ← change to move start
+        goalGCol = 3; goalGRow = 3;   // yellow goal here   ← change to move goal
+    }
+
+    // ── LEVEL 1  ROUND 2  (grid: 7×7) ────────────────────────────────────────
+    // Corridor cells are at odd col/row indices: 1,3,5
+    //         col→  0 1 2 3 4 5 6
+    void GenerateLevel1Round2()
+    {
+        mazeGrid = new int[7, 7]
+        {
+            { 1,1,1,1,1,1,1 },  // row 0
+            { 1,0,1,0,0,0,1 },  // row 1
+            { 1,0,1,1,1,0,1 },  // row 2
+            { 1,0,0,0,1,0,1 },  // row 3
+            { 1,1,1,0,1,0,1 },  // row 4
+            { 1,0,0,0,0,0,1 },  // row 5
+            { 1,1,1,1,1,1,1 },  // row 6
+        };
+        startGCol = 1; startGRow = 5;   // robot starts here  ← change to move start
+        goalGCol = 5; goalGRow = 1;   // yellow goal here   ← change to move goal
+    }
+
+    // ── LEVEL 2  ROUND 2  (grid: 9×9) ────────────────────────────────────────
+    // Corridor cells are at odd col/row indices: 1,3,5,7
+    //         col→  0 1 2 3 4 5 6 7 8
+    void GenerateLevel2Round2()
+    {
+        mazeGrid = new int[9, 9]
+        {
+            { 1,1,1,1,1,1,1,1,1 },  // row 0
+            { 1,0,0,0,1,0,0,0,1 },  // row 1
+            { 1,0,1,0,1,0,1,1,1 },  // row 2
+            { 1,0,1,0,0,0,0,0,1 },  // row 3
+            { 1,0,1,1,1,1,1,0,1 },  // row 4
+            { 1,0,0,0,1,0,0,0,1 },  // row 5
+            { 1,1,1,0,1,0,1,1,1 },  // row 6
+            { 1,0,0,0,0,0,0,0,1 },  // row 7
+            { 1,1,1,1,1,1,1,1,1 },  // row 8
+        };
+        startGCol = 1; startGRow = 7;   // robot starts here  ← change to move start
+        goalGCol = 7; goalGRow = 1;   // yellow goal here   ← change to move goal
+    }
+
+    // ── LEVEL 3  ROUND 2  (grid: 11×11) ──────────────────────────────────────
+    // Corridor cells are at odd col/row indices: 1,3,5,7,9
+    //         col→  0 1 2 3 4 5 6 7 8 9 10
+    void GenerateLevel3Round2()
+    {
+        mazeGrid = new int[11, 11]
+        {
+            { 1,1,1,1,1,1,1,1,1,1,1 },  // row 0
+            { 1,0,0,0,0,0,0,0,1,0,1 },  // row 1
+            { 1,0,1,1,1,1,1,0,1,0,1 },  // row 2
+            { 1,0,1,0,0,0,1,0,0,0,1 },  // row 3
+            { 1,0,1,0,1,0,1,1,1,0,1 },  // row 4
+            { 1,0,0,0,1,0,0,0,1,0,1 },  // row 5
+            { 1,1,1,0,1,1,1,0,1,0,1 },  // row 6
+            { 1,0,0,0,0,0,0,0,1,0,1 },  // row 7
+            { 1,0,1,1,1,1,1,1,1,0,1 },  // row 8
+            { 1,0,0,0,0,0,0,0,0,0,1 },  // row 9
+            { 1,1,1,1,1,1,1,1,1,1,1 },  // row 10
+        };
+        startGCol = 1; startGRow = 9;   // robot starts here  ← change to move start
+        goalGCol = 7; goalGRow = 1;   // yellow goal here   ← change to move goal
+    }
+
+    // ═════════════════════════════════════════════════════════════════════════
 
     IEnumerator InitAfterLayout()
     {
@@ -327,21 +418,33 @@ public class MazeGenerator : MonoBehaviour
 
         if (robotCol == goalGCol && robotRow == goalGRow)
         {
-            bool isLast = currentLevel + 1 >= TOTAL_LEVELS;
+            bool isLastRound = currentRound + 1 >= ROUNDS_PER_LEVEL;
+            bool isLastLevel = currentLevel + 1 >= TOTAL_LEVELS;
 
-            Debug.Log($"[MazeGenerator] Level {currentLevel} complete isLast={isLast}");
+            Debug.Log($"[MazeGenerator] Level {currentLevel} round {currentRound} complete " +
+                      $"isLastRound={isLastRound} isLastLevel={isLastLevel}");
 
-            ShowResult(isLast ? msgWinAll : msgNext, failed: false);
+            string msg = (isLastRound && isLastLevel) ? msgWinAll
+                       : isLastRound ? msgNext
+                                                      : msgNextRound;
+            ShowResult(msg, failed: false);
             FindObjectOfType<UIManager>()?.SetPlayLabel();
 
             yield return new WaitForSeconds(1.5f);
             if (resultPanel) resultPanel.SetActive(false);
             programPanel.ClearProgram();
 
-            if (_trigger != null)
-                _trigger.FinishLevel(currentLevel);
+            if (isLastRound)
+            {
+                if (_trigger != null)
+                    _trigger.FinishLevel(currentLevel);
+                else
+                    Debug.LogError("[MazeGenerator] No GameFinishTrigger in scene!");
+            }
             else
-                Debug.LogError("[MazeGenerator] No GameFinishTrigger in scene!");
+            {
+                LoadLevel(currentLevel, currentRound + 1);
+            }
         }
         else
         {

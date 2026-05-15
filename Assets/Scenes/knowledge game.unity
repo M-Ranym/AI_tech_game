@@ -10120,8 +10120,10 @@ MonoBehaviour:
     decisionPoints:
     - slotIndex: 2
       correctAction: 5
-    - slotIndex: 8
-      correctAction: 0
+    - slotIndex: 9
+      correctAction: 2
+    - slotIndex: 12
+      correctAction: 1
   - levelRoot: {fileID: 1347768641}
     slotTransforms:
     - {fileID: 1098163469}
@@ -13622,7 +13624,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1506776680
 Transform:
   m_ObjectHideFlags: 0
@@ -16292,7 +16294,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1757025593
 Transform:
   m_ObjectHideFlags: 0
