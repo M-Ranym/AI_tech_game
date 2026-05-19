@@ -1,0 +1,477 @@
+fileFormatVersion: 2
+guid: f36de3c5c49da0e428556b1cb80df573
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -499536261505356739
+    second: Graphics_Mouth_SpriteSheet_0
+  - first:
+      213: 3778123326942905454
+    second: Graphics_Mouth_SpriteSheet_1
+  - first:
+      213: 3601877860094349224
+    second: Graphics_Mouth_SpriteSheet_2
+  - first:
+      213: 1267105641256207792
+    second: Graphics_Mouth_SpriteSheet_3
+  - first:
+      213: -8723499159970684197
+    second: Graphics_Mouth_SpriteSheet_4
+  - first:
+      213: 304319675060232372
+    second: Graphics_Mouth_SpriteSheet_5
+  - first:
+      213: -918489631346659040
+    second: Graphics_Mouth_SpriteSheet_6
+  - first:
+      213: 4104385750383265394
+    second: Graphics_Mouth_SpriteSheet_7
+  - first:
+      213: 7172915182926768493
+    second: Graphics_Mouth_SpriteSheet_8
+  - first:
+      213: -8942171071926049651
+    second: Graphics_Mouth_SpriteSheet_9
+  - first:
+      213: -1616889925929452560
+    second: Graphics_Mouth_SpriteSheet_10
+  - first:
+      213: 8020381619005048019
+    second: Graphics_Mouth_SpriteSheet_11
+  - first:
+      213: 8369220441334044635
+    second: Graphics_Mouth_SpriteSheet_12
+  - first:
+      213: 4709770679219324678
+    second: Graphics_Mouth_SpriteSheet_13
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 0
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 1
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Graphics_Mouth_SpriteSheet_0
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 966
+        width: 252
+        height: 117
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d3ceb84ba6a4119f0800000000000000
+      internalID: -499536261505356739
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Graphics_Mouth_SpriteSheet_1
+      rect:
+        serializedVersion: 2
+        x: 491
+        y: 943
+        width: 148
+        height: 196
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e648c0406279e6430800000000000000
+      internalID: 3778123326942905454
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Graphics_Mouth_SpriteSheet_2
+      rect:
+        serializedVersion: 2
+        x: 845
+        y: 975
+        width: 282
+        height: 99
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8af844784d07cf130800000000000000
+      internalID: 3601877860094349224
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Graphics_Mouth_SpriteSheet_3
+      rect:
+        serializedVersion: 2
+        x: 1281
+        y: 971
+        width: 253
+        height: 106
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0b548f70ed9a59110800000000000000
+      internalID: 1267105641256207792
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Graphics_Mouth_SpriteSheet_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 605
+        width: 288
+        height: 79
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bd2678babb7efe680800000000000000
+      internalID: -8723499159970684197
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Graphics_Mouth_SpriteSheet_5
+      rect:
+        serializedVersion: 2
+        x: 421
+        y: 607
+        width: 288
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4b0a022d129293400800000000000000
+      internalID: 304319675060232372
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Graphics_Mouth_SpriteSheet_6
+      rect:
+        serializedVersion: 2
+        x: 853
+        y: 583
+        width: 266
+        height: 111
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 021f3b1fb8ed043f0800000000000000
+      internalID: -918489631346659040
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Graphics_Mouth_SpriteSheet_7
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 608
+        width: 254
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 27605c01815b5f830800000000000000
+      internalID: 4104385750383265394
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Graphics_Mouth_SpriteSheet_8
+      rect:
+        serializedVersion: 2
+        x: 13
+        y: 206
+        width: 262
+        height: 124
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d692b5aea505b8360800000000000000
+      internalID: 7172915182926768493
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Graphics_Mouth_SpriteSheet_9
+      rect:
+        serializedVersion: 2
+        x: 429
+        y: 204
+        width: 272
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d84e219a9c607e380800000000000000
+      internalID: -8942171071926049651
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Graphics_Mouth_SpriteSheet_10
+      rect:
+        serializedVersion: 2
+        x: 849
+        y: 212
+        width: 274
+        height: 112
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0fb3114dd27af89e0800000000000000
+      internalID: -1616889925929452560
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Graphics_Mouth_SpriteSheet_11
+      rect:
+        serializedVersion: 2
+        x: 1278
+        y: 208
+        width: 258
+        height: 121
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3d44ed3b69e1e4f60800000000000000
+      internalID: 8020381619005048019
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Graphics_Mouth_SpriteSheet_12
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 0
+        width: 254
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bd757ac36a1752470800000000000000
+      internalID: 8369220441334044635
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Graphics_Mouth_SpriteSheet_13
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 14
+        width: 201
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6070b64ba777c5140800000000000000
+      internalID: 4709770679219324678
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      Graphics_Mouth_SpriteSheet_0: -499536261505356739
+      Graphics_Mouth_SpriteSheet_1: 3778123326942905454
+      Graphics_Mouth_SpriteSheet_10: -1616889925929452560
+      Graphics_Mouth_SpriteSheet_11: 8020381619005048019
+      Graphics_Mouth_SpriteSheet_12: 8369220441334044635
+      Graphics_Mouth_SpriteSheet_13: 4709770679219324678
+      Graphics_Mouth_SpriteSheet_2: 3601877860094349224
+      Graphics_Mouth_SpriteSheet_3: 1267105641256207792
+      Graphics_Mouth_SpriteSheet_4: -8723499159970684197
+      Graphics_Mouth_SpriteSheet_5: 304319675060232372
+      Graphics_Mouth_SpriteSheet_6: -918489631346659040
+      Graphics_Mouth_SpriteSheet_7: 4104385750383265394
+      Graphics_Mouth_SpriteSheet_8: 7172915182926768493
+      Graphics_Mouth_SpriteSheet_9: -8942171071926049651
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

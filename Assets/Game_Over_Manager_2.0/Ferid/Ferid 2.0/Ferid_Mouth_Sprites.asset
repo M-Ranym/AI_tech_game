@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bf7c34a0dc4e6348bea04faa70406ee, type: 3}
+  m_Name: Ferid_Mouth_Sprites
+  m_EditorClassIdentifier: 
+  m_Labels:
+  - m_Name: Mouth
+    m_Hash: 520385427
+    m_CategoryList:
+    - m_Name: Idle
+      m_Hash: 1008081451
+      m_Sprite: {fileID: 8369220441334044635, guid: f146d75b78b0e254fafa45c2e7164e41,
+        type: 3}
+    - m_Name: Happy
+      m_Hash: 1059892429
+      m_Sprite: {fileID: 8369220441334044635, guid: f146d75b78b0e254fafa45c2e7164e41,
+        type: 3}
+    - m_Name: Laugh
+      m_Hash: 592735362
+      m_Sprite: {fileID: 7172915182926768493, guid: f146d75b78b0e254fafa45c2e7164e41,
+        type: 3}
+    - m_Name: Sad
+      m_Hash: 662877788
+      m_Sprite: {fileID: 4709770679219324678, guid: f146d75b78b0e254fafa45c2e7164e41,
+        type: 3}
+    - m_Name: Yawn
+      m_Hash: 337681741
+      m_Sprite: {fileID: 3778123326942905454, guid: f146d75b78b0e254fafa45c2e7164e41,
+        type: 3}
+    - m_Name: Smile
+      m_Hash: 55258123
+      m_Sprite: {fileID: 4104385750383265394, guid: f146d75b78b0e254fafa45c2e7164e41,
+        type: 3}

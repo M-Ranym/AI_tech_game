@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bf7c34a0dc4e6348bea04faa70406ee, type: 3}
+  m_Name: Ferid_Eyes_Sprites
+  m_EditorClassIdentifier: 
+  m_Labels:
+  - m_Name: Eye_Modes
+    m_Hash: 943433224
+    m_CategoryList:
+    - m_Name: Idle
+      m_Hash: 1008081451
+      m_Sprite: {fileID: 1782712069817683516, guid: 7c963b634e9dd384ab9e3fd2d0a6cd90,
+        type: 3}
+    - m_Name: Happy
+      m_Hash: 1059892429
+      m_Sprite: {fileID: -8536734946987894299, guid: 7c963b634e9dd384ab9e3fd2d0a6cd90,
+        type: 3}
+    - m_Name: Sad
+      m_Hash: 662877788
+      m_Sprite: {fileID: 6124238943856733408, guid: 7c963b634e9dd384ab9e3fd2d0a6cd90,
+        type: 3}
+    - m_Name: AngryLeft
+      m_Hash: 766081590
+      m_Sprite: {fileID: 5608143757612131974, guid: 7c963b634e9dd384ab9e3fd2d0a6cd90,
+        type: 3}
+    - m_Name: AngryRight
+      m_Hash: 948881274
+      m_Sprite: {fileID: 4182329913257080426, guid: 7c963b634e9dd384ab9e3fd2d0a6cd90,
+        type: 3}

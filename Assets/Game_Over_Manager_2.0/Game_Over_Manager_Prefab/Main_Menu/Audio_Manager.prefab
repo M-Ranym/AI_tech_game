@@ -1,0 +1,1200 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5378524194867136454
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5378524194867136448}
+  - component: {fileID: 5378524194867136449}
+  m_Layer: 0
+  m_Name: Audio_Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5378524194867136448
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5378524194867136454}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5378524194867136449
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5378524194867136454}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7ae370012160d143bf1909ba4903532, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _sounds:
+  - IsFeridSpeech: 0
+    name: Music
+    clip: {fileID: 8300000, guid: e18713d5c19d4a84fa2c91618335bcd5, type: 3}
+    LocalizedAudioClipsList: []
+    volume: 0.46
+    pitch: 1
+    loop: 1
+    source: {fileID: 0}
+  - IsFeridSpeech: 0
+    name: Click_Sfx
+    clip: {fileID: 8300000, guid: 7ad1151c25639724ea1ffe4bd262bf25, type: 3}
+    LocalizedAudioClipsList: []
+    volume: 0.37
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 0
+    name: Bubble_Sfx
+    clip: {fileID: 8300000, guid: 7c303f313c0c57e4fb8d005f0ae65ebc, type: 3}
+    LocalizedAudioClipsList: []
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 0
+    name: Whoosh_Sfx
+    clip: {fileID: 8300000, guid: a4654791426d12d4f91f90b1c78af5e3, type: 3}
+    LocalizedAudioClipsList: []
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 0
+    name: InfniteMode_Sfx
+    clip: {fileID: 8300000, guid: d15d2dbe42e36cf4fb27f94524e4ace1, type: 3}
+    LocalizedAudioClipsList: []
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 0
+    name: Win_Sfx
+    clip: {fileID: 8300000, guid: f2550f92922d74248922d6184f32f68c, type: 3}
+    LocalizedAudioClipsList: []
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 0
+    name: Lose_Sfx
+    clip: {fileID: 8300000, guid: ba8e5c2372d362f4284b119af33bdd41, type: 3}
+    LocalizedAudioClipsList: []
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 0
+    name: Last_Level_Reached_Sfx
+    clip: {fileID: 8300000, guid: a7bb2afe1e5b8ac409d2682d82f25448, type: 3}
+    LocalizedAudioClipsList: []
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 0
+    name: Last_Level_Reached_Sfx
+    clip: {fileID: 8300000, guid: a7bb2afe1e5b8ac409d2682d82f25448, type: 3}
+    LocalizedAudioClipsList: []
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 0
+    name: Counter_Sfx
+    clip: {fileID: 8300000, guid: 1fbf9e400f603da498a181dc1b99e48b, type: 3}
+    LocalizedAudioClipsList: []
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  _feridSounds:
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_LETS_PLAY_0
+    clip: {fileID: 8300000, guid: c9c5ea32c95a1ed4c9026b3c80499a83, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: c9c5ea32c95a1ed4c9026b3c80499a83, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: ab5ca3adf7ab0794090a76b2ffc206fa, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: f513785085dd55249824b8b663b70482, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 1
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_LETS_PLAY_1
+    clip: {fileID: 8300000, guid: b654d52cf16efd3418c7d30b1cdd6185, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: b654d52cf16efd3418c7d30b1cdd6185, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: 9e702b92e299f97488203ca8b793eab2, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: b35c481fe12856e4d98861457e7c78d3, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_LETS_PLAY_3
+    clip: {fileID: 8300000, guid: 8e6878074cbd82744899f6d8572dd78a, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: 8e6878074cbd82744899f6d8572dd78a, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: 06ab1c3093d6a3643bf1ce71a806437d, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: ded9aa624457b0e4d9d4aa673cb25579, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_LETS_PLAY_4
+    clip: {fileID: 8300000, guid: 6aa45ec38dda00540b90bc2388525f53, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: 6aa45ec38dda00540b90bc2388525f53, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: 46c63e11a7fb2c3459a0b160d30bd641, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: 974173262c0227842a6baa46a5ec9ae0, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_LETS_PLAY_5
+    clip: {fileID: 8300000, guid: 67f444bb00f4a774ca38f2d05f0ebd68, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: 67f444bb00f4a774ca38f2d05f0ebd68, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: 344211a4f565bbf4eae948192c086c90, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: 0ef2b804f655cab46923aa49823bfb50, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_LETS_PLAY_6
+    clip: {fileID: 8300000, guid: d097b0dcff73e434cb3b6b77949e48f5, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: d097b0dcff73e434cb3b6b77949e48f5, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: ebeb8e8b3de6f794798bfc31d4232d37, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: df44833611618cb44b178e5a4b91abf0, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_LETS_PLAY_7
+    clip: {fileID: 8300000, guid: 22bec69e6087cc34db19710879c85f00, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: 22bec69e6087cc34db19710879c85f00, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: f43a061b551f6464c8483045612c1b83, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: 274caf33b7fa5d3428fbed83dbf05f44, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_LETS_PLAY_8
+    clip: {fileID: 8300000, guid: 363f790d5c7195f46bdf8b055669bf59, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: 363f790d5c7195f46bdf8b055669bf59, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: 833a33c7753681c468725d3620f9a63d, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: e370674e95910fc4abd7039be606ad77, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_LETS_PLAY_9
+    clip: {fileID: 8300000, guid: 923bb56183ad412469765449c9049120, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: 923bb56183ad412469765449c9049120, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: 6995c55bcc8c44c4b8feaf2829a421ed, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: f709722f78c7adc46a55a4e2c9dbda1b, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_LETS_PLAY_10
+    clip: {fileID: 8300000, guid: ebce29ec5b4fefe4e975dac6eaf3f218, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: ebce29ec5b4fefe4e975dac6eaf3f218, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: 65afc253334c6ed49bd81ad8343855df, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: c122ab0a1a4f7fd41b05759fe093d7e4, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_LETS_PLAY_11
+    clip: {fileID: 8300000, guid: e8de2b62c03727d49836ec5b6f293ea7, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: e8de2b62c03727d49836ec5b6f293ea7, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: 54e7789a9c6f05440b0abe0621166c82, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: 64444239dd0335443a8716aa8a44fb5c, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_LETS_PLAY_12
+    clip: {fileID: 8300000, guid: 4a5057d3c7993c34683cb467485f75b8, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: 4a5057d3c7993c34683cb467485f75b8, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: 93ac0ada2edf3ab4c86284675a0d8ffb, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: cc735bda8e5d15e40aa561c26f6c4cea, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: 1,2,3LET_GO
+    clip: {fileID: 8300000, guid: f46e60f100e53224f8acd913d6b4dcbd, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: f46e60f100e53224f8acd913d6b4dcbd, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: f7f04edf69b0c304e91cc068d0f0047d, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: 384e58b1ac24b43489fc5333bb32efff, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: You can challenge your friends after completing all the levels
+    clip: {fileID: 8300000, guid: a9b436300f9f8a5449b1a33de6ebc713, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: a9b436300f9f8a5449b1a33de6ebc713, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: 6dcaa3991bdcc9249b6e1c475f65deb9, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: 24b8940703efce14190de28afe1bafd2, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: You can now challenge your friends with the infinite mode
+    clip: {fileID: 8300000, guid: 4d9a20d8c508d004fa6d03d8cac54d73, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: 4d9a20d8c508d004fa6d03d8cac54d73, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: 4ca995540ebfbab4c8b33e78182cf1cb, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: a5d2e40165dbe9146ba1b4ccf3cb92eb, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: You have to finish all the levels first
+    clip: {fileID: 8300000, guid: a38b7393b51e78b49aefddca83fe7917, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: a38b7393b51e78b49aefddca83fe7917, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: 8b87a54db92db7d4e8e6df3f2eb84efc, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: 9746fd7b12e176d41a701768f70d8454, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_LETS_LOSE_0
+    clip: {fileID: 8300000, guid: e49c32efe313f694589d3d267a69e0cb, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: e49c32efe313f694589d3d267a69e0cb, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: 08752183c538e65428e7e7e9f00a84ac, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: 1eff249f72b08d142872b0c046342c1a, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_LETS_LOSE_1
+    clip: {fileID: 8300000, guid: cb7b0f73c87af5a489d3001cc8f0da33, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: cb7b0f73c87af5a489d3001cc8f0da33, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: 40cb45ea4ff5a5f4c84ac4827d7b4278, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: d4c06fc350e61d44f85a64d4836c15dd, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_LETS_LOSE_2
+    clip: {fileID: 8300000, guid: 39424658876fc8d4abf5b71f078a8166, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: 39424658876fc8d4abf5b71f078a8166, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: adfdb3f315ded0f4781951d2436b042f, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: 1258e6d99c3e3294c9594e8bc8606dd9, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_LETS_LOSE_3
+    clip: {fileID: 8300000, guid: a2d48e2ecfb7a5b4eb632c7a2a78514c, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: a2d48e2ecfb7a5b4eb632c7a2a78514c, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: 2eee2a7bd44691b4f85de3ba00209a7c, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: a290ea006444f474aa10804cfa96eefc, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_3_STARS_WIN_0
+    clip: {fileID: 8300000, guid: 35d8d6cd5aa7c21409d47bd9827611c2, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: 35d8d6cd5aa7c21409d47bd9827611c2, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: 021cf27173b697a4c9648a838f1fef2b, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: c570be14b41b7c64c841fbe3b1c41f64, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_3_STARS_WIN_1
+    clip: {fileID: 8300000, guid: efa71d53e9141ef439f97773e42bd44d, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: efa71d53e9141ef439f97773e42bd44d, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: 120b9e641396129409c166ec40d65519, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: 94004d042fdd53b4a8d0ee42ac2d4f98, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_3_STARS_WIN_2
+    clip: {fileID: 8300000, guid: d9e56f8477fcaff4db54668a79572ce4, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: d9e56f8477fcaff4db54668a79572ce4, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: 2f9907465751c9d45a38cf3c9c64efe6, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: e1ff5f87aeaafce4b849c1db018e00ce, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_3_STARS_WIN_3
+    clip: {fileID: 8300000, guid: 4ad549e4211c32745a4400f7496150a3, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: 4ad549e4211c32745a4400f7496150a3, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: 5237f07368c24164989d6f08ef920189, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: 23392fe780dbabd4f800ca2cad5b1ddd, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_3_STARS_WIN_4
+    clip: {fileID: 8300000, guid: 5054dd241d5d27a47bf8c7901cc6f36a, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: 5054dd241d5d27a47bf8c7901cc6f36a, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: fe313084717be0e438314e7cefa4a50d, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: 0d9a49f3a35dab44183db1d16e2eeae6, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_3_STARS_WIN_5
+    clip: {fileID: 8300000, guid: 3081a0df210a03440b66b5df81e0281e, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: 3081a0df210a03440b66b5df81e0281e, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: f23c73173c003144f81fe7e0e79ed753, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: ab72c9cefe5b7714ab6702776ab159d5, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_3_STARS_WIN_6
+    clip: {fileID: 8300000, guid: 7e1c71b5a5cfd0140b88d544b4765cfa, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: 7e1c71b5a5cfd0140b88d544b4765cfa, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: 4cc1b5201d503aa47a71fbfc23d4e1d5, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: bafd8292d3302e8448713193debc9992, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_2_STARS_WIN_0
+    clip: {fileID: 8300000, guid: 0cbd707d364e72f4eadffe8ee8e8578f, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: 0cbd707d364e72f4eadffe8ee8e8578f, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: 6ab2ade4fa9905f48af73e65b57d0605, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: f77ba3c9e3019d84995107dbcd2492a6, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_2_STARS_WIN_1
+    clip: {fileID: 8300000, guid: 015c876037679704fac093de2f2311e8, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: 015c876037679704fac093de2f2311e8, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: c879395e928d61d4b9cf08946cb0f48e, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: 706f0ae180d64a64fbd8c65eeabafa85, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_1_STARS_WIN_0
+    clip: {fileID: 8300000, guid: ccc22e39cddb233438f6b640e3e9f194, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: ccc22e39cddb233438f6b640e3e9f194, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: c01844199949d0f46859aaaee564679d, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: 1f3a4b7e5d139724894b1388098c5b76, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_1_STARS_WIN_1
+    clip: {fileID: 8300000, guid: 4b44fa09321f1984ea4f0cf0f181f3ee, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: 4b44fa09321f1984ea4f0cf0f181f3ee, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: c9697ce1251e6ba45a8d4dade901ea57, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: 8d45586f87124bb4fbf9e7101f911400, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_1_STARS_WIN_2
+    clip: {fileID: 8300000, guid: fa6e9590edf0864449f149293c132e44, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: fa6e9590edf0864449f149293c132e44, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: 11c51dd8d4b5f10428dbfd28071185b2, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: 59ac1f6ea793eeb46a205918bb13b31d, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_1_STARS_WIN_3
+    clip: {fileID: 8300000, guid: 30a75e2ec262c284786311e942d4a5b0, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: 30a75e2ec262c284786311e942d4a5b0, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: 5dac91823b683e748be18a4701dc3158, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: 648d6f02e175dcb419e5ccaeb90ee150, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_TUTORIAL_0
+    clip: {fileID: 8300000, guid: 7bba938dbdc0ca94b89e0299db595e93, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: 7bba938dbdc0ca94b89e0299db595e93, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: 8049b432e082a43419da4178568385a5, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: 414832a2b3f236941b80ddda5f56c58b, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_TUTORIAL_1
+    clip: {fileID: 8300000, guid: 1ca12b2d8fd15454e80aeacf53af2699, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: 1ca12b2d8fd15454e80aeacf53af2699, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: e4f2806b28a9a8d4c9954be9d56f6d7d, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: 08c797ab7e127334eb9ea4d42bb88ef4, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_TUTORIAL_2
+    clip: {fileID: 8300000, guid: 40de335b9491f1b449d403320bcaecd2, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: 40de335b9491f1b449d403320bcaecd2, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: c6c866d7ad7feb24eb9d275590fe497f, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: 7e8843dcdd37a1245ab34d4bc26474e6, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: "you can follow your experience level through Ferid\u2019s button"
+    clip: {fileID: 8300000, guid: 6eee780ff94528f41ae0e788d39264b3, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: 6eee780ff94528f41ae0e788d39264b3, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: 0697e88e3a606a743aaeff146bcc0946, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: df6e04a4ab2992f4bbb01731dba33821, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: "You can follow your ranking with Ferid\u2019s button"
+    clip: {fileID: 8300000, guid: 7ed6cc99d03682d46a13822ed705ef99, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: 7ed6cc99d03682d46a13822ed705ef99, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: 3f08acae02f2cc146a53a4408c6714a2, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: f500f9bebd4c97e4b96159fe68cef753, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: Unlocked_all_The_Levels
+    clip: {fileID: 8300000, guid: 2bb3c6ff034e6a64e8aa2ae6dc8fb422, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: 2bb3c6ff034e6a64e8aa2ae6dc8fb422, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: c71bb6264e7025c4894361cf7f7a7ba9, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: e691d006348a4b8469e38be6a992c199, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_HELLO_0
+    clip: {fileID: 8300000, guid: ea0bdba4f60f4e2489d18dd8caf1e315, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: ea0bdba4f60f4e2489d18dd8caf1e315, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: f8a84dd936b70f64399c929e1008c988, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: acf9943bf3538404e889904babe7361d, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_HELLO_1
+    clip: {fileID: 8300000, guid: ae7ff735ee88b904eb5111da6280888a, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: ae7ff735ee88b904eb5111da6280888a, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: 194fadb8b42a96545b351a66d2d6ad75, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: a986d150ef3179e4b8bf8390ee19c41f, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_HELLO_2
+    clip: {fileID: 8300000, guid: 2ada1340550cf0d42bf9a2c5918501bf, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: 2ada1340550cf0d42bf9a2c5918501bf, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: 7f7fcd622b049da4a804abe6af3cb0f8, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: b5d1727866bf75c449a317ca7cb607ed, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_HELLO_3
+    clip: {fileID: 8300000, guid: d1ca35e3406089b42a8a6150bd1ae921, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: d1ca35e3406089b42a8a6150bd1ae921, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: b26acc81d63600a4eaaec6f3fd848807, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: a1c8645179955894ea1c8eb1fe8a92fd, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_HELLO_4
+    clip: {fileID: 8300000, guid: 9a227167b9f68bb42a88260981b4a06a, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: 9a227167b9f68bb42a88260981b4a06a, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: bba0f777b6bee464fb191855338c9fe4, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: 9dc03a292239f9e499539ae8fe30dbda, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_HELLO_5
+    clip: {fileID: 8300000, guid: 93c3932e0df2e1447bd0d9bd303fdd0e, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: 93c3932e0df2e1447bd0d9bd303fdd0e, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: 6e0aa07cfd99c684aa8cae96e5c96c4a, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: acf480b57c685aa46a3086f92b1ad9da, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_HELLO_6
+    clip: {fileID: 8300000, guid: 6f03f5e7f78c4424dbfbac31783e1672, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: 6f03f5e7f78c4424dbfbac31783e1672, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: 1055f586ecf50354a9aa6f200bdc840d, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: 6e4e80b06dd2bf546b0e9eb13ac30a85, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_HELLO_7
+    clip: {fileID: 8300000, guid: 5f174b45a196edc4483e09f9c4d06a7b, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: 5f174b45a196edc4483e09f9c4d06a7b, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: 002b4edd5d434c24895cb747981e8b5f, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: b938633168d021649908b83b395d8c6f, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_HELLO_8
+    clip: {fileID: 8300000, guid: a6d131b6c4671d3408058d9afa67db56, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: a6d131b6c4671d3408058d9afa67db56, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: ab70f0da1b899b84f99774ff4882f708, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: 62a0bd6543ae69040a55c4634afead9a, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_HELLO_9
+    clip: {fileID: 8300000, guid: 1936e108c118d6a40b7696eca8b6d402, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: 1936e108c118d6a40b7696eca8b6d402, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: c2f29540281684e4e9405865b32056fd, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: f0d74df12dd41d640b29372d3332e2b1, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_HELLO_10
+    clip: {fileID: 8300000, guid: dcd1cd705644af446a40ebef001cb851, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: dcd1cd705644af446a40ebef001cb851, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: d2f943a58b8c6284c850e461c0f49378, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: 86844f297b5054544ad6dcfea887a607, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_HELLO_SCORE_0
+    clip: {fileID: 8300000, guid: 268a43a697637624db48897980ecf1d0, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: 268a43a697637624db48897980ecf1d0, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: bc6f10dae71f7f142991b39141cf9838, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: c7b54f1dd22a8414ea3f74788dafbb1c, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_HELLO_SCORE_1
+    clip: {fileID: 8300000, guid: 31ec1c9dc8961c7449be57b288d9a160, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: 31ec1c9dc8961c7449be57b288d9a160, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: cd5a0b2d85159ef4183e830b26d3cdb2, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: f27d095f0b4dba64c895358e2a1800ee, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_HELLO_SCORE_2
+    clip: {fileID: 8300000, guid: 118294981aeb1bf44b8534806be230c6, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: 118294981aeb1bf44b8534806be230c6, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: 78163c9cda39c4e469fd149286c47191, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: 60e54163061336049be4105c12069cc4, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_HELLO_BEST_SCORE_0
+    clip: {fileID: 8300000, guid: fdf7e08ed05ba6f4295adc7bfb677715, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: fdf7e08ed05ba6f4295adc7bfb677715, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: 0c0f502e1c822da498b24628b79b2009, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: 7939bb78218345c43996c7ddfd93eaf4, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_HELLO_BEST_SCORE_1
+    clip: {fileID: 8300000, guid: 84cd64d270f6c254795576753f7777ee, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: 84cd64d270f6c254795576753f7777ee, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: c0c6ab4e08b6c764bbbd41b5177752ef, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: 17f109de89738334d91beb04204f6168, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_HELLO_BEST_SCORE_2
+    clip: {fileID: 8300000, guid: b6a2255bd118cab4da50030a7b1a2333, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: b6a2255bd118cab4da50030a7b1a2333, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: dbbb54e83659990479f26e0d623a0d8c, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: 9ada67fffb03aca42bb4cd55fd23a217, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_HELLO_BEST_SCORE_3
+    clip: {fileID: 8300000, guid: 150c9c8f580c0e948908633cba1b0177, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: 150c9c8f580c0e948908633cba1b0177, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: ce352c55f6105c44cb3985e36a12e467, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: 5e6e7cf47fd04844dbed150e9633b5e0, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_HELLO_BEST_SCORE_4
+    clip: {fileID: 8300000, guid: 23922274da300c148b85e1a90388708a, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: 23922274da300c148b85e1a90388708a, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: a6076c335abd11a48b3f740b802f9280, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: 70c553c54ad7d3e4d80ed705a5b39964, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_HELLO_BEST_SCORE_5
+    clip: {fileID: 8300000, guid: 9d96634f26efcd5478dd4c7a75b5718b, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: 9d96634f26efcd5478dd4c7a75b5718b, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: b44af2dfa3f392f4099f2470810a9436, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: b0bb211449cdb5b418c053f67eba0da4, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_HELLO_BEST_SCORE_6
+    clip: {fileID: 8300000, guid: 58e3f7cb0a2436d4eb61cd1ac28fa864, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: 58e3f7cb0a2436d4eb61cd1ac28fa864, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: 7b8ab0f42ed7727439d3a7f1049f6d25, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: 209f29cdcc3fce84b96846d4b704670e, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_HELLO_BEST_SCORE_7
+    clip: {fileID: 8300000, guid: 5918671c25a5918418c5e24a9c6d9a19, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: 5918671c25a5918418c5e24a9c6d9a19, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: 8781f147d52d4184b85faf58467bb29f, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: c5d9811dec8e0a44cbe11d64075b5323, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_HELLO_BEST_SCORE_8
+    clip: {fileID: 8300000, guid: 3e82f0b84aa4e95468d06e59bf73d409, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: 3e82f0b84aa4e95468d06e59bf73d409, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: 2094ccbff9449984e9e6f009e7ac611b, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: f0375d2be28e36641bcbafbb7755714d, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  - IsFeridSpeech: 1
+    name: FERID_TALKS_HELLO_BEST_SCORE_9
+    clip: {fileID: 8300000, guid: fc4c42e39ffb42149a776788f092b924, type: 3}
+    LocalizedAudioClipsList:
+    - Language:
+        name: ar
+      AudioClip: {fileID: 8300000, guid: fc4c42e39ffb42149a776788f092b924, type: 3}
+    - Language:
+        name: en
+      AudioClip: {fileID: 8300000, guid: 79cfc168e159c614ca86eede65ad8484, type: 3}
+    - Language:
+        name: fr
+      AudioClip: {fileID: 8300000, guid: fb18b87a7642e8842adce9b36cb2f06a, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
+  externalAudioSource: {fileID: 0}
+  musicMoment: 0
