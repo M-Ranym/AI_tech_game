@@ -86,7 +86,7 @@ public class TargetBox : MonoBehaviour, IDropHandler
                     itemCount++;
 
                     ShowCorrectFeedback();
-                    GameManager.instance.ItemPlaced();
+                    MyGameManager.instance.ItemPlaced();
                 }
                 else
                 {

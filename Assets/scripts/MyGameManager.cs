@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using UPersian.Components;
 
-public class GameManager : MonoBehaviour
+public class MyGameManager : MonoBehaviour
 {
-    public static GameManager instance;
+    public static MyGameManager instance;
 
     public GameObject successPanel;
     public RtlText resultText;

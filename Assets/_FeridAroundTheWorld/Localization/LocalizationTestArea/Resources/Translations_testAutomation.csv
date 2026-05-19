@@ -1,0 +1,32 @@
+Key,Arabic,English,French
+DashboardVarOne,يمكنك ادارة كامل النظام من اللوحة,You can manage the full system from panel,Vous pouvez gerer tout le systeme depuis panneau
+DashboardVarTwo,ادارة النظام تتم عبر لوحة التحكم,System management is done via dashboard,La gestion du systeme se fait via tableau
+DashboardVarThree,تتيح ادارة النظام كاملة,The dashboard allows full system management,Le tableau permet une gestion complete systeme
+
+SaveVarOne,يرجى حفظ جميع التغييرات قبل المغادرة,Please save all changes before leaving,Veuillez enregistrer toutes modifications avant partir
+SaveVarTwo,حفظ التغييرات مطلوب قبل الخروج,Saving changes is required before exit,Enregistrer les modifications est requis avant sortie
+SaveVarThree,تاكد من حفظ التغييرات قبل المتابعة,Make sure to save changes before proceeding,Assurez vous denregistrer les modifications avant continuer
+
+
+AuthVarOne,يجب تسجيل الدخول قبل استخدام النظام,You must log in before using system,Vous devez vous connecter avant utiliser systeme
+AuthVarTwo,تسجيل الدخول مطلوب للوصول الكامل,Login is required for full access,Connexion requise pour acces complet
+AuthVarThree,لا يمكن الوصول بدون تسجيل الدخول,Access is not possible without login,Acces impossible sans connexion
+
+
+AuthVarFour,أقرأ المنجا اليابانية في الصباح,I read Japanese manga in the morning,Je lis des mangas japonais le matin
+AuthVarFive,أحب قراءة المنجا اليابانية كل يوم بعد المدرسة,I like reading Japanese manga every day after school,J’aime lire des mangas japonais tous les jours après l’école
+
+
+Title,العنوان,English'ha,Baguette
+Subtitle,العنوان الفرعي,Subtitle,Sous-titre
+Email,البريد الإلكتروني ,Email,Email
+Description,الوصف الوصف,Description,Description
+Name,الاسم,Name,Nom
+Password,كلمة المرور,Password,Mot de passe
+Login,تسجيل الدخول,Login,Connexion
+
+phrase_1768549470,"أجد متعة في ترتيب أفكاري وكتابة ملاحظاتي في نهاية اليوم","I find pleasure in organizing my thought and writing down my notes at the end of the day","Je trouve du plaisir à organiser mes pensées et à écrire mes notes à la fin de la journée"
+phrase_1768549529,"أنا أحب لعب ألعاب الأنمي","I love playing anime games","J'adore jouer aux jeux d'anime"
+phrase_1768549531,"أحب الجلوس في الأماكن الهادئة مع فنجان قهوة","I love sitting in quiet places with a cup of coffee","J'adore m'asseoir dans des endroits calmes avec une tasse de café"
+phrase_1768549534,"أستمتع بالسفر واكتشاف مدن جديدة","I enjoy traveling and discovering new cities","Je profite de voyager et de découvrir de nouvelles villes"
+phrase_1768549537,"القراءة قبل النوم تساعدني على الاسترخاء","Reading before bed helps me relax","Lire avant de dormir m'aide à me détendre"
