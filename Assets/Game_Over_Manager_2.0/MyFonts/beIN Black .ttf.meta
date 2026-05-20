@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: 7c420ab75030fe342b364df07af7368e
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Droid Arabic Kufi
+  fontNames:
+  - Droid Arabic Kufi
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: a7ec3627dbd4b0c4d8972c0ff1a9372e, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
