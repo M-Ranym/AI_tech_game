@@ -50,7 +50,7 @@ public class MyGameManager : MonoBehaviour
         successPanel.SetActive(true);
         if (resultText != null)
             resultText.text = "ممتاز! لقد قمت بفرز جميع الحيوانات بشكل صحيح!";
-        _gameFinished = true; // enable tap detection
+        _gameFinished = true; 
     }
 
     void Update()
@@ -60,7 +60,7 @@ public class MyGameManager : MonoBehaviour
         if (Input.GetMouseButtonDown(0) || (Input.touchCount > 0
             && Input.GetTouch(0).phase == TouchPhase.Began))
         {
-            _gameFinished = false; // prevent double-trigger
+            _gameFinished = false; 
             OnSuccessTapped();
         }
     }
@@ -68,7 +68,7 @@ public class MyGameManager : MonoBehaviour
     public void OnSuccessTapped()
     {
         if (_trigger != null)
-            _trigger.FinishLevel(0);  // level 0 of 1 total, game done
+            _trigger.FinishLevel(0);  
         else
             Debug.LogError("[GameManager] No GameFinishTrigger in scene!");
     }
