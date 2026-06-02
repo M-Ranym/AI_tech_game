@@ -1,6 +1,9 @@
 ﻿using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UPersian.Components;
+
 
 public class MapManager : MonoBehaviour
 {
@@ -41,6 +44,21 @@ public class MapManager : MonoBehaviour
     [Header("Unlock Animation")]
     public float lockFadeDuration = 0.5f;
     public float colorRestoreDuration = 0.7f;
+
+    [Header("Unlock Reward Panel")]
+    public GameObject rewardPanel;
+    public RtlText rewardGameNameText;
+    public TextMeshProUGUI rewardGameIndexText;
+
+    private string[] gameNames = {
+        "جمع البيانات",
+        "تنظيف البيانات",
+        "التعرف على الصور",
+        "رصد الوجوه",
+        "تصحيح النظام",
+        "لعبة المتاهة",
+        "محاكاة اتخاذ القرار"
+    };
 
     static readonly Color LOCKED_COLOR = new Color32(56, 56, 56, 255);
     bool isHovering;
@@ -85,6 +103,9 @@ public class MapManager : MonoBehaviour
             levelBoards[justFinishedGame].Show();
         }
 
+        // Make sure reward panel starts hidden
+        if (rewardPanel != null) rewardPanel.SetActive(false);
+
         if (droneOnLevel < 0)
         {
             drone.anchoredPosition = droneGroundPosition;
@@ -98,7 +119,7 @@ public class MapManager : MonoBehaviour
             bool nextIsLocked = next < levelPositions.Length && next >= nextUnlocked;
 
             if (nextIsLocked)
-                StartCoroutine(FlyToAndUnlock(next));
+                StartCoroutine(ShowRewardThenFly(next));
             else
                 StartHover(drone.anchoredPosition);
         }
@@ -145,11 +166,42 @@ public class MapManager : MonoBehaviour
         levelBoards[levelIndex].Show();
     }
 
+    // ── Reward panel ──────────────────────────────────────────────────────────
+
+    IEnumerator ShowRewardThenFly(int levelIndex)
+    {
+        if (rewardPanel != null && levelIndex > 0)
+        {
+            int justFinishedIndex = levelIndex - 1;
+            if (rewardGameNameText != null && justFinishedIndex < gameNames.Length)
+                rewardGameNameText.text = gameNames[justFinishedIndex];
+            if (rewardGameIndexText != null)
+                rewardGameIndexText.text = (justFinishedIndex + 1).ToString();
+
+            rewardPanel.SetActive(true);
+
+            // Play win sound when reward panel appears
+            if (Game_Over_2_AudioManager.audioManInstance != null)
+                Game_Over_2_AudioManager.audioManInstance.Play_Sfx("LevelWin");
+
+            yield return new WaitUntil(() =>
+                Input.GetMouseButtonDown(0) ||
+                (Input.touchCount > 0 &&
+                 Input.GetTouch(0).phase == TouchPhase.Began));
+
+            rewardPanel.SetActive(false);
+            yield return new WaitForSeconds(0.2f);
+        }
+
+        yield return FlyToAndUnlock(levelIndex);
+    }
+
+
     IEnumerator FirstTimeSequence()
     {
         yield return MoveTo(new Vector2(droneGroundPosition.x, levelPositions[0].y), riseSpeed);
         yield return new WaitForSeconds(0.25f);
-        yield return FlyToAndUnlock(0);
+        yield return ShowRewardThenFly(0);
     }
 
     IEnumerator FlyToAndUnlock(int levelIndex)

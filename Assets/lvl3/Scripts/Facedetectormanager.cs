@@ -242,7 +242,7 @@ public class FaceDetectorManager : MonoBehaviour
     {
         feedbackPanel.SetActive(false);
         resultsPanel.SetActive(true);
-        resultsText.text = "النهاية";
+        resultsText.text = "ممتاز";
 
         // 1 level, finish it = go to map, drone unlocks next game
         StartCoroutine(DelayedFinish());

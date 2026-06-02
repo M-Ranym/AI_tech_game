@@ -4,19 +4,17 @@ using UPersian.Components;
 public class MyGameManager : MonoBehaviour
 {
     public static MyGameManager instance;
-
     public GameObject successPanel;
     public RtlText resultText;
-
     public TargetBox catBox;
     public TargetBox dogBox;
     public TargetBox birdBox;
-
     public int totalCatsNeeded = 3;
     public int totalDogsNeeded = 3;
     public int totalBirdsNeeded = 3;
 
     private GameFinishTrigger _trigger;
+    private bool _gameFinished = false;
 
     void Awake()
     {
@@ -42,25 +40,22 @@ public class MyGameManager : MonoBehaviour
             ShowSuccessPanel();
     }
 
-    private bool _gameFinished = false;
-
     void ShowSuccessPanel()
     {
         if (successPanel == null) return;
         successPanel.SetActive(true);
         if (resultText != null)
             resultText.text = "ممتاز! لقد قمت بفرز جميع الحيوانات بشكل صحيح!";
-        _gameFinished = true; 
+        _gameFinished = true;
     }
 
     void Update()
     {
         if (!_gameFinished) return;
-
         if (Input.GetMouseButtonDown(0) || (Input.touchCount > 0
             && Input.GetTouch(0).phase == TouchPhase.Began))
         {
-            _gameFinished = false; 
+            _gameFinished = false;
             OnSuccessTapped();
         }
     }
@@ -68,7 +63,7 @@ public class MyGameManager : MonoBehaviour
     public void OnSuccessTapped()
     {
         if (_trigger != null)
-            _trigger.FinishLevel(0);  
+            _trigger.FinishLevel(0);
         else
             Debug.LogError("[GameManager] No GameFinishTrigger in scene!");
     }

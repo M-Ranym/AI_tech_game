@@ -421,8 +421,6 @@ MonoBehaviour:
   boxWidth: 200
   boxHeight: 250
   itemScaleFactor: 0.7
-  correctFeedback: {fileID: 2088667913}
-  wrongFeedback: {fileID: 677258881}
 --- !u!1 &379795304
 GameObject:
   m_ObjectHideFlags: 0
@@ -2319,8 +2317,6 @@ MonoBehaviour:
   boxWidth: 200
   boxHeight: 250
   itemScaleFactor: 0.7
-  correctFeedback: {fileID: 682102144}
-  wrongFeedback: {fileID: 545717599}
 --- !u!114 &1594215125
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3086,8 +3082,6 @@ MonoBehaviour:
   boxWidth: 200
   boxHeight: 250
   itemScaleFactor: 0.7
-  correctFeedback: {fileID: 2041949664}
-  wrongFeedback: {fileID: 1350445761}
 --- !u!224 &2024251313
 RectTransform:
   m_ObjectHideFlags: 0

@@ -1,19 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 public class KidDropZone : MonoBehaviour, IDropHandler
 {
     [SerializeField] private string allowedTag;
 
-    [Header("Visual States")]
-    [SerializeField] private GameObject normalState;
-    [SerializeField] private GameObject correctState;
-    [SerializeField] private GameObject wrongState;
-
     [Header("Floating Area")]
-    [SerializeField] private RectTransform safeArea; // 👈 NEW
+    [SerializeField] private RectTransform safeArea;
 
     [SerializeField] private float flashDuration = 0.8f;
 
@@ -21,10 +17,21 @@ public class KidDropZone : MonoBehaviour, IDropHandler
     private bool isLocked;
     private List<KidDraggable> items = new List<KidDraggable>();
 
+    private Image boxImage;
+    private Color originalColor;
+
     private void Awake()
     {
         zoneRect = GetComponent<RectTransform>();
-        ShowNormal();
+
+        boxImage = GetComponent<Image>();
+        if (boxImage == null)
+            boxImage = GetComponentInChildren<Image>();
+
+        if (boxImage != null)
+            originalColor = boxImage.color;
+        else
+            Debug.LogError($"[KidDropZone] NO Image found on {gameObject.name}!");
     }
 
     public void AddItem(KidDraggable item)
@@ -36,7 +43,6 @@ public class KidDropZone : MonoBehaviour, IDropHandler
 
         item.transform.SetParent(transform, false);
 
-        // Use SafeArea if assigned
         RectTransform targetArea = safeArea != null ? safeArea : zoneRect;
 
         RectTransform itemRect = item.GetComponent<RectTransform>();
@@ -51,7 +57,6 @@ public class KidDropZone : MonoBehaviour, IDropHandler
             );
         }
 
-        // 👇 pass the SAFE AREA instead of full zone
         item.StartFloatingInZone(targetArea);
     }
 
@@ -68,6 +73,7 @@ public class KidDropZone : MonoBehaviour, IDropHandler
 
         AddItem(draggable);
 
+        // Flash green on correct drop, red on wrong
         StartCoroutine(FlashCoroutine(eventData.pointerDrag.CompareTag(allowedTag)));
     }
 
@@ -101,9 +107,13 @@ public class KidDropZone : MonoBehaviour, IDropHandler
 
     private IEnumerator FlashCoroutine(bool correct)
     {
-        if (correct) ShowCorrect(); else ShowWrong();
+        if (boxImage != null)
+            boxImage.color = correct ? Color.green : Color.red;
+
         yield return new WaitForSeconds(flashDuration);
-        ShowNormal();
+
+        if (boxImage != null)
+            boxImage.color = originalColor;
     }
 
     private void LockZone()
@@ -117,32 +127,13 @@ public class KidDropZone : MonoBehaviour, IDropHandler
     {
         isLocked = false;
         items.Clear();
-        ShowNormal();
+
+        if (boxImage != null)
+            boxImage.color = originalColor;
     }
 
     public RectTransform GetZoneRect()
     {
         return safeArea != null ? safeArea : zoneRect;
-    }
-
-    private void ShowNormal()
-    {
-        if (normalState != null) normalState.SetActive(true);
-        if (correctState != null) correctState.SetActive(false);
-        if (wrongState != null) wrongState.SetActive(false);
-    }
-
-    private void ShowCorrect()
-    {
-        if (normalState != null) normalState.SetActive(false);
-        if (correctState != null) correctState.SetActive(true);
-        if (wrongState != null) wrongState.SetActive(false);
-    }
-
-    private void ShowWrong()
-    {
-        if (normalState != null) normalState.SetActive(false);
-        if (correctState != null) correctState.SetActive(false);
-        if (wrongState != null) wrongState.SetActive(true);
     }
 }

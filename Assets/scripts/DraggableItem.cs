@@ -75,8 +75,11 @@ public class ItemMover : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         canvasGroup.blocksRaycasts = false;
         transform.SetParent(canvas.transform);
         transform.SetAsLastSibling();
-
         transform.localScale = originalScale;
+
+        // Plop sound
+        if (Game_Over_2_AudioManager.audioManInstance != null)
+            Game_Over_2_AudioManager.audioManInstance.Play_Sfx("BubblePop");
     }
 
     public void OnDrag(PointerEventData eventData)

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UPersian.Components;
@@ -10,12 +11,24 @@ public class AgentManager : MonoBehaviour
     [SerializeField] private float minAccuracy = 0.05f;
 
     [Header("UI Texts")]
-    [SerializeField] private RtlText accuracyText;
-    [SerializeField] private RtlText roundText;
-    [SerializeField] private Text accuracyNumberText;
-    [SerializeField] private Text roundNumberText;
     [SerializeField] private RtlText feedbackText;
     [SerializeField] private GameObject feedbackPanel;
+
+    [Header("Slider for Rounds")]
+    [SerializeField] private Slider roundSlider;
+    [SerializeField] private Image sliderFill;
+    [SerializeField] private List<Image> roundIcons = new List<Image>();
+    [SerializeField] private Sprite goldIconSprite;
+    [SerializeField] private Button submitButton;
+
+    [Header("Teaching Moment - Hand")]
+    [SerializeField] private Image handImage;
+    [SerializeField] private float teachingMomentDuration = 3f;
+    [SerializeField] private Image darkOverlay;
+    [SerializeField] private float handRightOffset = 60f; // tweak in Inspector
+
+    [Header("Shadow Color")]
+    [SerializeField] private Color shadowColor = new Color(1, 1, 1, 0.5f);
 
     [Header("Trash")]
     [SerializeField] private Transform trashCan;
@@ -68,6 +81,8 @@ public class AgentManager : MonoBehaviour
         _trigger = FindObjectOfType<GameFinishTrigger>();
 
         if (feedbackPanel != null) feedbackPanel.SetActive(false);
+        if (darkOverlay != null) darkOverlay.gameObject.SetActive(false);
+        if (handImage != null) handImage.gameObject.SetActive(false);
 
         SaveOriginalPositions();
         CreateAllShadows();
@@ -77,9 +92,8 @@ public class AgentManager : MonoBehaviour
 
     void ValidateUI()
     {
-        if (accuracyText == null || roundText == null ||
-            accuracyNumberText == null || roundNumberText == null)
-            Debug.LogError("UI Text references are missing.");
+        if (feedbackText == null || roundSlider == null)
+            Debug.LogError("UI references are missing.");
     }
 
     void Update()
@@ -112,7 +126,7 @@ public class AgentManager : MonoBehaviour
             rect.anchoredPosition = originalPositions[i];
 
             var img = shadowObj.AddComponent<Image>();
-            img.color = new Color(1, 1, 1, 0.5f);
+            img.color = shadowColor;
             img.raycastTarget = false;
             img.gameObject.SetActive(false);
 
@@ -155,6 +169,7 @@ public class AgentManager : MonoBehaviour
             {
                 shadowImages[i].sprite = isGood ? goodShadowPicture : badShadowPicture;
                 shadowImages[i].rectTransform.sizeDelta = isGood ? goodShadowSize : badShadowSize;
+                shadowImages[i].color = shadowColor;
             }
 
             DragAgent drag = img.GetComponent<DragAgent>() ?? img.gameObject.AddComponent<DragAgent>();
@@ -193,6 +208,7 @@ public class AgentManager : MonoBehaviour
         float change = (badRatio * 0.20f) - (goodPenalty * 0.15f);
         accuracy = Mathf.Max(minAccuracy, accuracy + change);
 
+        FillSliderToNextRound();
         ShowFeedbackPanel(badRatio, goodPenalty, goodMistakes);
     }
 
@@ -211,25 +227,154 @@ public class AgentManager : MonoBehaviour
         return okayMessages[Random.Range(0, okayMessages.Length)];
     }
 
+    void FillSliderToNextRound()
+    {
+        if (roundSlider != null)
+        {
+            roundSlider.maxValue = totalRounds - 1;
+            roundSlider.value += 1;
+
+            int iconIndexToChange = (int)roundSlider.value - 1;
+
+            if (iconIndexToChange >= 0 && iconIndexToChange < roundIcons.Count)
+            {
+                if (goldIconSprite != null)
+                {
+                    roundIcons[iconIndexToChange].sprite = goldIconSprite;
+                    Debug.Log($"Icon {iconIndexToChange} changed to gold sprite");
+                }
+                else
+                {
+                    Debug.LogError("Gold icon sprite not assigned!");
+                }
+            }
+        }
+    }
+
     void HideFeedback()
     {
         if (feedbackPanel != null) feedbackPanel.SetActive(false);
         feedbackShowing = false;
 
-        int roundJustFinished = currentRound - 1; // 0-based index
+        List<Image> missedBadAgents = new List<Image>();
+        for (int i = 0; i < allAgentImages.Count; i++)
+        {
+            bool isBad = !agentTypes[i];
+            if (isBad && allAgentImages[i].gameObject.activeSelf)
+                missedBadAgents.Add(allAgentImages[i]);
+        }
 
+        if (missedBadAgents.Count > 0)
+            StartCoroutine(ShowTeachingMoment(missedBadAgents));
+        else
+            MoveToNextRound();
+    }
+
+    IEnumerator ShowTeachingMoment(List<Image> missedAgents)
+    {
+        // Get root canvas and detect render mode for correct camera handling
+        Canvas rootCanvas = darkOverlay.GetComponentInParent<Canvas>().rootCanvas;
+        Transform canvasRoot = rootCanvas.transform;
+        Camera uiCamera = rootCanvas.renderMode == RenderMode.ScreenSpaceOverlay
+            ? null
+            : rootCanvas.worldCamera;
+
+        // Save original parents and sibling indices for all agents
+        Dictionary<Image, Transform> originalParents = new Dictionary<Image, Transform>();
+        Dictionary<Image, int> originalSiblingIndices = new Dictionary<Image, int>();
+
+        foreach (Image agent in allAgentImages)
+        {
+            originalParents[agent] = agent.transform.parent;
+            originalSiblingIndices[agent] = agent.transform.GetSiblingIndex();
+        }
+
+        // Save hand original state
+        Transform handOriginalParent = handImage != null ? handImage.transform.parent : null;
+        int handOriginalSibling = handImage != null ? handImage.transform.GetSiblingIndex() : 0;
+        Vector2 handOriginalAnchoredPos = handImage != null
+            ? handImage.GetComponent<RectTransform>().anchoredPosition
+            : Vector2.zero;
+
+        // Move overlay to canvas root and show it
+        if (darkOverlay != null)
+        {
+            darkOverlay.transform.SetParent(canvasRoot, true);
+            darkOverlay.gameObject.SetActive(true);
+            darkOverlay.transform.SetAsLastSibling();
+        }
+
+        for (int i = 0; i < missedAgents.Count; i++)
+        {
+            Image missedAgent = missedAgents[i];
+            RectTransform agentRect = missedAgent.GetComponent<RectTransform>();
+
+            // Move agent to canvas root AFTER overlay so it renders on top
+            missedAgent.transform.SetParent(canvasRoot, true);
+            missedAgent.transform.SetAsLastSibling();
+
+            if (handImage != null)
+            {
+                RectTransform handRect = handImage.GetComponent<RectTransform>();
+
+                // Move hand to canvas root above agent
+                handImage.transform.SetParent(canvasRoot, true);
+                handImage.transform.SetAsLastSibling();
+
+                // Convert agent world position to canvas local position correctly
+                // handles both ScreenSpaceOverlay (uiCamera=null) and Camera modes
+                Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(
+                    uiCamera,
+                    agentRect.position
+                );
+
+                RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                    (RectTransform)canvasRoot,
+                    screenPoint,
+                    uiCamera,
+                    out Vector2 localPoint
+                );
+
+                // Center on agent, offset right so finger tip points to middle
+                handRect.anchoredPosition = localPoint + new Vector2(handRightOffset, 0f);
+                handImage.gameObject.SetActive(true);
+            }
+
+            yield return new WaitForSeconds(teachingMomentDuration);
+
+            // Restore agent to original parent and sibling index
+            missedAgent.transform.SetParent(originalParents[missedAgent], true);
+            missedAgent.transform.SetSiblingIndex(originalSiblingIndices[missedAgent]);
+        }
+
+        // Restore hand
+        if (handImage != null)
+        {
+            handImage.transform.SetParent(handOriginalParent, true);
+            handImage.transform.SetSiblingIndex(handOriginalSibling);
+            handImage.GetComponent<RectTransform>().anchoredPosition = handOriginalAnchoredPos;
+            handImage.gameObject.SetActive(false);
+        }
+
+        // Hide overlay
+        if (darkOverlay != null)
+            darkOverlay.gameObject.SetActive(false);
+
+        MoveToNextRound();
+    }
+
+    void MoveToNextRound()
+    {
         if (currentRound >= totalRounds)
         {
-            // All 6 rounds done — go to map, drone unlocks next game
             Debug.Log($"[AgentManager] All rounds done. Calling FinishLevel(0)");
             if (_trigger != null)
-                _trigger.FinishLevel(0); // 1 level total
+                _trigger.FinishLevel(0);
             else
                 Debug.LogError("[AgentManager] No GameFinishTrigger in scene!");
         }
         else
         {
-            // More rounds remain — continue playing
             currentRound++;
             ResetRound();
         }
@@ -247,16 +392,16 @@ public class AgentManager : MonoBehaviour
 
             if (i < shadowImages.Count) shadowImages[i].gameObject.SetActive(false);
         }
-        UpdateUI();
         AssignAgentTypes();
     }
 
     void UpdateUI()
     {
-        if (accuracyText != null) accuracyText.text = "دقة البوت";
-        if (roundText != null) roundText.text = "الجولة";
-        if (accuracyNumberText != null) accuracyNumberText.text = $"{accuracy * 100:F0}%";
-        if (roundNumberText != null) roundNumberText.text = $"{currentRound}/{totalRounds}";
+        if (roundSlider != null)
+        {
+            roundSlider.maxValue = totalRounds - 1;
+            roundSlider.value = 0;
+        }
     }
 
     public Transform GetTrashCan() => trashCan;
