@@ -51,6 +51,16 @@ public class KidGameManager : MonoBehaviour
         resultPanel.SetActive(false);
         buttonText.text = "تحقق";
 
+        // If a tutorial is present let it finish first, otherwise start immediately
+        KidTutorialManager tm = FindObjectOfType<KidTutorialManager>();
+        if (tm == null)
+            StartCoroutine(InitAfterLayout());
+    }
+
+    /// <summary>Called by KidTutorialManager when the tutorial ends.</summary>
+    public void OnTutorialFinished()
+    {
+        Debug.Log("[KidGameManager] Tutorial finished – starting game.");
         StartCoroutine(InitAfterLayout());
     }
 
@@ -111,8 +121,11 @@ public class KidGameManager : MonoBehaviour
         Debug.Log($"[KidGameManager]   Round setup complete!");
     }
 
+    // ── original button handler — unchanged ──────────────────────────────
     public void OnButtonPressed()
     {
+        if (Game_Over_2_AudioManager.audioManInstance != null)
+            Game_Over_2_AudioManager.audioManInstance.Play_Sfx("KidButtonClick");
         if (!isChecked)
         {
             Debug.Log("[KidGameManager] Button pressed - CHECKING answers");

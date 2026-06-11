@@ -73,6 +73,9 @@ public class RoboPathDragImage : MonoBehaviour,
             cg.interactable = false;
         }
 
+        if (Game_Over_2_AudioManager.audioManInstance != null)
+            Game_Over_2_AudioManager.audioManInstance.Play_Sfx("RoboCardDrag");
+
         MoveToPointer(eventData);
     }
 
@@ -88,6 +91,8 @@ public class RoboPathDragImage : MonoBehaviour,
 
         if (!IsPointerInsidePanel(eventData.position))
         {
+            if (Game_Over_2_AudioManager.audioManInstance != null)
+                Game_Over_2_AudioManager.audioManInstance.Play_Sfx("RoboCardDropOut");
             Destroy(dragObject);
             dragObject = null;
             return;
@@ -106,6 +111,9 @@ public class RoboPathDragImage : MonoBehaviour,
         cardScript.isPlacedInSlot = false;
 
         RoboPathSlotManager.Instance.HandleDrop(cardScript, eventData.position);
+
+        if (Game_Over_2_AudioManager.audioManInstance != null)
+            Game_Over_2_AudioManager.audioManInstance.Play_Sfx("RoboCardDropSlot");
 
         dragObject = null;
     }

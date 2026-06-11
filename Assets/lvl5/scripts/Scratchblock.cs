@@ -57,6 +57,10 @@ public class ScratchBlock : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             cs.spriteBottom = spriteBottom;
 
             dragClone.GetComponent<CanvasGroup>().blocksRaycasts = false;
+
+            // Drag sound
+            if (Game_Over_2_AudioManager.audioManInstance != null)
+                Game_Over_2_AudioManager.audioManInstance.Play_Sfx("BlockDrag");
         }
         else if (inPanel)
         {
@@ -65,12 +69,14 @@ public class ScratchBlock : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
                 panel.SetDragging(gameObject);
 
             inPanel = false;
-
             transform.SetParent(canvas.transform, false);
             transform.SetAsLastSibling();
-
             canvasGroup.blocksRaycasts = false;
             canvasGroup.alpha = 0.9f;
+
+            // Drag sound
+            if (Game_Over_2_AudioManager.audioManInstance != null)
+                Game_Over_2_AudioManager.audioManInstance.Play_Sfx("BlockDrag");
         }
     }
 
@@ -117,15 +123,21 @@ public class ScratchBlock : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
                 {
                     var cloneSB = dragClone.GetComponent<ScratchBlock>();
                     cloneSB.inPanel = true;
-
                     dragClone.GetComponent<CanvasGroup>().blocksRaycasts = true;
-
                     dragClone.transform.SetParent(panel.transform, true);
-
                     panel.AddBlock(dragClone);
+
+                    // Dropped on panel sound
+                    if (Game_Over_2_AudioManager.audioManInstance != null)
+                        Game_Over_2_AudioManager.audioManInstance.Play_Sfx("BlockDropPanel");
                 }
                 else
+                {
+                    // Dropped outside sound
+                    if (Game_Over_2_AudioManager.audioManInstance != null)
+                        Game_Over_2_AudioManager.audioManInstance.Play_Sfx("BlockDropOut");
                     Destroy(dragClone);
+                }
 
                 dragClone = null;
             }
@@ -138,16 +150,22 @@ public class ScratchBlock : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             if (onPanel)
             {
                 transform.SetParent(panel.transform, true);
-
-                panel.FinalizeReorder(gameObject); // 🔥 FINAL reorder
-
+                panel.FinalizeReorder(gameObject);
                 inPanel = true;
-
                 panel.SnapToTargets();
+
+                // Reordered in panel sound
+                if (Game_Over_2_AudioManager.audioManInstance != null)
+                    Game_Over_2_AudioManager.audioManInstance.Play_Sfx("BlockDropPanel");
             }
             else
             {
                 panel?.RemoveBlock(gameObject);
+
+                // Removed from panel sound
+                if (Game_Over_2_AudioManager.audioManInstance != null)
+                    Game_Over_2_AudioManager.audioManInstance.Play_Sfx("BlockDropOut");
+
                 Destroy(gameObject);
             }
 

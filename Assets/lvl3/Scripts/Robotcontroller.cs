@@ -236,6 +236,10 @@ public class RobotController : MonoBehaviour
 
         labelObj.SetActive(true);
 
+        // Robot places label sound
+        if (Game_Over_2_AudioManager.audioManInstance != null)
+            Game_Over_2_AudioManager.audioManInstance.Play_Sfx("RobotPlaceLabel");
+
         CanvasGroup cg =
             labelObj.GetComponent<CanvasGroup>();
 

@@ -68,12 +68,19 @@ public class EvaluationManager : MonoBehaviour
         EvaluationData.previousAccuracy = 30f;
         EvaluationData.LoadLevel(currentLevel);
 
-        evaluateButton.onClick.RemoveAllListeners();
         evaluateButton.onClick.AddListener(OnEvaluateClicked);
         correctButton.onClick.RemoveAllListeners();
         wrongButton.onClick.RemoveAllListeners();
-        correctButton.onClick.AddListener(() => OnVerdict(true));
-        wrongButton.onClick.AddListener(() => OnVerdict(false));
+        correctButton.onClick.AddListener(() => {
+            if (Game_Over_2_AudioManager.audioManInstance != null)
+                Game_Over_2_AudioManager.audioManInstance.Play_Sfx("VerdictCorrect");
+            OnVerdict(true);
+        });
+        wrongButton.onClick.AddListener(() => {
+            if (Game_Over_2_AudioManager.audioManInstance != null)
+                Game_Over_2_AudioManager.audioManInstance.Play_Sfx("VerdictWrong");
+            OnVerdict(false);
+        });
 
         if (resultsPanel != null) resultsPanel.SetActive(false);
         if (healthBar != null) healthBar.SnapTo(EvaluationData.accuracy / 100f);
@@ -174,6 +181,10 @@ public class EvaluationManager : MonoBehaviour
 
     void OnEvaluateClicked()
     {
+        if (Game_Over_2_AudioManager.audioManInstance != null)
+            Game_Over_2_AudioManager.audioManInstance.Play_Sfx("EvalCheck");
+
+        _verdictGiven = false;
         _verdictGiven = false;
         currentP2Images = p2LevelSetups[currentLevel].p2Images;
 

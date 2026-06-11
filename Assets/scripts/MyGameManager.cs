@@ -15,6 +15,7 @@ public class MyGameManager : MonoBehaviour
 
     private GameFinishTrigger _trigger;
     private bool _gameFinished = false;
+    private bool _tutorialDone = false;   // set to true by TutorialManager when done
 
     void Awake()
     {
@@ -28,7 +29,18 @@ public class MyGameManager : MonoBehaviour
         _trigger = FindObjectOfType<GameFinishTrigger>();
     }
 
-    public void ItemPlaced() => CheckIfComplete();
+    /// <summary>Called by TutorialManager when the tutorial ends.</summary>
+    public void OnTutorialFinished()
+    {
+        _tutorialDone = true;
+    }
+
+    /// <summary>Called by TargetBox on every correct drop.</summary>
+    public void ItemPlaced()
+    {
+        if (!_tutorialDone) return;   // ignore drops during tutorial
+        CheckIfComplete();
+    }
 
     void CheckIfComplete()
     {

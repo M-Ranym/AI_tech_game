@@ -74,6 +74,8 @@ public class DragAgent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         startPosition = rectTransform.anchoredPosition;
         if (shadowImage != null)
             shadowImage.gameObject.SetActive(true);
+        if (Game_Over_2_AudioManager.audioManInstance != null)
+            Game_Over_2_AudioManager.audioManInstance.Play_Sfx("AgentDrag");
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -104,10 +106,14 @@ public class DragAgent : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 
         if (distToTrash < 150)
         {
+            if (Game_Over_2_AudioManager.audioManInstance != null)
+                Game_Over_2_AudioManager.audioManInstance.Play_Sfx("AgentDropTrash");
             gameObject.SetActive(false);
         }
         else
         {
+            if (Game_Over_2_AudioManager.audioManInstance != null)
+                Game_Over_2_AudioManager.audioManInstance.Play_Sfx("AgentDropReturn");
             rectTransform.anchoredPosition = startPosition;
         }
     }

@@ -40,6 +40,9 @@ public class RoboPathMover : MonoBehaviour
 
     public IEnumerator MoveToSlot(Transform target)
     {
+        if (Game_Over_2_AudioManager.audioManInstance != null)
+            Game_Over_2_AudioManager.audioManInstance.Play_Sfx("RoboWalk");
+
         while (Vector2.Distance(transform.position, target.position) > 0.05f)
         {
             transform.position = Vector2.MoveTowards(
@@ -51,6 +54,11 @@ public class RoboPathMover : MonoBehaviour
 
     public IEnumerator PlayAction(RoboPathCore.RobotAction action)
     {
+        // Play action sound for any real action
+        if (action != RoboPathCore.RobotAction.None &&
+            Game_Over_2_AudioManager.audioManInstance != null)
+            Game_Over_2_AudioManager.audioManInstance.Play_Sfx("RoboAction");
+
         switch (action)
         {
             case RoboPathCore.RobotAction.Jump:

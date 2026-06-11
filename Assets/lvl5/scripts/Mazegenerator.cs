@@ -471,6 +471,9 @@ public class MazeGenerator : MonoBehaviour
 
     IEnumerator SlideRobot(Vector2 target)
     {
+        if (Game_Over_2_AudioManager.audioManInstance != null)
+            Game_Over_2_AudioManager.audioManInstance.Play_Sfx("RobotMove");
+
         Vector2 start = robotTransform.anchoredPosition;
         for (float t = 0; t < 1; t += Time.deltaTime * moveSpeed)
         {
@@ -479,12 +482,14 @@ public class MazeGenerator : MonoBehaviour
         }
         robotTransform.anchoredPosition = target;
     }
-
     void ShowResult(string msg, bool failed)
     {
         lastRunFailed = failed;
         if (resultMessageLabel) resultMessageLabel.text = msg;
         if (resultPanel) resultPanel.SetActive(true);
+
+        if (Game_Over_2_AudioManager.audioManInstance != null)
+            Game_Over_2_AudioManager.audioManInstance.Play_Sfx(failed ? "MazeFail" : "MazeSuccess");
     }
 
     public bool IsResultShowing() => resultPanel != null && resultPanel.activeSelf;

@@ -31,6 +31,7 @@ public class FaceDetectorManager : MonoBehaviour
     [SerializeField] private float squareMoveSpeed = 500f;
     [SerializeField] private float pauseDuration = 0.5f;
 
+
     private Vector2 _robotHome;
     private float _robotGroundY;
     private int _currentRound = 0;
@@ -40,6 +41,8 @@ public class FaceDetectorManager : MonoBehaviour
     private bool _panelDismissed = false;
     private Vector2 _currentFaceCenter;
     private Canvas _canvas;
+    private float _dragSoundCooldown = 0f;
+
 
     private GameFinishTrigger _trigger;
 
@@ -56,14 +59,16 @@ public class FaceDetectorManager : MonoBehaviour
         foreach (var img in roundImages)
             if (img != null) img.SetActive(false);
 
-        correctButton.gameObject.SetActive(false);
-        wrongButton.gameObject.SetActive(false);
-        confirmButton.gameObject.SetActive(false);
-        feedbackPanel.SetActive(false);
-        resultsPanel.SetActive(false);
-
-        correctButton.onClick.AddListener(() => OnVerdict(true));
-        wrongButton.onClick.AddListener(() => OnVerdict(false));
+        correctButton.onClick.AddListener(() => {
+            if (Game_Over_2_AudioManager.audioManInstance != null)
+                Game_Over_2_AudioManager.audioManInstance.Play_Sfx("VerdictCorrect");
+            OnVerdict(true);
+        });
+        wrongButton.onClick.AddListener(() => {
+            if (Game_Over_2_AudioManager.audioManInstance != null)
+                Game_Over_2_AudioManager.audioManInstance.Play_Sfx("VerdictWrong");
+            OnVerdict(false);
+        });
         confirmButton.onClick.AddListener(OnConfirm);
 
         SetupSquareDrag();
@@ -162,7 +167,17 @@ public class FaceDetectorManager : MonoBehaviour
     private void OnSquareDrag(PointerEventData eventData)
     {
         if (!_draggingEnabled) return;
+
+        _dragSoundCooldown -= Time.deltaTime;
+        if (_dragSoundCooldown <= 0f)
+        {
+            if (Game_Over_2_AudioManager.audioManInstance != null)
+                Game_Over_2_AudioManager.audioManInstance.Play_Sfx("SquareDrag");
+            _dragSoundCooldown = 0.2f; // play at most every 0.2s
+        }
+
         RectTransform canvasRect = _canvas.GetComponent<RectTransform>();
+        if (!_draggingEnabled) return;
         Camera cam = _canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : _canvas.worldCamera;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             canvasRect, eventData.position, cam, out Vector2 localPoint);
@@ -185,6 +200,11 @@ public class FaceDetectorManager : MonoBehaviour
             yield return null;
         }
         square.anchoredPosition = ClampInsideSafeArea(target);
+        square.anchoredPosition = ClampInsideSafeArea(target);
+
+        // Robot placed square sound
+        if (Game_Over_2_AudioManager.audioManInstance != null)
+            Game_Over_2_AudioManager.audioManInstance.Play_Sfx("SquarePlaced");
     }
 
     private void OnVerdict(bool kidSaysCorrect)
@@ -222,6 +242,10 @@ public class FaceDetectorManager : MonoBehaviour
 
     private void OnConfirm()
     {
+        if (Game_Over_2_AudioManager.audioManInstance != null)
+            Game_Over_2_AudioManager.audioManInstance.Play_Sfx("SquareConfirm");
+
+        _draggingEnabled = false;
         _draggingEnabled = false;
         confirmButton.gameObject.SetActive(false);
 

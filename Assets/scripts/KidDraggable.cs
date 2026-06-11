@@ -38,6 +38,8 @@ public class KidDraggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
         transform.SetParent(canvas.transform, true);
         transform.SetAsLastSibling();
+        if (Game_Over_2_AudioManager.audioManInstance != null)
+            Game_Over_2_AudioManager.audioManInstance.Play_Sfx("KidDrag");
     }
 
     public void OnDrag(PointerEventData eventData)

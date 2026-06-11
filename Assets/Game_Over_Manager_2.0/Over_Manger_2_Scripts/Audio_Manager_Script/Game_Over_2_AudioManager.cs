@@ -147,6 +147,12 @@ public class Game_Over_2_AudioManager : MonoBehaviour
         if (s == null)
         {
             Debug.LogWarning("Sound " + name + " not Found!");
+            return;
+        }
+        if (s.source == null)
+        {
+            Debug.LogWarning("Sound " + name + " has no AudioSource — was it added after the AudioManager initialized?");
+            return;
         }
         s.source.Play();
     }

@@ -514,7 +514,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &189606931
 RectTransform:
   m_ObjectHideFlags: 0
@@ -531,7 +531,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1025.8931, y: -158.40285}
+  m_AnchoredPosition: {x: -980, y: -134.00002}
   m_SizeDelta: {x: 220.3442, y: 187.2493}
   m_Pivot: {x: 0.5, y: 0.6379566}
 --- !u!114 &189606932
@@ -589,7 +589,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &194775230
 RectTransform:
   m_ObjectHideFlags: 0
@@ -606,7 +606,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1025.8931, y: -158.40285}
+  m_AnchoredPosition: {x: -980, y: -134.00002}
   m_SizeDelta: {x: 220.3442, y: 187.2493}
   m_Pivot: {x: 0.5, y: 0.6379566}
 --- !u!114 &194775231
@@ -3209,7 +3209,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &768806889
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3226,7 +3226,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1025.8931, y: -158.40285}
+  m_AnchoredPosition: {x: -980, y: -134}
   m_SizeDelta: {x: 220.3442, y: 187.2493}
   m_Pivot: {x: 0.5, y: 0.6379566}
 --- !u!114 &768806890
@@ -7106,7 +7106,7 @@ MonoBehaviour:
   resultPercentageText: {fileID: 1238747587}
   resultGradeText: {fileID: 1951091061}
   robotController: {fileID: 1845415349}
-  evaluateButton: {fileID: 0}
+  evaluateButton: {fileID: 206318336}
   healthBar: {fileID: 495419613}
   gradientImages:
   - {fileID: 520813250}
@@ -7124,8 +7124,8 @@ MonoBehaviour:
   p2Canvas: {fileID: 477621211}
   p2LabelImage: {fileID: 322172125}
   p2LabelText: {fileID: 1078554382}
-  correctButton: {fileID: 0}
-  wrongButton: {fileID: 0}
+  correctButton: {fileID: 812394828}
+  wrongButton: {fileID: 1360161672}
   delayBetween: 0.5
   fadeDuration: 0.35
 --- !u!4 &1826939087

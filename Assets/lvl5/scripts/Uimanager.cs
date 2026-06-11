@@ -38,9 +38,11 @@ public class UIManager : MonoBehaviour
 
     public void OnPlayResetPressed()
     {
+        if (Game_Over_2_AudioManager.audioManInstance != null)
+            Game_Over_2_AudioManager.audioManInstance.Play_Sfx("MazeButton");
+
         MazeGenerator maze = FindObjectOfType<MazeGenerator>();
         if (maze == null) return;
-
         maze.OnPlayResetPressed();
     }
 }

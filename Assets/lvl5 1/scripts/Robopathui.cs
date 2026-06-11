@@ -56,6 +56,9 @@ public class RoboPathUI : MonoBehaviour
         levelCompletePanel.SetActive(true);
         SetText(levelCompleteMessage, MSG_LEVEL_DONE);
         isFinalWin = false;
+
+        if (Game_Over_2_AudioManager.audioManInstance != null)
+            Game_Over_2_AudioManager.audioManInstance.Play_Sfx("RoboGoalReached");
     }
 
     public void ShowAllLevelsComplete()
@@ -64,18 +67,27 @@ public class RoboPathUI : MonoBehaviour
         levelCompletePanel.SetActive(true);
         SetText(levelCompleteMessage, MSG_WIN);
         isFinalWin = true;
+
+        if (Game_Over_2_AudioManager.audioManInstance != null)
+            Game_Over_2_AudioManager.audioManInstance.Play_Sfx("RoboGoalReached");
     }
 
     public void ShowWrongAnswer()
     {
         levelCompletePanel.SetActive(false);
         wrongPanel.SetActive(true);
+
+        if (Game_Over_2_AudioManager.audioManInstance != null)
+            Game_Over_2_AudioManager.audioManInstance.Play_Sfx("RoboWrongAnswer");
     }
 
     public void ShowWin() => ShowAllLevelsComplete();
 
     private void OnGoPressed()
     {
+        if (Game_Over_2_AudioManager.audioManInstance != null)
+            Game_Over_2_AudioManager.audioManInstance.Play_Sfx("RoboGoButton");
+
         RoboPathCore.Instance.StartRun();
     }
 

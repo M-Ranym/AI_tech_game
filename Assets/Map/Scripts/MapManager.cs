@@ -162,6 +162,10 @@ public class MapManager : MonoBehaviour
             Debug.LogWarning($"[MapManager] No board assigned for level {levelIndex}");
             return;
         }
+
+        if (Game_Over_2_AudioManager.audioManInstance != null)
+            Game_Over_2_AudioManager.audioManInstance.Play_Sfx("MapButtonClick");
+
         Debug.Log($"[MapManager] Opening board for level {levelIndex}");
         levelBoards[levelIndex].Show();
     }

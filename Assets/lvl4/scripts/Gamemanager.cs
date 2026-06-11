@@ -191,6 +191,9 @@ public class AgentManager : MonoBehaviour
 
     public void OnSubmitButtonClicked()
     {
+        if (Game_Over_2_AudioManager.audioManInstance != null)
+            Game_Over_2_AudioManager.audioManInstance.Play_Sfx("AgentSubmit");
+
         int badCaught = 0, goodMistakes = 0, totalBad = 0, totalGood = 0;
 
         for (int i = 0; i < allAgentImages.Count; i++)

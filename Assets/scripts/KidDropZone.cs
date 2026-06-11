@@ -72,9 +72,17 @@ public class KidDropZone : MonoBehaviour, IDropHandler
             zone.RemoveItem(draggable);
 
         AddItem(draggable);
+        bool correct = eventData.pointerDrag.CompareTag(allowedTag);
 
-        // Flash green on correct drop, red on wrong
-        StartCoroutine(FlashCoroutine(eventData.pointerDrag.CompareTag(allowedTag)));
+        // Notify the tutorial manager if a tutorial is running
+        KidTutorialManager tm = FindObjectOfType<KidTutorialManager>();
+        if (tm != null && tm.IsTutorialActive())
+            tm.OnTutorialDrop(eventData.pointerDrag, correct);
+
+        if (Game_Over_2_AudioManager.audioManInstance != null)
+            Game_Over_2_AudioManager.audioManInstance.Play_Sfx(correct ? "KidDropCorrect" : "KidDropWrong");
+        StartCoroutine(FlashCoroutine(correct));
+
     }
 
     public void RemoveItem(KidDraggable item)

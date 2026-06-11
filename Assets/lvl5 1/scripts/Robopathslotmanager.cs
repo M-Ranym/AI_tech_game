@@ -53,8 +53,8 @@ public class RoboPathSlotManager : MonoBehaviour
 
     // ── Scan ─────────────────────────────────────
     public IEnumerator ScanForAction(
-        RoboPathCore.RobotAction needed,
-        System.Action<int> onDone)
+     RoboPathCore.RobotAction needed,
+     System.Action<int> onDone)
     {
         int foundIndex = -1;
 
@@ -63,12 +63,22 @@ public class RoboPathSlotManager : MonoBehaviour
             if (!slots[i].IsFilled) continue;
 
             slots[i].SetCardColor(scanColor);
+
+            // Sound for scanning each card
+            if (Game_Over_2_AudioManager.audioManInstance != null)
+                Game_Over_2_AudioManager.audioManInstance.Play_Sfx("RoboScanCard");
+
             yield return new WaitForSeconds(scanDelay);
 
             if (slots[i].PlacedAction == needed)
             {
                 foundIndex = i;
                 slots[i].SetCardColor(foundColor);
+
+                // Correct card found sound
+                if (Game_Over_2_AudioManager.audioManInstance != null)
+                    Game_Over_2_AudioManager.audioManInstance.Play_Sfx("RoboCardFound");
+
                 break;
             }
             else
@@ -93,7 +103,6 @@ public class RoboPathSlotManager : MonoBehaviour
 
         onDone?.Invoke(foundIndex);
     }
-
     // ── Helpers ──────────────────────────────────
     public void ResetFoundSlot(int slotIndex)
     {
