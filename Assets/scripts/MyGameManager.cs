@@ -64,6 +64,7 @@ public class MyGameManager : MonoBehaviour
     void Update()
     {
         if (!_gameFinished) return;
+        if (!_tutorialDone) return;   // don't intercept taps during tutorial
         if (Input.GetMouseButtonDown(0) || (Input.touchCount > 0
             && Input.GetTouch(0).phase == TouchPhase.Began))
         {
