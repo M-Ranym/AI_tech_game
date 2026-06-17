@@ -81,8 +81,8 @@ public class KidDropZone : MonoBehaviour, IDropHandler
 
         if (Game_Over_2_AudioManager.audioManInstance != null)
             Game_Over_2_AudioManager.audioManInstance.Play_Sfx(correct ? "KidDropCorrect" : "KidDropWrong");
-        StartCoroutine(FlashCoroutine(correct));
 
+        StartCoroutine(FlashCoroutine(correct));
     }
 
     public void RemoveItem(KidDraggable item)
@@ -112,6 +112,42 @@ public class KidDropZone : MonoBehaviour, IDropHandler
         LockZone();
         return true;
     }
+
+    // ==================== Tutorial Flash ====================
+
+    /// <summary>
+    /// Called by KidTutorialManager to flash the zone colour during tutorial demos.
+    /// After calling this, the caller should yield for flashDuration seconds
+    /// and then call ResetFlash() to restore the original colour.
+    /// </summary>
+    public IEnumerator TutorialFlash(bool correct)
+    {
+        if (boxImage == null) yield break;
+        Color original = boxImage.color;
+        Color flashColor = correct ? Color.green : Color.red;
+        flashColor.a = original.a;
+
+        for (int i = 0; i < 3; i++)
+        {
+            boxImage.color = flashColor;
+            yield return new WaitForSeconds(0.3f);
+            boxImage.color = original;
+            yield return new WaitForSeconds(0.2f);
+        }
+        boxImage.color = original;
+    }
+
+    /// <summary>
+    /// Immediately restores the zone image to its original colour.
+    /// Called by KidTutorialManager after FlashAndWait completes.
+    /// </summary>
+    public void ResetFlash()
+    {
+        if (boxImage != null)
+            boxImage.color = originalColor;
+    }
+
+    // ========================================================
 
     private IEnumerator FlashCoroutine(bool correct)
     {

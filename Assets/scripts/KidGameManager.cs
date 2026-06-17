@@ -42,25 +42,16 @@ public class KidGameManager : MonoBehaviour
         currentLevel = Mathf.Clamp(requestedLevel, 0, levelStructure.Length - 1);
         currentSubLevel = 0;
 
-        Debug.Log($"[KidGameManager] STARTING GAME");
-        Debug.Log($"  Requested Level: {requestedLevel}");
-        Debug.Log($"  Clamped Level: {currentLevel}");
-        Debug.Log($"  Starting Sub-Level: {currentSubLevel}");
-        Debug.Log($"  Total Sub-Levels in Level {currentLevel}: {SubsPerLevel}");
-
         resultPanel.SetActive(false);
         buttonText.text = "تحقق";
 
-        // If a tutorial is present let it finish first, otherwise start immediately
         KidTutorialManager tm = FindObjectOfType<KidTutorialManager>();
         if (tm == null)
             StartCoroutine(InitAfterLayout());
     }
 
-    /// <summary>Called by KidTutorialManager when the tutorial ends.</summary>
     public void OnTutorialFinished()
     {
-        Debug.Log("[KidGameManager] Tutorial finished – starting game.");
         StartCoroutine(InitAfterLayout());
     }
 
@@ -72,8 +63,6 @@ public class KidGameManager : MonoBehaviour
 
     void SetupRound()
     {
-        Debug.Log($"[KidGameManager] SETUP ROUND - Level {currentLevel}, Sub-Level {currentSubLevel}");
-
         isChecked = false;
         buttonText.text = "تحقق";
         resultPanel.SetActive(false);
@@ -83,21 +72,18 @@ public class KidGameManager : MonoBehaviour
 
         int itemCount = levelStructure[currentLevel][currentSubLevel];
 
-        Debug.Log($"[KidGameManager]   Items to spawn: {itemCount}");
+        foreach (var item in allAnimals) if (item != null) item.SetActive(false);
+        foreach (var item in allFruits) if (item != null) item.SetActive(false);
 
-        foreach (var item in allAnimals)
-            if (item != null) item.SetActive(false);
-        foreach (var item in allFruits)
-            if (item != null) item.SetActive(false);
-
-        var roundItems = new List<GameObject>();
+        var animals = new List<GameObject>();
+        var fruits = new List<GameObject>();
 
         for (int i = 0; i < itemCount && i < allAnimals.Count; i++)
         {
             if (allAnimals[i] == null) continue;
             allAnimals[i].SetActive(true);
             allAnimals[i].GetComponent<KidDraggable>()?.UnlockDragging();
-            roundItems.Add(allAnimals[i]);
+            animals.Add(allAnimals[i]);
         }
 
         for (int i = 0; i < itemCount && i < allFruits.Count; i++)
@@ -105,37 +91,53 @@ public class KidGameManager : MonoBehaviour
             if (allFruits[i] == null) continue;
             allFruits[i].SetActive(true);
             allFruits[i].GetComponent<KidDraggable>()?.UnlockDragging();
-            roundItems.Add(allFruits[i]);
+            fruits.Add(allFruits[i]);
         }
 
-        var shuffled = ShuffledCopy(roundItems);
-        int half = shuffled.Count / 2;
+        // Guarantee at least 1 wrong placement per zone so it's never 100% correct at start
+        // Animals go to animalZone, fruits go to fruitZone — then swap some across
+        int wrongCount = Mathf.Max(1, Mathf.RoundToInt(itemCount * 0.5f));
+        wrongCount = Mathf.Min(wrongCount, animals.Count, fruits.Count);
 
-        for (int i = 0; i < shuffled.Count; i++)
+        var shuffledAnimals = ShuffledCopy(animals);
+        var shuffledFruits = ShuffledCopy(fruits);
+
+        // Place most animals correctly, but put wrongCount of them in fruitZone
+        for (int i = 0; i < shuffledAnimals.Count; i++)
         {
-            KidDropZone targetZone = (i < half) ? animalZone : fruitZone;
-            if (shuffled[i].TryGetComponent(out KidDraggable drag))
-                targetZone.AddItem(drag);
+            KidDropZone target = (i < wrongCount) ? fruitZone : animalZone;
+            if (shuffledAnimals[i].TryGetComponent(out KidDraggable drag))
+                target.AddItem(drag);
         }
 
-        Debug.Log($"[KidGameManager]   Round setup complete!");
+        // Place most fruits correctly, but put wrongCount of them in animalZone
+        for (int i = 0; i < shuffledFruits.Count; i++)
+        {
+            KidDropZone target = (i < wrongCount) ? animalZone : fruitZone;
+            if (shuffledFruits[i].TryGetComponent(out KidDraggable drag))
+                target.AddItem(drag);
+        }
     }
 
-    // ── original button handler — unchanged ──────────────────────────────
     public void OnButtonPressed()
     {
         if (Game_Over_2_AudioManager.audioManInstance != null)
             Game_Over_2_AudioManager.audioManInstance.Play_Sfx("KidButtonClick");
+
+        // During tutorial Step 7 the tutorial manager is waiting for this signal.
+        // Forward the press to it and do nothing else — the game round starts
+        // only after OnTutorialFinished() is called.
+        KidTutorialManager tm = FindObjectOfType<KidTutorialManager>();
+        if (tm != null && tm.IsTutorialActive())
+        {
+            tm.OnCheckPressed();
+            return;
+        }
+
         if (!isChecked)
-        {
-            Debug.Log("[KidGameManager] Button pressed - CHECKING answers");
             StartCoroutine(CheckRoutine());
-        }
         else
-        {
-            Debug.Log("[KidGameManager] Button pressed - HANDLING next action");
             HandleNextAction();
-        }
     }
 
     IEnumerator CheckRoutine()
@@ -145,15 +147,10 @@ public class KidGameManager : MonoBehaviour
         bool animalCorrect = animalZone.ValidateItems();
         bool fruitCorrect = fruitZone.ValidateItems();
 
-        Debug.Log($"[KidGameManager] CHECKING ANSWERS");
-        Debug.Log($"  Animals Correct: {animalCorrect}");
-        Debug.Log($"  Fruits Correct: {fruitCorrect}");
-
         yield return new WaitForSeconds(delayBeforeResult);
 
         if (animalCorrect && fruitCorrect)
         {
-            Debug.Log($"[KidGameManager] ✓ CORRECT!");
             resultPanel.SetActive(true);
             resultText.text = "أحسنت";
 
@@ -162,7 +159,6 @@ public class KidGameManager : MonoBehaviour
         }
         else
         {
-            Debug.Log($"[KidGameManager] ✗ INCORRECT!");
             yield return new WaitForSeconds(1f);
             isChecked = false;
             resultPanel.SetActive(false);
@@ -181,14 +177,7 @@ public class KidGameManager : MonoBehaviour
         }
         else
         {
-            Debug.Log($"[KidGameManager] ★ LEVEL {currentLevel} COMPLETE!");
-
-            if (_trigger == null)
-            {
-                Debug.LogError("[KidGameManager] FATAL ERROR: No GameFinishTrigger in scene!");
-                return;
-            }
-
+            if (_trigger == null) { Debug.LogError("[KidGameManager] No GameFinishTrigger!"); return; }
             _trigger.FinishLevel(currentLevel);
         }
     }

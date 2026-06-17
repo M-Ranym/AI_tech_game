@@ -1,384 +1,606 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using UPersian.Components;
 using System.Collections;
 using System.Collections.Generic;
 
 public class KidTutorialManager : MonoBehaviour
 {
-    // ─── Ferid & speech ──────────────────────────────────────────────────
     [Header("Ferid & Speech Bubble")]
     public RectTransform feridRect;
     public RectTransform speechBubbleRect;
     public RtlText speechText;
 
-    // ─── Always-on-top UI ────────────────────────────────────────────────
-    [Header("Always On Top  (Ferid GO · SpeechBubble GO · Hand GO)")]
+    [Header("Audio")]
+    public Game_Over_2_AudioManager audioManager;
+
+    [Header("Always On Top")]
     public List<GameObject> topLevelUI;
 
-    // ─── Per-step positions (9 slots, index 0 = step 1 … index 8 = step 9)
-    [Header("Positions Per Step  (size = 9)")]
-    public Vector2[] feridPositions = new Vector2[9];
-    public Vector2[] speechBubblePositions = new Vector2[9];
-    public Vector2[] handPositions = new Vector2[9];
-    [Tooltip("Z rotation in degrees for the hand per step")]
-    public float[] handRotations = new float[9];
+    [Header("Positions Per Step (size = 8)")]
+    public Vector2[] feridPositions = new Vector2[8];
+    public Vector2[] speechBubblePositions = new Vector2[8];
 
-    // ─── Hand ────────────────────────────────────────────────────────────
     [Header("Hand")]
     public GameObject tutorialHand;
     public float handBobSpeed = 2.0f;
     public float handBobAmount = 12f;
     public float handSquashSpeed = 3.0f;
 
-    // ─── Overlay ─────────────────────────────────────────────────────────
-    [Header("Overlay  (must be a direct Canvas child, same level as items)")]
+    [Header("Overlay")]
     public GameObject darkOverlay;
 
-    // ─── Items ───────────────────────────────────────────────────────────
-    [Header("All Items")]
-    public List<GameObject> allAnimals;
-    public List<GameObject> allFruits;
-
-    // ─── Zones ───────────────────────────────────────────────────────────
-    [Header("Drop Zones")]
+    [Header("Tutorial Targets")]
     public KidDropZone animalZone;
     public KidDropZone fruitZone;
-    public GameObject animalZoneGO;
-    public GameObject fruitZoneGO;
+    public List<GameObject> allAnimals;
+    public List<GameObject> allFruits;
+    public GameObject checkButton;
 
-    // ─── Demo fruit (step 5) ─────────────────────────────────────────────
-    [Header("Demo Fruit  (one fruit for the drag-demo in step 5)")]
-    public GameObject tutorialFruit;
-
-    // ─── Check button ────────────────────────────────────────────────────
-    [Header("Check Button")]
-    public GameObject checkButtonGO;
-
-    // ─── Timing ──────────────────────────────────────────────────────────
     [Header("Timing")]
-    public float afterDropPause = 0.6f;
-    public float flashHoldTime = 1.4f;
+    public float afterDropPause = 0.4f;
+    public float flashDuration = 1.2f;   // how long the flash colour shows before resetting
 
-    // ═════════════════════════════════════════════════════════════════════
-    //  Private state
-    // ═════════════════════════════════════════════════════════════════════
+    // ── Voice clip names ───────────────────────────────────────────────
+    private const string V1 = "KidTutorial_Step1";
+    private const string V2 = "KidTutorial_Step2";
+    private const string V3 = "KidTutorial_Step3";
+    private const string V4 = "KidTutorial_Step4";
+    private const string V5 = "KidTutorial_Step5";   // "drag this animal to fruit box"
+    private const string V5b = "KidTutorial_Step5b";  // "red means wrong"
+    private const string V6 = "KidTutorial_Step6";   // "drag animal to animal box"
+    private const string V6b = "KidTutorial_Step6b";  // "green means correct"
+    private const string V6c = "KidTutorial_Step6c";  // third demo intro
+    private const string V7 = "KidTutorial_Step7";   // "now complete the rest"
+    private const string V7b = "KidTutorial_Step7b";  // end praise
+
+    // ── Known misplaced items (set once in SetupTutorialLevel) ────────
+    // Storing direct references avoids the re-parent search bug:
+    // after BringInFrontOfOverlay moves an item out of the zone hierarchy,
+    // GetComponentsInChildren can no longer find it.
+    private GameObject _wrongFruitInAnimalZone;   // fruits[0]  → should go to fruitZone
+    private GameObject _wrongAnimalInFruitZone;   // animals[2] → should go to animalZone
+
+    // ── The animal used for the wrong-drop demo in Step 5 ─────────────
+    // Stored as a field so Step 6 can reference it reliably without
+    // any hierarchy search.
+    private GameObject _demoAnimal;
+
+    // ── Drop / check signal state ──────────────────────────────────────
+    private bool _waitingForWrongDrop = false;
+    private bool _wrongDropReceived = false;
+    private bool _waitingForCorrectDrop = false;
+    private bool _correctDropReceived = false;
+    private bool _waitingForCorrectDrop2 = false;
+    private bool _correctDropReceived2 = false;
+    private bool _waitingForCorrectDrop3 = false;
+    private bool _correctDropReceived3 = false;
+    private bool _waitingForCheck = false;
+    private bool _checkReceived = false;
+
+    // ── General state ──────────────────────────────────────────────────
     private int _step = 0;
     private bool _tutorialFinished = false;
-    private bool _buttonPressed = false;
-    private bool _fruitDropped = false;
 
-    private Dictionary<GameObject, Transform> _originalParents = new Dictionary<GameObject, Transform>();
-
+    // ── Hand animation ─────────────────────────────────────────────────
     private Vector2 _handBasePos;
     private float _handBaseRot;
     private float _handTimer = 0f;
+    private Coroutine _handCoroutine = null;
 
-    // Canvas bounds used for background floating
-    private RectTransform _canvasBounds;
-
-    // ─────────────────────────────────────────────────────────────────────
+    // ══════════════════════════════════════════════════════════════════
     void Start()
     {
-        EnsureHandNonBlocking();
+        if (audioManager == null)
+            audioManager = FindObjectOfType<Game_Over_2_AudioManager>();
 
+        EnsureHandNonBlocking();
         if (tutorialHand != null) tutorialHand.SetActive(false);
         if (speechBubbleRect != null) speechBubbleRect.gameObject.SetActive(false);
-        if (checkButtonGO != null) checkButtonGO.SetActive(false);
+        if (checkButton != null) checkButton.SetActive(false);
 
-        // Wire button text + onClick in code
-        if (checkButtonGO != null)
-        {
-            RtlText rtl = checkButtonGO.GetComponentInChildren<RtlText>();
-            if (rtl != null) rtl.text = "تحقق";
-            else { Text t = checkButtonGO.GetComponentInChildren<Text>(); if (t != null) t.text = "تحقق"; }
-
-            Button btn = checkButtonGO.GetComponent<Button>();
-            if (btn != null) { btn.onClick.RemoveAllListeners(); btn.onClick.AddListener(OnTutorialButtonPressed); }
-        }
-
-        // Save original parents BEFORE touching anything
-        SaveOriginalParents(allAnimals);
-        SaveOriginalParents(allFruits);
-        SaveOriginalParent(tutorialFruit);
-        SaveOriginalParent(checkButtonGO);
-        SaveOriginalParent(animalZoneGO);
-        SaveOriginalParent(fruitZoneGO);
-
-        // Cache canvas bounds (parent of the overlay)
-        _canvasBounds = darkOverlay != null
-            ? darkOverlay.transform.parent.GetComponent<RectTransform>()
-            : null;
-
-        // Move everything to canvas root so sibling-index vs overlay works
-        var allItems = CombinedList(allAnimals, allFruits);
-        ReparentToCanvasRoot(allItems);
-        ReparentToCanvasRoot(new List<GameObject> { animalZoneGO, fruitZoneGO });
-
-        // Activate all items
-        foreach (var go in allItems) if (go != null) go.SetActive(true);
-
-        // Lock raycasts on items and zones (overlay is on top)
-        BlockRaycasts(allItems, false);
-        BlockRaycasts(new List<GameObject> { animalZoneGO, fruitZoneGO }, false);
-
-        // Send items and zones BEHIND the overlay
-        SendBehindOverlay(allItems);
-        SendBehindOverlay(new List<GameObject> { animalZoneGO, fruitZoneGO });
-
-        // ── Start background floating for ALL items immediately ──────────
-        // They float invisibly behind the overlay from the very beginning
-        foreach (var go in allItems)
-        {
-            if (go == null) continue;
-            KidItemAnimator anim = go.GetComponent<KidItemAnimator>();
-            if (anim == null) anim = go.AddComponent<KidItemAnimator>();
-            if (_canvasBounds != null) anim.StartMoving(_canvasBounds);
-        }
+        DisableAllItems();
+        LockAll();
 
         StartCoroutine(RunTutorial());
     }
 
-    // ═════════════════════════════════════════════════════════════════════
+    // ══════════════════════════════════════════════════════════════════
     //  MAIN TUTORIAL COROUTINE
-    // ═════════════════════════════════════════════════════════════════════
+    // ══════════════════════════════════════════════════════════════════
     IEnumerator RunTutorial()
     {
-        var allItems = CombinedList(allAnimals, allFruits);
+        SetupTutorialLevel();   // also sets _wrongFruitInAnimalZone / _wrongAnimalInFruitZone
+        yield return null;      // let Unity settle
 
-        // ── Step 1  Welcome ───────────────────────────────────────────────
-        // Items float BEHIND overlay the whole time — no change needed
+        // ── STEP 1 ────────────────────────────────────────────────────
         _step = 1;
-        HideHand();
-        ShowSpeech("مرحباً بك في لعبة تنظيف البيانات!");
+        ShowFerid();
+        ShowSpeech("مرحباً بك في لعبة تنظيف البيانات!", V1);
+        SendBehindOverlay(allAnimals);
+        SendBehindOverlay(allFruits);
+        SendBehindOverlay(new List<GameObject> { animalZone.gameObject, fruitZone.gameObject });
+        if (checkButton != null) SendBehindOverlay(new List<GameObject> { checkButton });
         PinUIToTop();
         yield return WaitForTap();
 
-        // ── Step 2  Show all animals & fruits in FRONT ────────────────────
+        // ── STEP 2 ────────────────────────────────────────────────────
         _step = 2;
-        ShowSpeech("هذه هي الحيوانات والفواكه التي سنقوم بتنظيفها");
-
-        SendBehindOverlay(new List<GameObject> { animalZoneGO, fruitZoneGO });
-        // Bring items in front — they are already floating, now visible
-        BringInFrontOfOverlay(allItems);
-
+        ShowSpeech("هذه هي الحيوانات والفواكه التي سنقوم بتنظيفها", V2);
+        BringInFrontOfOverlay(allAnimals);
+        BringInFrontOfOverlay(allFruits);
+        SendBehindOverlay(new List<GameObject> { animalZone.gameObject, fruitZone.gameObject });
+        if (checkButton != null) SendBehindOverlay(new List<GameObject> { checkButton });
         PinUIToTop();
-        yield return new WaitForSeconds(0.3f);
         ShowHand();
         yield return WaitForTap();
         HideHand();
 
-        // Send items back behind overlay (keep floating in background)
-        SendBehindOverlay(allItems);
-
-        // ── Step 3  Animal container only ─────────────────────────────────
+        // ── STEP 3 ────────────────────────────────────────────────────
         _step = 3;
-        ShowSpeech("هذا هو مكان الحيوانات، هنا تضع كل الحيوانات");
-
-        SendBehindOverlay(new List<GameObject> { fruitZoneGO });
-        BringInFrontOfOverlay(new List<GameObject> { animalZoneGO });
+        ShowSpeech("هذا هو مكان الحيوانات، وهذا مكان الفواكه", V3);
+        SendBehindOverlay(allAnimals);
+        SendBehindOverlay(allFruits);
+        BringInFrontOfOverlay(new List<GameObject> { animalZone.gameObject, fruitZone.gameObject });
+        if (checkButton != null) SendBehindOverlay(new List<GameObject> { checkButton });
         PinUIToTop();
         ShowHand();
         yield return WaitForTap();
         HideHand();
 
-        SendBehindOverlay(new List<GameObject> { animalZoneGO });
-
-        // ── Step 4  Fruit container only ──────────────────────────────────
+        // ── STEP 4 ────────────────────────────────────────────────────
         _step = 4;
-        ShowSpeech("وهذا هو مكان الفواكه، هنا تضع كل الفواكه");
-
-        BringInFrontOfOverlay(new List<GameObject> { fruitZoneGO });
+        ShowSpeech("عندما تنتهي اضغط زر التحقق", V4);
+        SendBehindOverlay(allAnimals);
+        SendBehindOverlay(allFruits);
+        SendBehindOverlay(new List<GameObject> { animalZone.gameObject, fruitZone.gameObject });
+        if (checkButton != null)
+        {
+            checkButton.SetActive(true);
+            BringInFrontOfOverlay(new List<GameObject> { checkButton });
+        }
         PinUIToTop();
         ShowHand();
         yield return WaitForTap();
         HideHand();
 
-        SendBehindOverlay(new List<GameObject> { fruitZoneGO });
-
-        // ── Step 5  Interactive drag demo ─────────────────────────────────
+        // ── STEP 5 — wrong drop demo ──────────────────────────────────
+        // Pick a CORRECT animal (animals[0] or animals[1] — not _wrongAnimalInFruitZone)
+        // and store it in _demoAnimal so Step 6 can reuse it without any search.
         _step = 5;
-        ShowSpeech("إذا وجدت فاكهة في مكان خاطأ، اسحبها إلى مكانها الصحيح");
-
-        // ── Hide EVERYTHING behind overlay ────────────────────────────────
-        // Stop floating for all items except the tutorial fruit
-        foreach (var go in allItems)
-        {
-            if (go == null || go == tutorialFruit) continue;
-            go.GetComponent<KidItemAnimator>()?.StopMoving();
-            go.SetActive(false); // completely remove from scene
-        }
-        SendBehindOverlay(new List<GameObject> { animalZoneGO, fruitZoneGO });
-
-        // ── Show ONLY tutorialFruit floating in front ─────────────────────
-        if (tutorialFruit != null)
-        {
-            tutorialFruit.SetActive(true);
-
-            // Re-parent to canvas root (needed for sibling-index and KidDraggable.canvas)
-            ReparentToCanvasRoot(new List<GameObject> { tutorialFruit });
-
-            // Bring in front of overlay so it's visible
-            BringInFrontOfOverlay(new List<GameObject> { tutorialFruit });
-
-            // Start it floating freely across the canvas
-            KidItemAnimator anim = tutorialFruit.GetComponent<KidItemAnimator>();
-            if (anim == null) anim = tutorialFruit.AddComponent<KidItemAnimator>();
-            if (_canvasBounds != null) anim.StartMoving(_canvasBounds);
-
-            // Give full drag access
-            KidDraggable drag = tutorialFruit.GetComponent<KidDraggable>();
-            drag?.UnlockDragging();
-            CanvasGroup cg = tutorialFruit.GetComponent<CanvasGroup>();
-            if (cg == null) cg = tutorialFruit.AddComponent<CanvasGroup>();
-            cg.blocksRaycasts = true;
-            cg.interactable = true;
-            cg.alpha = 1f;
-        }
-
-        // ── Bring fruit zone in front as the drop target ──────────────────
-        BringInFrontOfOverlay(new List<GameObject> { fruitZoneGO });
-        // Enable its CanvasGroup so IDropHandler receives events
-        CanvasGroup zoneCG = fruitZoneGO.GetComponent<CanvasGroup>();
-        if (zoneCG == null) zoneCG = fruitZoneGO.AddComponent<CanvasGroup>();
-        zoneCG.blocksRaycasts = true;
-        zoneCG.interactable = true;
-        zoneCG.alpha = 1f;
-
+        ShowSpeech("اسحب هذا الحيوان إلى صندوق الفواكه", V5);
         PinUIToTop();
+        yield return WaitForTap();
+        HideFerid();
 
-        // Show hand hinting the drag direction
-        Vector2 fromPos = GetAnchoredPos(tutorialFruit);
-        Vector2 toPos = GetAnchoredPos(fruitZoneGO);
-        yield return new WaitForSeconds(0.4f);
-        yield return AnimateHandPath(fromPos, toPos, 1.4f);
-        HideHand();
+        // Pick directly from allAnimals — no hierarchy search needed.
+        _demoAnimal = FindCorrectAnimalForDemo();
 
-        // Wait for child to drop the fruit into the fruit zone
-        _fruitDropped = false;
-        yield return new WaitUntil(() => _fruitDropped);
-
-        // ── Auto-advance: show "well done" speech, then wait for tap ──────
-        yield return new WaitForSeconds(afterDropPause);
-        ShowSpeech("أحسنت! هكذا تضع الفاكهة في مكانها الصحيح");
-        PinUIToTop();
-
-        // Lock fruit and zone again
-        fruitZone.ResetZone();
-        zoneCG.blocksRaycasts = false;
-        zoneCG.interactable = false;
-        if (tutorialFruit != null)
+        if (_demoAnimal != null)
         {
-            tutorialFruit.GetComponent<KidDraggable>()?.LockDragging();
-            tutorialFruit.GetComponent<KidItemAnimator>()?.StopMoving();
-            CanvasGroup cg = tutorialFruit.GetComponent<CanvasGroup>();
-            if (cg != null) { cg.blocksRaycasts = false; cg.interactable = false; }
-        }
+            ResetItemForDemo(_demoAnimal);
+            SendBehindOverlay(allAnimals);
+            SendBehindOverlay(allFruits);
+            SendBehindOverlay(new List<GameObject> { animalZone.gameObject });
+            BringInFrontOfOverlay(new List<GameObject> { _demoAnimal, fruitZone.gameObject });
+            LockAll();
+            SetOneInteractable(_demoAnimal, true);
+            SetOneInteractable(fruitZone.gameObject, true);
 
+            _wrongDropReceived = false;
+            _waitingForWrongDrop = true;
+            StartHandAnim(GetAnchoredPos(_demoAnimal), GetAnchoredPos(fruitZone.gameObject), 1.4f);
+            yield return new WaitUntil(() => _wrongDropReceived);
+            _waitingForWrongDrop = false;
+            StopAndHideHand();
+            yield return new WaitForSeconds(afterDropPause);
+        }
+        else { Debug.LogError("Step 5: No suitable demo animal found in allAnimals!"); }
+
+        // ── STEP 5b — red flash (auto-clears after flashDuration) ─────
+        LockAll();
+        BringInFrontOfOverlay(new List<GameObject> { animalZone.gameObject, fruitZone.gameObject });
+        yield return FlashAndWait(fruitZone, false);   // shows red → waits → zone resets
+
+        ShowFerid();
+        ShowSpeech("عندما يكون اللون أحمر فهذا يعني أن الإجابة خاطئة", V5b);
+        PinUIToTop();
         yield return WaitForTap();
 
-        // ── Step 6  Check button ──────────────────────────────────────────
+        // ── STEP 6 — correct drop demo (animal back → animalZone) ─────
         _step = 6;
-        SendBehindOverlay(new List<GameObject> { tutorialFruit, fruitZoneGO });
-        ShowSpeech("عندما تنتهي من الترتيب، اضغط هذا الزر للتحقق من إجابتك");
+        ShowSpeech("اسحب الحيوان إلى صندوق الحيوانات", V6);
+        PinUIToTop();
+        yield return WaitForTap();
+        HideFerid();
 
-        if (checkButtonGO != null)
+        // Use the stored _demoAnimal reference — no search required.
+        if (_demoAnimal != null && _demoAnimal.activeInHierarchy)
         {
-            checkButtonGO.SetActive(true);
-            ReparentToCanvasRoot(new List<GameObject> { checkButtonGO });
-            BringInFrontOfOverlay(new List<GameObject> { checkButtonGO });
-            CanvasGroup cg = checkButtonGO.GetComponent<CanvasGroup>();
-            if (cg == null) cg = checkButtonGO.AddComponent<CanvasGroup>();
-            cg.blocksRaycasts = true; cg.interactable = true; cg.alpha = 1f;
+            ResetItemForDemo(_demoAnimal);
+            SendBehindOverlay(allAnimals);
+            SendBehindOverlay(allFruits);
+            SendBehindOverlay(new List<GameObject> { fruitZone.gameObject });
+            BringInFrontOfOverlay(new List<GameObject> { _demoAnimal, animalZone.gameObject });
+            LockAll();
+            SetOneInteractable(_demoAnimal, true);
+            SetOneInteractable(animalZone.gameObject, true);
+
+            _correctDropReceived = false;
+            _waitingForCorrectDrop = true;
+            StartHandAnim(GetAnchoredPos(_demoAnimal), GetAnchoredPos(animalZone.gameObject), 1.4f);
+            yield return new WaitUntil(() => _correctDropReceived);
+            _waitingForCorrectDrop = false;
+            StopAndHideHand();
+            yield return new WaitForSeconds(afterDropPause);
+        }
+        else { Debug.LogError("Step 6: _demoAnimal is null or inactive!"); }
+
+        // ── STEP 6b — green flash (auto-clears) ───────────────────────
+        LockAll();
+        BringInFrontOfOverlay(new List<GameObject> { animalZone.gameObject, fruitZone.gameObject });
+        yield return FlashAndWait(animalZone, true);   // shows green → waits → zone resets
+
+        ShowFerid();
+        ShowSpeech("وعندما يكون اللون أخضر فهذا يعني أن الإجابة صحيحة!", V6b);
+        PinUIToTop();
+        yield return WaitForTap();
+
+        // ══════════════════════════════════════════════════════════════
+        // ── STEP 6c — THIRD DEMO: 2 remaining wrong items ────────────
+        //
+        // Board state entering here (Step 5+6 are net-neutral — same
+        // animal went wrong then came back):
+        //   animalZone : animals[0], animals[1], fruits[0]   ← _wrongFruitInAnimalZone
+        //   fruitZone  : fruits[1], fruits[2], animals[2]    ← _wrongAnimalInFruitZone
+        //
+        // We use the stored references set in SetupTutorialLevel so
+        // re-parenting from previous steps never breaks the lookup.
+        // ══════════════════════════════════════════════════════════════
+        _step = 7;
+        ShowFerid();
+        ShowSpeech("الآن أكمل ترتيب الباقي", V6c);
+        PinUIToTop();
+        yield return WaitForTap();
+        HideFerid();
+
+        // ── 6c-Part 1: _wrongFruitInAnimalZone → fruitZone ───────────
+        if (_wrongFruitInAnimalZone != null)
+        {
+            Debug.Log($"Step 6c-1: {_wrongFruitInAnimalZone.name} → fruitZone");
+            ResetItemForDemo(_wrongFruitInAnimalZone);
+
+            // Show both wrong items + both zones; hide everything else
+            SendBehindOverlay(allAnimals);
+            SendBehindOverlay(allFruits);
+            BringInFrontOfOverlay(new List<GameObject>
+                { _wrongFruitInAnimalZone, _wrongAnimalInFruitZone,
+                  animalZone.gameObject,   fruitZone.gameObject });
+
+            LockAll();
+            SetOneInteractable(_wrongFruitInAnimalZone, true);
+            SetOneInteractable(fruitZone.gameObject, true);
+
+            _correctDropReceived2 = false;
+            _waitingForCorrectDrop2 = true;
+            StartHandAnim(
+                GetAnchoredPos(_wrongFruitInAnimalZone),
+                GetAnchoredPos(fruitZone.gameObject), 1.4f);
+
+            yield return new WaitUntil(() => _correctDropReceived2);
+            _waitingForCorrectDrop2 = false;
+            StopAndHideHand();
+            yield return new WaitForSeconds(afterDropPause);
+
+            // Green flash on fruitZone — auto-clears
+            yield return FlashAndWait(fruitZone, true);
+        }
+        else { Debug.LogError("Step 6c-1: _wrongFruitInAnimalZone is null!"); }
+
+        // ── 6c-Part 2: _wrongAnimalInFruitZone → animalZone ──────────
+        if (_wrongAnimalInFruitZone != null)
+        {
+            Debug.Log($"Step 6c-2: {_wrongAnimalInFruitZone.name} → animalZone");
+            ResetItemForDemo(_wrongAnimalInFruitZone);
+
+            SendBehindOverlay(allAnimals);
+            SendBehindOverlay(allFruits);
+            BringInFrontOfOverlay(new List<GameObject>
+                { _wrongAnimalInFruitZone, animalZone.gameObject, fruitZone.gameObject });
+
+            LockAll();
+            SetOneInteractable(_wrongAnimalInFruitZone, true);
+            SetOneInteractable(animalZone.gameObject, true);
+
+            _correctDropReceived3 = false;
+            _waitingForCorrectDrop3 = true;
+            StartHandAnim(
+                GetAnchoredPos(_wrongAnimalInFruitZone),
+                GetAnchoredPos(animalZone.gameObject), 1.4f);
+
+            yield return new WaitUntil(() => _correctDropReceived3);
+            _waitingForCorrectDrop3 = false;
+            StopAndHideHand();
+            yield return new WaitForSeconds(afterDropPause);
+
+            // Green flash on animalZone — auto-clears
+            yield return FlashAndWait(animalZone, true);
+        }
+        else { Debug.LogError("Step 6c-2: _wrongAnimalInFruitZone is null!"); }
+
+        // ── STEP 7 — show check button, say "press check" ───────────
+        _step = 7;
+        LockAll();
+        ShowFerid();
+        ShowSpeech("اضغط زر التحقق", V7);
+
+        BringInFrontOfOverlay(allAnimals);
+        BringInFrontOfOverlay(allFruits);
+        BringInFrontOfOverlay(new List<GameObject> { animalZone.gameObject, fruitZone.gameObject });
+        if (checkButton != null)
+        {
+            checkButton.SetActive(true);
+            BringInFrontOfOverlay(new List<GameObject> { checkButton });
         }
 
+        // All items interactable for free play
+        foreach (var go in allAnimals) SetOneInteractable(go, true);
+        foreach (var go in allFruits) SetOneInteractable(go, true);
+        SetOneInteractable(animalZone.gameObject, true);
+        SetOneInteractable(fruitZone.gameObject, true);
+        if (checkButton != null) SetOneInteractable(checkButton, true);
+
         PinUIToTop();
-        ShowHand();
-        _buttonPressed = false;
-        yield return new WaitUntil(() => _buttonPressed);
 
-        HideHand();
-        if (checkButtonGO != null) checkButtonGO.SetActive(false);
-
-        // ── Step 7  Both zones flash RED ──────────────────────────────────
-        _step = 7;
-        ShowSpeech("عندما يكون اللون أحمر فهذا يعني أن الإجابة خاطئة");
-
-        BringInFrontOfOverlay(new List<GameObject> { animalZoneGO, fruitZoneGO });
-        PinUIToTop();
-        ShowHand();
-        yield return FlashZonesDirect(Color.red, flashHoldTime);
+        // Wait for tap to dismiss speech, then wait for check button press
         yield return WaitForTap();
-        HideHand();
+        HideFerid();
 
-        // ── Step 8  Both zones flash GREEN ────────────────────────────────
-        _step = 8;
-        ShowSpeech("وعندما يكون اللون أخضر فهذا يعني أن الإجابة صحيحة!");
+        _checkReceived = false;
+        _waitingForCheck = true;
+        yield return new WaitUntil(() => _checkReceived);
+        _waitingForCheck = false;
 
-        PinUIToTop();
-        ShowHand();
-        yield return FlashZonesDirect(Color.green, flashHoldTime);
-        yield return WaitForTap();
-        HideHand();
-
-        // ── Step 9  Ready ─────────────────────────────────────────────────
-        _step = 9;
-        HideHand();
-        SendBehindOverlay(new List<GameObject> { animalZoneGO, fruitZoneGO });
-        ShowSpeech("رائع! أنت الآن جاهز للعب. حظاً موفقاً!");
-        PinUIToTop();
-        yield return new WaitForSeconds(1.8f);
-
+        // ── END ───────────────────────────────────────────────────────
+        ShowFerid();
+        ShowSpeech("رائع! أنت الآن جاهز للعب. حظاً موفقاً!", V7b);
+        yield return new WaitForSeconds(2.5f);
         EndTutorial();
     }
 
-    // ═════════════════════════════════════════════════════════════════════
-    //  DIRECT FLASH
-    // ═════════════════════════════════════════════════════════════════════
-    IEnumerator FlashZonesDirect(Color flashColor, float hold)
+    // ══════════════════════════════════════════════════════════════════
+    //  FLASH — shows colour briefly then auto-resets
+    // ══════════════════════════════════════════════════════════════════
+
+    /// <summary>
+    /// Triggers TutorialFlash on the zone, waits flashDuration seconds,
+    /// then calls ResetFlash so the colour clears before the tutorial continues.
+    /// yield return this instead of calling FlashZone directly.
+    /// </summary>
+    IEnumerator FlashAndWait(KidDropZone zone, bool correct)
     {
-        Image imgA = animalZoneGO?.GetComponent<Image>() ?? animalZoneGO?.GetComponentInChildren<Image>();
-        Image imgF = fruitZoneGO?.GetComponent<Image>() ?? fruitZoneGO?.GetComponentInChildren<Image>();
-
-        Color origA = imgA != null ? imgA.color : Color.white;
-        Color origF = imgF != null ? imgF.color : Color.white;
-
-        if (imgA != null) imgA.color = flashColor;
-        if (imgF != null) imgF.color = flashColor;
-
-        yield return new WaitForSeconds(hold);
-
-        if (imgA != null) imgA.color = origA;
-        if (imgF != null) imgF.color = origF;
+        if (zone == null) yield break;
+        StartCoroutine(zone.TutorialFlash(correct));
+        yield return new WaitForSeconds(flashDuration);
+        zone.ResetFlash();
     }
 
-    // ═════════════════════════════════════════════════════════════════════
+    // ══════════════════════════════════════════════════════════════════
     //  PUBLIC CALLBACKS
-    // ═════════════════════════════════════════════════════════════════════
-    public void OnTutorialButtonPressed()
+    // ══════════════════════════════════════════════════════════════════
+
+    public void OnTutorialDrop(GameObject droppedObject, bool correct)
     {
-        if (_step == 6) _buttonPressed = true;
+        if (_waitingForWrongDrop) { _wrongDropReceived = true; return; }
+        if (_waitingForCorrectDrop) { _correctDropReceived = true; return; }
+        if (_waitingForCorrectDrop2) { _correctDropReceived2 = true; return; }
+        if (_waitingForCorrectDrop3) { _correctDropReceived3 = true; return; }
     }
 
-    public void OnTutorialDrop(GameObject droppedItem, bool correct)
+    public void OnCheckPressed()
     {
-        if (_step == 5 && droppedItem == tutorialFruit)
-            _fruitDropped = true;
+        if (_waitingForCheck) _checkReceived = true;
     }
 
-    // ═════════════════════════════════════════════════════════════════════
-    //  HAND BOB (Update)
-    // ═════════════════════════════════════════════════════════════════════
+    // ══════════════════════════════════════════════════════════════════
+    //  SETUP
+    // ══════════════════════════════════════════════════════════════════
+
+    void SetupTutorialLevel()
+    {
+        animalZone.ResetZone();
+        fruitZone.ResetZone();
+        DisableAllItems();
+
+        for (int i = 0; i < 3 && i < allAnimals.Count; i++)
+        {
+            allAnimals[i].SetActive(true);
+            allAnimals[i].GetComponent<KidDraggable>()?.UnlockDragging();
+        }
+        for (int i = 0; i < 3 && i < allFruits.Count; i++)
+        {
+            allFruits[i].SetActive(true);
+            allFruits[i].GetComponent<KidDraggable>()?.UnlockDragging();
+        }
+
+        // animalZone: animals[0], animals[1] correct + fruits[0] WRONG
+        if (allAnimals.Count > 0) animalZone.AddItem(allAnimals[0].GetComponent<KidDraggable>());
+        if (allAnimals.Count > 1) animalZone.AddItem(allAnimals[1].GetComponent<KidDraggable>());
+        if (allFruits.Count > 0) animalZone.AddItem(allFruits[0].GetComponent<KidDraggable>());
+
+        // fruitZone: fruits[1], fruits[2] correct + animals[2] WRONG
+        if (allFruits.Count > 1) fruitZone.AddItem(allFruits[1].GetComponent<KidDraggable>());
+        if (allFruits.Count > 2) fruitZone.AddItem(allFruits[2].GetComponent<KidDraggable>());
+        if (allAnimals.Count > 2) fruitZone.AddItem(allAnimals[2].GetComponent<KidDraggable>());
+
+        // Store direct references — immune to re-parenting done by BringInFrontOfOverlay
+        _wrongFruitInAnimalZone = allFruits.Count > 0 ? allFruits[0] : null;
+        _wrongAnimalInFruitZone = allAnimals.Count > 2 ? allAnimals[2] : null;
+    }
+
+    void DisableAllItems()
+    {
+        foreach (var go in allAnimals) if (go != null) go.SetActive(false);
+        foreach (var go in allFruits) if (go != null) go.SetActive(false);
+    }
+
+    // ══════════════════════════════════════════════════════════════════
+    //  ITEM HELPERS
+    // ══════════════════════════════════════════════════════════════════
+
+    /// <summary>
+    /// Picks the first animal from allAnimals that is:
+    ///   - active in the hierarchy
+    ///   - NOT the pre-designated wrong animal (_wrongAnimalInFruitZone / animals[2])
+    ///   - NOT the pre-designated wrong fruit (_wrongFruitInAnimalZone is a fruit, so irrelevant here)
+    /// Searches allAnimals directly so it works regardless of current parent
+    /// (BringInFrontOfOverlay may have re-parented items out of the zone).
+    /// </summary>
+    private GameObject FindCorrectAnimalForDemo()
+    {
+        foreach (var item in allAnimals)
+        {
+            if (item == null || !item.activeInHierarchy) continue;
+            if (item == _wrongAnimalInFruitZone) continue;   // skip the pre-placed wrong one
+            return item;
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// Prepares an item for a demo drag: stops idle animation, re-enables
+    /// dragging, resets CanvasGroup, pushes to top of render order.
+    /// </summary>
+    private void ResetItemForDemo(GameObject item)
+    {
+        if (item == null) return;
+
+        KidItemAnimator anim = item.GetComponent<KidItemAnimator>();
+        if (anim != null) anim.StopMoving();
+
+        KidDraggable draggable = item.GetComponent<KidDraggable>();
+        if (draggable != null) { draggable.enabled = true; draggable.UnlockDragging(); }
+
+        CanvasGroup cg = item.GetComponent<CanvasGroup>() ?? item.AddComponent<CanvasGroup>();
+        cg.alpha = 1f;
+        cg.blocksRaycasts = true;
+        cg.interactable = true;
+        cg.ignoreParentGroups = true;
+
+        item.transform.SetAsLastSibling();
+    }
+
+    // ══════════════════════════════════════════════════════════════════
+    //  FERID / SPEECH
+    // ══════════════════════════════════════════════════════════════════
+
+    void ShowFerid()
+    {
+        if (feridRect != null) feridRect.gameObject.SetActive(true);
+        if (speechBubbleRect != null) speechBubbleRect.gameObject.SetActive(true);
+    }
+
+    void HideFerid()
+    {
+        if (feridRect != null) feridRect.gameObject.SetActive(false);
+        if (speechBubbleRect != null) speechBubbleRect.gameObject.SetActive(false);
+    }
+
+    void ShowSpeech(string arabic, string voiceName)
+    {
+        int i = _step - 1;
+        if (feridRect != null && i >= 0 && i < feridPositions.Length)
+            feridRect.anchoredPosition = feridPositions[i];
+        if (speechBubbleRect != null)
+        {
+            speechBubbleRect.gameObject.SetActive(true);
+            if (i >= 0 && i < speechBubblePositions.Length)
+                speechBubbleRect.anchoredPosition = speechBubblePositions[i];
+        }
+        if (speechText != null) speechText.text = arabic;
+        if (audioManager != null && !string.IsNullOrEmpty(voiceName))
+            audioManager.Play_Sfx(voiceName);
+    }
+
+    // ══════════════════════════════════════════════════════════════════
+    //  INTERACTABILITY
+    // ══════════════════════════════════════════════════════════════════
+
+    void LockAll()
+    {
+        foreach (var go in allAnimals) SetOneInteractable(go, false);
+        foreach (var go in allFruits) SetOneInteractable(go, false);
+        SetOneInteractable(animalZone.gameObject, false);
+        SetOneInteractable(fruitZone.gameObject, false);
+        if (checkButton != null) SetOneInteractable(checkButton, false);
+    }
+
+    void SetOneInteractable(GameObject go, bool state)
+    {
+        if (go == null) return;
+        CanvasGroup cg = go.GetComponent<CanvasGroup>() ?? go.AddComponent<CanvasGroup>();
+        cg.blocksRaycasts = state;
+        cg.interactable = state;
+        cg.ignoreParentGroups = true;
+    }
+
+    // ══════════════════════════════════════════════════════════════════
+    //  OVERLAY Z-ORDER
+    // ══════════════════════════════════════════════════════════════════
+
+    void BringInFrontOfOverlay(List<GameObject> targets)
+    {
+        if (darkOverlay == null) return;
+        Transform overlayParent = darkOverlay.transform.parent;
+        int overlayIndex = darkOverlay.transform.GetSiblingIndex();
+        foreach (var go in targets)
+        {
+            if (go == null) continue;
+            if (go.transform.parent != overlayParent)
+                go.transform.SetParent(overlayParent, true);
+            go.transform.SetSiblingIndex(overlayIndex + 1);
+        }
+    }
+
+    void SendBehindOverlay(List<GameObject> targets)
+    {
+        if (darkOverlay == null) return;
+        Transform overlayParent = darkOverlay.transform.parent;
+        int overlayIndex = darkOverlay.transform.GetSiblingIndex();
+        foreach (var go in targets)
+        {
+            if (go == null) continue;
+            if (go.transform.parent != overlayParent)
+                go.transform.SetParent(overlayParent, true);
+            go.transform.SetSiblingIndex(Mathf.Max(0, overlayIndex));
+        }
+    }
+
+    void PinUIToTop()
+    {
+        foreach (var go in topLevelUI)
+            if (go != null) go.transform.SetAsLastSibling();
+    }
+
+    // ══════════════════════════════════════════════════════════════════
+    //  HAND ANIMATION
+    // ══════════════════════════════════════════════════════════════════
+
+    void EnsureHandNonBlocking()
+    {
+        if (tutorialHand == null) return;
+        CanvasGroup cg = tutorialHand.GetComponent<CanvasGroup>() ?? tutorialHand.AddComponent<CanvasGroup>();
+        cg.blocksRaycasts = false;
+        cg.interactable = false;
+    }
+
     void Update()
     {
         if (_tutorialFinished || tutorialHand == null || !tutorialHand.activeSelf) return;
-
         _handTimer += Time.deltaTime;
         float bob = Mathf.Sin(_handTimer * handBobSpeed) * handBobAmount;
         float scaleY = 1f + Mathf.Sin(_handTimer * handSquashSpeed) * 0.08f;
         float scaleX = 1f - Mathf.Sin(_handTimer * handSquashSpeed) * 0.05f;
         float rock = Mathf.Sin(_handTimer * handBobSpeed * 0.7f) * 8f;
-
         RectTransform rt = tutorialHand.GetComponent<RectTransform>();
         if (rt != null)
         {
@@ -388,32 +610,27 @@ public class KidTutorialManager : MonoBehaviour
         }
     }
 
-    // ═════════════════════════════════════════════════════════════════════
-    //  HAND HELPERS
-    // ═════════════════════════════════════════════════════════════════════
     void ShowHand()
     {
         if (tutorialHand == null) return;
         EnsureHandNonBlocking();
         tutorialHand.SetActive(true);
-        int i = _step - 1;
         RectTransform rt = tutorialHand.GetComponent<RectTransform>();
-        if (rt == null) return;
-        _handBasePos = (i >= 0 && i < handPositions.Length) ? handPositions[i] : rt.anchoredPosition;
-        rt.anchoredPosition = _handBasePos;
-        _handBaseRot = (i >= 0 && i < handRotations.Length) ? handRotations[i] : 0f;
-        rt.localRotation = Quaternion.Euler(0f, 0f, _handBaseRot);
+        if (rt != null) { _handBasePos = rt.anchoredPosition; _handBaseRot = 0f; }
     }
 
     void HideHand() { if (tutorialHand != null) tutorialHand.SetActive(false); }
 
-    void EnsureHandNonBlocking()
+    void StartHandAnim(Vector2 from, Vector2 to, float duration)
     {
-        if (tutorialHand == null) return;
-        CanvasGroup cg = tutorialHand.GetComponent<CanvasGroup>();
-        if (cg == null) cg = tutorialHand.AddComponent<CanvasGroup>();
-        cg.blocksRaycasts = false;
-        cg.interactable = false;
+        StopAndHideHand();
+        _handCoroutine = StartCoroutine(AnimateHandPath(from, to, duration));
+    }
+
+    void StopAndHideHand()
+    {
+        if (_handCoroutine != null) { StopCoroutine(_handCoroutine); _handCoroutine = null; }
+        HideHand();
     }
 
     IEnumerator AnimateHandPath(Vector2 from, Vector2 to, float duration)
@@ -423,11 +640,13 @@ public class KidTutorialManager : MonoBehaviour
         tutorialHand.SetActive(true);
         Vector2 dir = (to - from).normalized;
         _handBaseRot = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        yield return LerpHand(from, to, duration);
-        yield return new WaitForSeconds(0.3f);
-        yield return LerpHand(to, from, duration * 0.6f);
-        yield return new WaitForSeconds(0.2f);
-        yield return LerpHand(from, to, duration);
+        while (true)
+        {
+            yield return LerpHand(from, to, duration);
+            yield return new WaitForSeconds(0.3f);
+            yield return LerpHand(to, from, duration * 0.6f);
+            yield return new WaitForSeconds(0.2f);
+        }
     }
 
     IEnumerator LerpHand(Vector2 from, Vector2 to, float dur)
@@ -443,98 +662,26 @@ public class KidTutorialManager : MonoBehaviour
         }
     }
 
-    // ═════════════════════════════════════════════════════════════════════
-    //  SPEECH
-    // ═════════════════════════════════════════════════════════════════════
-    void ShowSpeech(string arabic)
-    {
-        int i = _step - 1;
-        if (feridRect != null && i >= 0 && i < feridPositions.Length)
-            feridRect.anchoredPosition = feridPositions[i];
-        if (speechBubbleRect != null)
-        {
-            speechBubbleRect.gameObject.SetActive(true);
-            if (i >= 0 && i < speechBubblePositions.Length)
-                speechBubbleRect.anchoredPosition = speechBubblePositions[i];
-        }
-        if (speechText != null) speechText.text = arabic;
-    }
+    // ══════════════════════════════════════════════════════════════════
+    //  INPUT
+    // ══════════════════════════════════════════════════════════════════
 
-    void PinUIToTop()
-    {
-        foreach (var go in topLevelUI)
-            if (go != null) go.transform.SetAsLastSibling();
-    }
-
-    // ═════════════════════════════════════════════════════════════════════
-    //  TAP DETECTION
-    // ═════════════════════════════════════════════════════════════════════
     IEnumerator WaitForTap()
     {
         yield return new WaitForSeconds(0.25f);
-        while (true)
+        bool tapped = false;
+        while (!tapped)
         {
-            if (Input.GetMouseButtonDown(0) ||
-               (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began))
-                yield break;
+            if (Input.GetMouseButtonDown(0)
+                || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began))
+                tapped = true;
             yield return null;
         }
     }
 
-    // ═════════════════════════════════════════════════════════════════════
-    //  HIERARCHY HELPERS
-    // ═════════════════════════════════════════════════════════════════════
-    int OverlaySiblingIndex()
-        => darkOverlay != null ? darkOverlay.transform.GetSiblingIndex() : 0;
-
-    void ReparentToCanvasRoot(List<GameObject> targets)
-    {
-        if (darkOverlay == null) return;
-        Transform root = darkOverlay.transform.parent;
-        foreach (var go in targets)
-        {
-            if (go == null) continue;
-            if (!_originalParents.ContainsKey(go)) _originalParents[go] = go.transform.parent;
-            if (go.transform.parent != root) go.transform.SetParent(root, true);
-        }
-    }
-
-    void BringInFrontOfOverlay(List<GameObject> targets)
-    {
-        int idx = OverlaySiblingIndex();
-        foreach (var go in targets)
-            if (go != null) go.transform.SetSiblingIndex(idx + 1);
-    }
-
-    void SendBehindOverlay(List<GameObject> targets)
-    {
-        int insertAt = Mathf.Max(0, OverlaySiblingIndex() - 1);
-        foreach (var go in targets)
-            if (go != null) go.transform.SetSiblingIndex(insertAt);
-    }
-
-    void BlockRaycasts(List<GameObject> targets, bool block)
-    {
-        foreach (var go in targets)
-        {
-            if (go == null) continue;
-            CanvasGroup cg = go.GetComponent<CanvasGroup>();
-            if (cg == null) cg = go.AddComponent<CanvasGroup>();
-            cg.blocksRaycasts = block;
-            cg.interactable = block;
-        }
-    }
-
-    void SaveOriginalParents(List<GameObject> items)
-    {
-        foreach (var go in items) SaveOriginalParent(go);
-    }
-
-    void SaveOriginalParent(GameObject go)
-    {
-        if (go != null && !_originalParents.ContainsKey(go))
-            _originalParents[go] = go.transform.parent;
-    }
+    // ══════════════════════════════════════════════════════════════════
+    //  UTILITY
+    // ══════════════════════════════════════════════════════════════════
 
     Vector2 GetAnchoredPos(GameObject go)
     {
@@ -542,61 +689,23 @@ public class KidTutorialManager : MonoBehaviour
         return rt != null ? rt.anchoredPosition : Vector2.zero;
     }
 
-    List<GameObject> CombinedList(List<GameObject> a, List<GameObject> b)
-    {
-        var r = new List<GameObject>(a); r.AddRange(b); return r;
-    }
+    // ══════════════════════════════════════════════════════════════════
+    //  END
+    // ══════════════════════════════════════════════════════════════════
 
-    // ═════════════════════════════════════════════════════════════════════
-    //  END TUTORIAL
-    // ═════════════════════════════════════════════════════════════════════
     void EndTutorial()
     {
         _tutorialFinished = true;
-        HideHand();
-
+        StopAndHideHand();
         if (speechBubbleRect != null) speechBubbleRect.gameObject.SetActive(false);
         if (feridRect != null) feridRect.gameObject.SetActive(false);
         if (darkOverlay != null) darkOverlay.SetActive(false);
 
-        // Stop all floating and restore items to original parents, deactivate them
-        var allItems = CombinedList(allAnimals, allFruits);
-        foreach (var go in allItems)
-        {
-            if (go == null) continue;
-            go.GetComponent<KidItemAnimator>()?.StopMoving();
-            if (_originalParents.TryGetValue(go, out Transform p) && p != null)
-                go.transform.SetParent(p, true);
-            go.SetActive(false); // KidGameManager.SetupRound() will re-activate what it needs
-        }
-
-        // Restore zones to original parents and re-enable them
-        foreach (var go in new[] { animalZoneGO, fruitZoneGO })
-        {
-            if (go == null) continue;
-            if (_originalParents.TryGetValue(go, out Transform p) && p != null)
-                go.transform.SetParent(p, true);
-            CanvasGroup cg = go.GetComponent<CanvasGroup>();
-            if (cg != null) { cg.blocksRaycasts = true; cg.interactable = true; cg.alpha = 1f; }
-        }
-
-        // Restore check button — remove tutorial listener so real game takes over
-        if (checkButtonGO != null)
-        {
-            checkButtonGO.SetActive(true);
-            if (_originalParents.TryGetValue(checkButtonGO, out Transform p) && p != null)
-                checkButtonGO.transform.SetParent(p, true);
-            CanvasGroup cg = checkButtonGO.GetComponent<CanvasGroup>();
-            if (cg != null) { cg.blocksRaycasts = true; cg.interactable = true; cg.alpha = 1f; }
-            Button btn = checkButtonGO.GetComponent<Button>();
-            if (btn != null) btn.onClick.RemoveListener(OnTutorialButtonPressed);
-        }
-
-        // Re-enable all items' CanvasGroups for real game use
-        BlockRaycasts(allItems, true);
-
-        animalZone?.ResetZone();
-        fruitZone?.ResetZone();
+        foreach (var go in allAnimals) SetOneInteractable(go, true);
+        foreach (var go in allFruits) SetOneInteractable(go, true);
+        SetOneInteractable(animalZone.gameObject, true);
+        SetOneInteractable(fruitZone.gameObject, true);
+        if (checkButton != null) SetOneInteractable(checkButton, true);
 
         KidGameManager gm = FindObjectOfType<KidGameManager>();
         gm?.OnTutorialFinished();
