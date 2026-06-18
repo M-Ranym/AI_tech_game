@@ -157,7 +157,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -35.132}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 763, y: 340}
+  m_AnchoredPosition: {x: 95, y: -321}
   m_SizeDelta: {x: 510.0478, y: 366.711}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &17250847
@@ -900,7 +900,7 @@ PrefabInstance:
     - target: {fileID: 5378524194867136449, guid: b5136844e6d99b34dbb0773ef98e817e, type: 3}
       propertyPath: _sounds.Array.data[60].clip
       value: 
-      objectReference: {fileID: 8300000, guid: 9b30d35c65993704fb5c067973d73b09, type: 3}
+      objectReference: {fileID: 8300000, guid: f3edbc27e100e14449770c0544221aed, type: 3}
     - target: {fileID: 5378524194867136449, guid: b5136844e6d99b34dbb0773ef98e817e, type: 3}
       propertyPath: _sounds.Array.data[60].name
       value: KidTutorial_Step6c
@@ -908,7 +908,7 @@ PrefabInstance:
     - target: {fileID: 5378524194867136449, guid: b5136844e6d99b34dbb0773ef98e817e, type: 3}
       propertyPath: _sounds.Array.data[61].clip
       value: 
-      objectReference: {fileID: 8300000, guid: f3edbc27e100e14449770c0544221aed, type: 3}
+      objectReference: {fileID: 8300000, guid: 9b30d35c65993704fb5c067973d73b09, type: 3}
     - target: {fileID: 5378524194867136449, guid: b5136844e6d99b34dbb0773ef98e817e, type: 3}
       propertyPath: _sounds.Array.data[61].name
       value: KidTutorial_Step7
@@ -1912,11 +1912,11 @@ PrefabInstance:
     - target: {fileID: 5378524194867136449, guid: b5136844e6d99b34dbb0773ef98e817e, type: 3}
       propertyPath: _sounds.Array.data[60].LocalizedAudioClipsList.Array.data[0].AudioClip
       value: 
-      objectReference: {fileID: 8300000, guid: 9b30d35c65993704fb5c067973d73b09, type: 3}
+      objectReference: {fileID: 8300000, guid: f3edbc27e100e14449770c0544221aed, type: 3}
     - target: {fileID: 5378524194867136449, guid: b5136844e6d99b34dbb0773ef98e817e, type: 3}
       propertyPath: _sounds.Array.data[61].LocalizedAudioClipsList.Array.data[0].AudioClip
       value: 
-      objectReference: {fileID: 8300000, guid: f3edbc27e100e14449770c0544221aed, type: 3}
+      objectReference: {fileID: 8300000, guid: 9b30d35c65993704fb5c067973d73b09, type: 3}
     - target: {fileID: 5378524194867136449, guid: b5136844e6d99b34dbb0773ef98e817e, type: 3}
       propertyPath: _sounds.Array.data[62].LocalizedAudioClipsList.Array.data[0].AudioClip
       value: 

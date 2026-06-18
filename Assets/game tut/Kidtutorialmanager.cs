@@ -116,9 +116,10 @@ public class KidTutorialManager : MonoBehaviour
         _step = 1;
         ShowFerid();
         ShowSpeech("مرحباً بك في لعبة تنظيف البيانات!", V1);
-        SendBehindOverlay(allAnimals);
-        SendBehindOverlay(allFruits);
-        SendBehindOverlay(new List<GameObject> { animalZone.gameObject, fruitZone.gameObject });
+        // Show animals, fruits and zones — only hide checkButton
+        BringInFrontOfOverlay(allAnimals);
+        BringInFrontOfOverlay(allFruits);
+        BringInFrontOfOverlay(new List<GameObject> { animalZone.gameObject, fruitZone.gameObject });
         if (checkButton != null) SendBehindOverlay(new List<GameObject> { checkButton });
         PinUIToTop();
         yield return WaitForTap();
@@ -131,9 +132,10 @@ public class KidTutorialManager : MonoBehaviour
         SendBehindOverlay(new List<GameObject> { animalZone.gameObject, fruitZone.gameObject });
         if (checkButton != null) SendBehindOverlay(new List<GameObject> { checkButton });
         PinUIToTop();
-        ShowHand();
+        // Hand points at first animal for 2s, then first fruit for 2s, loops until tap
+        _handCoroutine = StartCoroutine(PointAtItemsLoop());
         yield return WaitForTap();
-        HideHand();
+        StopAndHideHand();
 
         // ── STEP 3 ────────────────────────────────────────────────────
         _step = 3;
@@ -143,9 +145,10 @@ public class KidTutorialManager : MonoBehaviour
         BringInFrontOfOverlay(new List<GameObject> { animalZone.gameObject, fruitZone.gameObject });
         if (checkButton != null) SendBehindOverlay(new List<GameObject> { checkButton });
         PinUIToTop();
-        ShowHand();
+        // Hand points at animalZone for 2s, then fruitZone for 2s, loops until tap
+        _handCoroutine = StartCoroutine(PointAtZonesLoop());
         yield return WaitForTap();
-        HideHand();
+        StopAndHideHand();
 
         // ── STEP 4 ────────────────────────────────────────────────────
         _step = 4;
@@ -159,7 +162,7 @@ public class KidTutorialManager : MonoBehaviour
             BringInFrontOfOverlay(new List<GameObject> { checkButton });
         }
         PinUIToTop();
-        ShowHand();
+        ShowHandAt(new Vector2(95f, -321f));
         yield return WaitForTap();
         HideHand();
 
@@ -178,9 +181,10 @@ public class KidTutorialManager : MonoBehaviour
         if (_demoAnimal != null)
         {
             ResetItemForDemo(_demoAnimal);
+            // Only the one demo animal + target zone visible — everything else hidden
             SendBehindOverlay(allAnimals);
             SendBehindOverlay(allFruits);
-            SendBehindOverlay(new List<GameObject> { animalZone.gameObject });
+            SendBehindOverlay(new List<GameObject> { animalZone.gameObject, fruitZone.gameObject });
             BringInFrontOfOverlay(new List<GameObject> { _demoAnimal, fruitZone.gameObject });
             LockAll();
             SetOneInteractable(_demoAnimal, true);
@@ -196,15 +200,18 @@ public class KidTutorialManager : MonoBehaviour
         }
         else { Debug.LogError("Step 5: No suitable demo animal found in allAnimals!"); }
 
-        // ── STEP 5b — red flash (auto-clears after flashDuration) ─────
+        // ── STEP 5b — red stays on while speech plays, resets after tap ─
         LockAll();
         BringInFrontOfOverlay(new List<GameObject> { animalZone.gameObject, fruitZone.gameObject });
-        yield return FlashAndWait(fruitZone, false);   // shows red → waits → zone resets
+        // Flash red and hold — do NOT use FlashAndWait (that auto-resets)
+        StartCoroutine(fruitZone.TutorialFlash(false));
+        yield return new WaitForSeconds(flashDuration); // wait for flash anim to settle on red
 
         ShowFerid();
         ShowSpeech("عندما يكون اللون أحمر فهذا يعني أن الإجابة خاطئة", V5b);
         PinUIToTop();
         yield return WaitForTap();
+        fruitZone.ResetFlash(); // NOW reset after player has seen + dismissed the speech
 
         // ── STEP 6 — correct drop demo (animal back → animalZone) ─────
         _step = 6;
@@ -217,9 +224,10 @@ public class KidTutorialManager : MonoBehaviour
         if (_demoAnimal != null && _demoAnimal.activeInHierarchy)
         {
             ResetItemForDemo(_demoAnimal);
+            // Only the one demo animal + target zone visible — everything else hidden
             SendBehindOverlay(allAnimals);
             SendBehindOverlay(allFruits);
-            SendBehindOverlay(new List<GameObject> { fruitZone.gameObject });
+            SendBehindOverlay(new List<GameObject> { animalZone.gameObject, fruitZone.gameObject });
             BringInFrontOfOverlay(new List<GameObject> { _demoAnimal, animalZone.gameObject });
             LockAll();
             SetOneInteractable(_demoAnimal, true);
@@ -235,15 +243,18 @@ public class KidTutorialManager : MonoBehaviour
         }
         else { Debug.LogError("Step 6: _demoAnimal is null or inactive!"); }
 
-        // ── STEP 6b — green flash (auto-clears) ───────────────────────
+        // ── STEP 6b — green stays on while speech plays, resets after tap ─
         LockAll();
         BringInFrontOfOverlay(new List<GameObject> { animalZone.gameObject, fruitZone.gameObject });
-        yield return FlashAndWait(animalZone, true);   // shows green → waits → zone resets
+        // Flash green and hold — do NOT use FlashAndWait (that auto-resets)
+        StartCoroutine(animalZone.TutorialFlash(true));
+        yield return new WaitForSeconds(flashDuration); // wait for flash anim to settle on green
 
         ShowFerid();
         ShowSpeech("وعندما يكون اللون أخضر فهذا يعني أن الإجابة صحيحة!", V6b);
         PinUIToTop();
         yield return WaitForTap();
+        animalZone.ResetFlash(); // NOW reset after player has seen + dismissed the speech
 
         // ══════════════════════════════════════════════════════════════
         // ── STEP 6c — THIRD DEMO: 2 remaining wrong items ────────────
@@ -269,12 +280,12 @@ public class KidTutorialManager : MonoBehaviour
             Debug.Log($"Step 6c-1: {_wrongFruitInAnimalZone.name} → fruitZone");
             ResetItemForDemo(_wrongFruitInAnimalZone);
 
-            // Show both wrong items + both zones; hide everything else
+            // Only this one item + target zone visible
             SendBehindOverlay(allAnimals);
             SendBehindOverlay(allFruits);
+            SendBehindOverlay(new List<GameObject> { animalZone.gameObject, fruitZone.gameObject });
             BringInFrontOfOverlay(new List<GameObject>
-                { _wrongFruitInAnimalZone, _wrongAnimalInFruitZone,
-                  animalZone.gameObject,   fruitZone.gameObject });
+                { _wrongFruitInAnimalZone, fruitZone.gameObject });
 
             LockAll();
             SetOneInteractable(_wrongFruitInAnimalZone, true);
@@ -302,10 +313,12 @@ public class KidTutorialManager : MonoBehaviour
             Debug.Log($"Step 6c-2: {_wrongAnimalInFruitZone.name} → animalZone");
             ResetItemForDemo(_wrongAnimalInFruitZone);
 
+            // Only this one item + target zone visible
             SendBehindOverlay(allAnimals);
             SendBehindOverlay(allFruits);
+            SendBehindOverlay(new List<GameObject> { animalZone.gameObject, fruitZone.gameObject });
             BringInFrontOfOverlay(new List<GameObject>
-                { _wrongAnimalInFruitZone, animalZone.gameObject, fruitZone.gameObject });
+                { _wrongAnimalInFruitZone, animalZone.gameObject });
 
             LockAll();
             SetOneInteractable(_wrongAnimalInFruitZone, true);
@@ -350,10 +363,12 @@ public class KidTutorialManager : MonoBehaviour
         if (checkButton != null) SetOneInteractable(checkButton, true);
 
         PinUIToTop();
+        ShowHandAt(new Vector2(95f, -321f));
 
         // Wait for tap to dismiss speech, then wait for check button press
         yield return WaitForTap();
         HideFerid();
+        HideHand();
 
         _checkReceived = false;
         _waitingForCheck = true;
@@ -363,7 +378,7 @@ public class KidTutorialManager : MonoBehaviour
         // ── END ───────────────────────────────────────────────────────
         ShowFerid();
         ShowSpeech("رائع! أنت الآن جاهز للعب. حظاً موفقاً!", V7b);
-        yield return new WaitForSeconds(2.5f);
+        yield return WaitForTap();   // player taps to dismiss before moving on
         EndTutorial();
     }
 
@@ -539,7 +554,8 @@ public class KidTutorialManager : MonoBehaviour
         if (go == null) return;
         CanvasGroup cg = go.GetComponent<CanvasGroup>() ?? go.AddComponent<CanvasGroup>();
         cg.blocksRaycasts = state;
-        cg.interactable = state;
+        // Never set interactable=false — that grays out the UI visually.
+        // Blocking raycasts is enough to prevent interaction.
         cg.ignoreParentGroups = true;
     }
 
@@ -604,9 +620,77 @@ public class KidTutorialManager : MonoBehaviour
         RectTransform rt = tutorialHand.GetComponent<RectTransform>();
         if (rt != null)
         {
-            rt.anchoredPosition = new Vector2(_handBasePos.x, _handBasePos.y + bob);
+            // _handBasePos is world position when set via StartHandAnim/GetAnchoredPos;
+            // ShowHandAt sets anchoredPosition directly so we leave it to the bob only.
+            rt.position = new Vector2(_handBasePos.x, _handBasePos.y + bob);
             rt.localScale = new Vector3(scaleX, scaleY, 1f);
             rt.localRotation = Quaternion.Euler(0f, 0f, _handBaseRot + rock);
+        }
+    }
+
+    /// <summary>
+    /// Used in Step 3: hand bobs over animalZone for 2s, then fruitZone for 2s,
+    /// repeating until StopAndHideHand() is called (on WaitForTap completing).
+    /// </summary>
+    IEnumerator PointAtZonesLoop()
+    {
+        if (tutorialHand == null) yield break;
+        EnsureHandNonBlocking();
+        tutorialHand.SetActive(true);
+
+        RectTransform handRt = tutorialHand.GetComponent<RectTransform>();
+        while (true)
+        {
+            // Point at animalZone
+            _handBasePos = GetAnchoredPos(animalZone.gameObject);
+            _handBaseRot = 0f;
+            _handTimer = 0f;
+            if (handRt != null) handRt.position = _handBasePos;
+            yield return new WaitForSeconds(2.0f);
+
+            // Point at fruitZone
+            _handBasePos = GetAnchoredPos(fruitZone.gameObject);
+            _handBaseRot = 0f;
+            _handTimer = 0f;
+            if (handRt != null) handRt.position = _handBasePos;
+            yield return new WaitForSeconds(2.0f);
+        }
+    }
+
+    /// <summary>
+    /// Used in Step 2: hand bobs over first active animal for 2s, then first active
+    /// fruit for 2s, repeating until StopAndHideHand() is called.
+    /// </summary>
+    IEnumerator PointAtItemsLoop()
+    {
+        if (tutorialHand == null) yield break;
+        EnsureHandNonBlocking();
+        tutorialHand.SetActive(true);
+
+        RectTransform handRt = tutorialHand.GetComponent<RectTransform>();
+        while (true)
+        {
+            // Point at first active animal
+            GameObject firstAnimal = allAnimals.Count > 0 ? allAnimals[0] : null;
+            if (firstAnimal != null && firstAnimal.activeInHierarchy)
+            {
+                _handBasePos = GetAnchoredPos(firstAnimal);
+                _handBaseRot = 0f;
+                _handTimer = 0f;
+                if (handRt != null) handRt.position = _handBasePos;
+            }
+            yield return new WaitForSeconds(2.0f);
+
+            // Point at first active fruit
+            GameObject firstFruit = allFruits.Count > 0 ? allFruits[0] : null;
+            if (firstFruit != null && firstFruit.activeInHierarchy)
+            {
+                _handBasePos = GetAnchoredPos(firstFruit);
+                _handBaseRot = 0f;
+                _handTimer = 0f;
+                if (handRt != null) handRt.position = _handBasePos;
+            }
+            yield return new WaitForSeconds(2.0f);
         }
     }
 
@@ -617,6 +701,26 @@ public class KidTutorialManager : MonoBehaviour
         tutorialHand.SetActive(true);
         RectTransform rt = tutorialHand.GetComponent<RectTransform>();
         if (rt != null) { _handBasePos = rt.anchoredPosition; _handBaseRot = 0f; }
+    }
+
+    /// <summary>
+    /// Shows the hand at a fixed anchored position (relative to its parent RectTransform).
+    /// Use this when you know the exact pixel position, e.g. for the check button.
+    /// </summary>
+    void ShowHandAt(Vector2 anchoredPos)
+    {
+        if (tutorialHand == null) return;
+        EnsureHandNonBlocking();
+        RectTransform rt = tutorialHand.GetComponent<RectTransform>();
+        if (rt != null)
+        {
+            rt.anchoredPosition = anchoredPos;
+            // Cache world position so Update's bob loop works in the same space
+            _handBasePos = rt.position;
+            _handBaseRot = 0f;
+            _handTimer = 0f;
+        }
+        tutorialHand.SetActive(true);
     }
 
     void HideHand() { if (tutorialHand != null) tutorialHand.SetActive(false); }
@@ -657,7 +761,8 @@ public class KidTutorialManager : MonoBehaviour
         {
             elapsed += Time.deltaTime;
             _handBasePos = Vector2.Lerp(from, to, Mathf.SmoothStep(0f, 1f, elapsed / dur));
-            if (rt != null) rt.anchoredPosition = _handBasePos;
+            // Use world position so the hand tracks correctly regardless of parent
+            if (rt != null) rt.position = _handBasePos;
             yield return null;
         }
     }
@@ -683,10 +788,17 @@ public class KidTutorialManager : MonoBehaviour
     //  UTILITY
     // ══════════════════════════════════════════════════════════════════
 
+    /// <summary>
+    /// Returns the world position of <paramref name="go"/>'s RectTransform.
+    /// World space is the only coordinate system that is always comparable
+    /// regardless of which parent each object currently has.
+    /// LerpHand and AnimateHandPath use rt.position (world) accordingly.
+    /// </summary>
     Vector2 GetAnchoredPos(GameObject go)
     {
-        RectTransform rt = go?.GetComponent<RectTransform>();
-        return rt != null ? rt.anchoredPosition : Vector2.zero;
+        if (go == null) return Vector2.zero;
+        RectTransform rt = go.GetComponent<RectTransform>();
+        return rt != null ? (Vector2)rt.position : Vector2.zero;
     }
 
     // ══════════════════════════════════════════════════════════════════
