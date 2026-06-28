@@ -40,6 +40,18 @@ public class ScratchBlock : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         if (next != null) img.sprite = next;
     }
 
+    // 🎤 NEW — lets an external input method (voice commands) place a
+    // block directly into the program panel, bypassing drag-and-drop.
+    // The block behaves identically to a dragged one afterwards (it can
+    // still be reordered or removed by dragging it).
+    public void InitializeAsPlacedBlock(BlockType type, ProgramPanel panel)
+    {
+        blockType = type;
+        isInToolbox = false;
+        inPanel = true;
+        panel.AddBlock(gameObject);
+    }
+
     public void OnBeginDrag(PointerEventData eventData)
     {
         lastInsertIndex = -1;

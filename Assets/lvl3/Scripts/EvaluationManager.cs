@@ -1,21 +1,13 @@
 ﻿using UPersian.Components;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class EvaluationManager : MonoBehaviour
 {
-    [System.Serializable]
-    public class P2LevelSetup
-    {
-        public GameObject[] p2Images;
-    }
-
     [Header("LEVEL GAMEPLAY CANVASES")]
     [SerializeField] private GameObject[] levelCanvases;
-
-    [Header("P2 LEVEL SETUPS")]
-    [SerializeField] private P2LevelSetup[] p2LevelSetups;
 
     [Header("RESULTS PANEL")]
     [SerializeField] private GameObject resultsPanel;
@@ -30,6 +22,9 @@ public class EvaluationManager : MonoBehaviour
 
     [Header("P2 CANVAS")]
     [SerializeField] private GameObject p2Canvas;
+    // Where the reused Canvas-1 photo gets parked while it's being judged.
+    // If left empty, it falls back to p2Canvas's own transform.
+    [SerializeField] private RectTransform p2ImageContainer;
     [SerializeField] private GameObject p2LabelImage;
     [SerializeField] private RtlText p2LabelText;
     [SerializeField] private Button correctButton;
@@ -46,11 +41,21 @@ public class EvaluationManager : MonoBehaviour
     private int currentRound = 0;
     private bool _verdictGiven = false;
 
+    // The same photo GameObjects that are on Canvas 1's board for this level —
+    // not a separate duplicate set. Index i matches EvaluationData.labelTexts[i].
     private GameObject[] currentP2Images;
     private int _p2Index = 0;
     private int _honestCount = 0;
 
+    // Tracks the single photo currently borrowed onto Canvas 2, and where it
+    // came from, so it can be put back on the Canvas-1 board afterward.
+    private GameObject _currentP2DisplayedImage;
+    private readonly Dictionary<GameObject, Transform> _imageOriginalParent = new Dictionary<GameObject, Transform>();
+    private readonly Dictionary<GameObject, Vector2> _imageOriginalAnchoredPos = new Dictionary<GameObject, Vector2>();
+    private readonly Dictionary<GameObject, Vector3> _imageOriginalScale = new Dictionary<GameObject, Vector3>();
+
     private GameFinishTrigger _trigger;
+    private EvaluationTutorialManager _tutorial;
 
     void Start()
     {
@@ -85,7 +90,38 @@ public class EvaluationManager : MonoBehaviour
         if (resultsPanel != null) resultsPanel.SetActive(false);
         if (healthBar != null) healthBar.SnapTo(EvaluationData.accuracy / 100f);
 
+        _tutorial = FindObjectOfType<EvaluationTutorialManager>();
+        if (_tutorial == null)
+            StartRound();
+        // else: EvaluationTutorialManager calls OnTutorialStartRound() when ready
+    }
+
+    // ── Tutorial callbacks ─────────────────────────────────────────
+
+    /// <summary>Called by tutorial when robot should start its demo round.</summary>
+    public void OnTutorialStartRound()
+    {
         StartRound();
+    }
+
+    /// <summary>Called by tutorial — resets state and starts real game.</summary>
+    public void OnTutorialFinished()
+    {
+        _tutorial = null;
+        currentRound = 0;
+        EvaluationData.accuracy = 30f;
+        EvaluationData.previousAccuracy = 30f;
+        StartRound();
+    }
+
+    /// <summary>Called by RobotController when robot finishes placing all labels.</summary>
+    public void OnRobotFinished()
+    {
+        // Always show the button — this is what the original game did via evaluateButtonObject
+        if (evaluateButton != null)
+            evaluateButton.gameObject.SetActive(true);
+        // Notify tutorial so it can bring the button in front of overlay and show hand
+        if (_tutorial != null) _tutorial.OnRobotRoundFinished();
     }
 
     void StartRound()
@@ -140,7 +176,7 @@ public class EvaluationManager : MonoBehaviour
         bool[] correct = new bool[total];
         for (int i = 0; i < correctCount; i++) correct[indices[i]] = true;
 
-        var usedWords = new System.Collections.Generic.List<string>();
+        var usedWords = new List<string>();
         for (int i = 0; i < total; i++)
             if (correct[i]) usedWords.Add(EvaluationData.currentCorrectAnswers[i]);
 
@@ -184,15 +220,20 @@ public class EvaluationManager : MonoBehaviour
         if (Game_Over_2_AudioManager.audioManInstance != null)
             Game_Over_2_AudioManager.audioManInstance.Play_Sfx("EvalCheck");
 
+        if (_tutorial != null) _tutorial.OnEvaluatePressed();
+
         _verdictGiven = false;
-        _verdictGiven = false;
-        currentP2Images = p2LevelSetups[currentLevel].p2Images;
+
+        // Reuse the exact photos already shown on Canvas 1 — index i lines up
+        // with EvaluationData.labelTexts[i], the word the robot just placed there.
+        currentP2Images = robotController.GetCurrentLevelImages();
 
         foreach (var c in levelCanvases) if (c != null) c.SetActive(false);
         p2Canvas.SetActive(true);
 
         _p2Index = 0;
         _honestCount = 0;
+        _currentP2DisplayedImage = null;
 
         if (p2LabelImage != null) p2LabelImage.SetActive(false);
         if (p2LabelText != null) p2LabelText.text = "";
@@ -205,18 +246,16 @@ public class EvaluationManager : MonoBehaviour
         correctButton.interactable = false;
         wrongButton.interactable = false;
 
-        foreach (var img in currentP2Images) if (img != null) img.SetActive(false);
+        // Put the previous photo back on the Canvas-1 board before grabbing the next one
+        RestoreCurrentP2Image();
         if (p2LabelImage != null) p2LabelImage.SetActive(false);
         if (p2LabelText != null) p2LabelText.text = "";
 
         yield return new WaitForSeconds(delayBetween);
 
         GameObject currentImage = currentP2Images[_p2Index];
-        currentImage.SetActive(true);
-
-        CanvasGroup cg = currentImage.GetComponent<CanvasGroup>();
-        if (cg == null) cg = currentImage.AddComponent<CanvasGroup>();
-        cg.alpha = 1f;
+        ShowImageOnP2(currentImage);
+        _currentP2DisplayedImage = currentImage;
 
         yield return new WaitForSeconds(0.2f);
 
@@ -230,6 +269,58 @@ public class EvaluationManager : MonoBehaviour
         wrongButton.interactable = true;
     }
 
+    /// <summary>
+    /// Temporarily reparents a Canvas-1 board photo onto Canvas 2 so it's visible
+    /// there too (a child never renders while its current parent is inactive,
+    /// which is why just SetActive(true) on it while Canvas 1 is hidden did nothing).
+    /// Remembers its original parent/position/scale so it can be restored later.
+    /// </summary>
+    void ShowImageOnP2(GameObject img)
+    {
+        if (img == null) return;
+
+        RectTransform rt = img.GetComponent<RectTransform>();
+        if (rt == null) return;
+
+        Transform targetParent = p2ImageContainer != null ? (Transform)p2ImageContainer : p2Canvas.transform;
+
+        if (!_imageOriginalParent.ContainsKey(img))
+        {
+            _imageOriginalParent[img] = rt.parent;
+            _imageOriginalAnchoredPos[img] = rt.anchoredPosition;
+            _imageOriginalScale[img] = rt.localScale;
+        }
+
+        rt.SetParent(targetParent, false);
+        rt.anchoredPosition = Vector2.zero;
+        rt.localScale = Vector3.one;
+
+        CanvasGroup cg = img.GetComponent<CanvasGroup>();
+        if (cg == null) cg = img.AddComponent<CanvasGroup>();
+        cg.alpha = 1f;
+        cg.blocksRaycasts = false; // it's just a picture — don't let it eat clicks meant for the verdict buttons
+        cg.ignoreParentGroups = true;
+
+        img.SetActive(true);
+    }
+
+    /// <summary>Moves the currently-borrowed photo back to its original spot on Canvas 1's board.</summary>
+    void RestoreCurrentP2Image()
+    {
+        if (_currentP2DisplayedImage == null) return;
+
+        RectTransform rt = _currentP2DisplayedImage.GetComponent<RectTransform>();
+        if (rt != null && _imageOriginalParent.TryGetValue(_currentP2DisplayedImage, out Transform originalParent))
+        {
+            rt.SetParent(originalParent, false);
+            rt.anchoredPosition = _imageOriginalAnchoredPos[_currentP2DisplayedImage];
+            rt.localScale = _imageOriginalScale[_currentP2DisplayedImage];
+        }
+
+        _currentP2DisplayedImage.SetActive(false);
+        _currentP2DisplayedImage = null;
+    }
+
     void OnVerdict(bool kidSaysCorrect)
     {
         if (_verdictGiven) return;
@@ -237,6 +328,8 @@ public class EvaluationManager : MonoBehaviour
 
         correctButton.interactable = false;
         wrongButton.interactable = false;
+
+        if (_tutorial != null) _tutorial.OnVerdictPressed();
 
         bool robotWasRight = EvaluationData.robotWasRight[_p2Index];
         bool kidIsHonest = (kidSaysCorrect == robotWasRight);
@@ -257,6 +350,10 @@ public class EvaluationManager : MonoBehaviour
     {
         _verdictGiven = false;
 
+        // Last item evaluated never gets replaced by a "next" ShowP2Current call —
+        // put it back on the Canvas-1 board now so the board looks right next round.
+        RestoreCurrentP2Image();
+
         EvaluationData.previousAccuracy = EvaluationData.accuracy;
 
         if (_honestCount >= Mathf.CeilToInt(EvaluationData.currentItemCount / 2f))
@@ -273,6 +370,13 @@ public class EvaluationManager : MonoBehaviour
 
         Debug.Log($"[EvaluationManager] FinishRound level={currentLevel} round={currentRound}/{ROUNDS_PER_LEVEL} isLastRound={isLastRound}");
 
+        // If tutorial is watching, animate bar then notify it — tutorial takes over from here
+        if (_tutorial != null)
+        {
+            StartCoroutine(AnimateBarForTutorial());
+            return;
+        }
+
         if (isLastRound)
         {
             // All rounds in this level done — show results then go to map
@@ -285,6 +389,18 @@ public class EvaluationManager : MonoBehaviour
             // More rounds remaining — stay in scene
             StartRound();
         }
+    }
+
+    IEnumerator AnimateBarForTutorial()
+    {
+        if (healthBar != null)
+        {
+            healthBar.AnimateFromTo(
+                EvaluationData.previousAccuracy / 100f,
+                EvaluationData.accuracy / 100f);
+            yield return new WaitForSeconds(healthBar.animDuration + 0.3f);
+        }
+        if (_tutorial != null) _tutorial.OnBarAnimationFinished();
     }
 
     IEnumerator DelayedLevelComplete(int levelIndex)
