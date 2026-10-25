@@ -83,6 +83,14 @@ A **CNN-based offline speech recognizer** integrated into *Robot Path Planning* 
 
 ---
 
+## 🤖 AI in Action
+
+| |
+|---|
+| ![AI Demo](README_docs_images/ai_demo.gif) |
+
+---
+
 ## 📎 Supporting Documents
 
 - **Full presentation:** `AI tech game docs/Ai  teaching game presentation.pptx` (43 slides — architecture, methodology, requirements, results) — *personal document, not in repository*
