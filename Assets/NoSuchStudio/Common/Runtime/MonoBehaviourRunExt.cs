@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 
 using UnityEngine;
@@ -6,30 +6,30 @@ using UnityEngine;
 namespace NoSuchStudio.Common {
 
 
-    /// <summary>
-    /// Utility class for UnityEngine.Object subclasses (MonoBehaviour, Component, Editor, etc.) that want to use the extended logging capabilities below:
-    /// <ul>
-    /// <li>Option to log ThreadId, class name, object name, game time or other common info to log messages.</li>
-    /// <li>Configure the info PER CLASS. Useful for debugging specific classes.</li>
-    /// </ul>
-    /// </summary>
-    /// <remarks>
-    /// This class keeps track of all types that use it and creates a <see cref="UnityEngine.Logger"/> for each. 
-    /// Any messages logged through the extension methods will have the info based on the LoggerConfig for that type prepended to the message.
-    /// <code>
-    /// MyClass myObj = new MyClass(); // MyClass extends UnityEngine.Object (i.e. MonoBehaviour, Editor, Component, ...)
-    /// myObj.LogLog("Hello World!"); 
-    /// // will print "[1][4.56](MyClass)(myObjName) Hello World!"
-    /// </code>
-    /// Using sample code like below, you can filter your logs by class.
-    /// <code>
-    /// UnityObjectLoggerExt.GetLoggerByType&lt;MyClass&gt;().logger.filterLogType = LogType.Error;
-    /// </code>
-    /// Using sample code like below, you can change the logging config for each class.
-    /// <code>
-    /// UnityObjectLoggerExt.GetLoggerByType&lt;MyClass&gt;().loggerConfig.logGameTime = false;
-    /// </code>
-    /// </remarks>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     public static class MonoBehaviourRunExt {
 
         public static IEnumerator PeriodicCoroutine(object ie, Action a) {

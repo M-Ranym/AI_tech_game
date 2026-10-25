@@ -26,10 +26,10 @@ public class Game_Over_2_Node : MonoBehaviour
     public bool isLevelReached;
     [Space]
     [Header("Localization")]
-    //--localization
+    
     [SerializeField] private Transform RtlPositionTr;
     [SerializeField] private Transform LtrPositionTr;
-    //----
+    
 
     private void Start()
     {
@@ -43,7 +43,7 @@ public class Game_Over_2_Node : MonoBehaviour
         this._backGroundChunk.sprite = sprite;
     }
 
-    /*Change Stars Sprites*/
+    
 
     private void Reached_Level_Stars_Counting_Behaviour()
     {
@@ -58,7 +58,7 @@ public class Game_Over_2_Node : MonoBehaviour
         }
         else if (PlayerPrefs.HasKey(Game_Over_2_Constants.GAME_DATA_STARS + Game_Over_2_Constants.COOL_SEPERATOR + (levelIndex - 1)))
         {
-            // ------ localization
+            
             bool success = false;
             if (LocalizationHelper.IsRTL())
             {
@@ -84,9 +84,9 @@ public class Game_Over_2_Node : MonoBehaviour
                     Instantiate(_marker, LtrPositionTr.position, Quaternion.identity, this.transform);
                 }
             }
-            if (!success)//fallback
+            if (!success)
                 Instantiate(_marker, this.transform.position, Quaternion.identity, this.transform);
-            // ------
+            
             isLevelReached = true;
         }
         else

@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 
 using UnityEditor;
 using UnityEngine;
@@ -11,9 +11,9 @@ namespace NoSuchStudio.Localization.Editor {
         Name
     }
 
-    /// <summary>
-    /// static class for serializing <see cref="DisplayMode"/> enum without depending on JSON lib.
-    /// </summary>
+    
+    
+    
     public static class DisplayModeExts {
         public static DisplayMode FastDeserialize(string str) {
             if (str == "Code") return DisplayMode.Code;
@@ -63,7 +63,7 @@ namespace NoSuchStudio.Localization.Editor {
             _displayMode = ldm;
             Menu.SetChecked(MenuKeyDisplayModeCode, _displayMode == DisplayMode.Code);
             Menu.SetChecked(MenuKeyDisplayModeName, _displayMode == DisplayMode.Name);
-            // Save editor settings
+            
             EditorPrefs.SetString(MenuKeyDisplayMode, DisplayModeExts.FastSerialize(_displayMode));
             RepainAllLocalizationEditors();
         }
@@ -80,7 +80,7 @@ namespace NoSuchStudio.Localization.Editor {
 
         [MenuItem(MenuKeyDisplayModeCode, true)]
         static bool ValidateSetLocaleDisplayModeCode() {
-            //return _displayMode != LocaleDisplayMode.Code;
+            
             return true;
         }
 
@@ -91,7 +91,7 @@ namespace NoSuchStudio.Localization.Editor {
 
         [MenuItem(MenuKeyDisplayModeName, true)]
         static bool ValidateSetLocaleDisplayModeName() {
-            //return _displayMode != LocaleDisplayMode.Name;
+            
             return true;
         }
     }

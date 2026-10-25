@@ -1,4 +1,4 @@
-﻿using UPersian.Components;
+using UPersian.Components;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,8 +22,8 @@ public class EvaluationManager : MonoBehaviour
 
     [Header("P2 CANVAS")]
     [SerializeField] private GameObject p2Canvas;
-    // Where the reused Canvas-1 photo gets parked while it's being judged.
-    // If left empty, it falls back to p2Canvas's own transform.
+    
+    
     [SerializeField] private RectTransform p2ImageContainer;
     [SerializeField] private GameObject p2LabelImage;
     [SerializeField] private RtlText p2LabelText;
@@ -41,14 +41,14 @@ public class EvaluationManager : MonoBehaviour
     private int currentRound = 0;
     private bool _verdictGiven = false;
 
-    // The same photo GameObjects that are on Canvas 1's board for this level —
-    // not a separate duplicate set. Index i matches EvaluationData.labelTexts[i].
+    
+    
     private GameObject[] currentP2Images;
     private int _p2Index = 0;
     private int _honestCount = 0;
 
-    // Tracks the single photo currently borrowed onto Canvas 2, and where it
-    // came from, so it can be put back on the Canvas-1 board afterward.
+    
+    
     private GameObject _currentP2DisplayedImage;
     private readonly Dictionary<GameObject, Transform> _imageOriginalParent = new Dictionary<GameObject, Transform>();
     private readonly Dictionary<GameObject, Vector2> _imageOriginalAnchoredPos = new Dictionary<GameObject, Vector2>();
@@ -61,7 +61,7 @@ public class EvaluationManager : MonoBehaviour
     {
         _trigger = FindObjectOfType<GameFinishTrigger>();
 
-        // Resume from the level the player clicked on the board
+        
         int requestedLevel = _trigger != null ? _trigger.GetStartLevel() : 0;
         currentLevel = Mathf.Clamp(requestedLevel, 0, TOTAL_LEVELS - 1);
         currentRound = 0;
@@ -93,18 +93,18 @@ public class EvaluationManager : MonoBehaviour
         _tutorial = FindObjectOfType<EvaluationTutorialManager>();
         if (_tutorial == null)
             StartRound();
-        // else: EvaluationTutorialManager calls OnTutorialStartRound() when ready
+        
     }
 
-    // ── Tutorial callbacks ─────────────────────────────────────────
+    
 
-    /// <summary>Called by tutorial when robot should start its demo round.</summary>
+    
     public void OnTutorialStartRound()
     {
         StartRound();
     }
 
-    /// <summary>Called by tutorial — resets state and starts real game.</summary>
+    
     public void OnTutorialFinished()
     {
         _tutorial = null;
@@ -114,13 +114,13 @@ public class EvaluationManager : MonoBehaviour
         StartRound();
     }
 
-    /// <summary>Called by RobotController when robot finishes placing all labels.</summary>
+    
     public void OnRobotFinished()
     {
-        // Always show the button — this is what the original game did via evaluateButtonObject
+        
         if (evaluateButton != null)
             evaluateButton.gameObject.SetActive(true);
-        // Notify tutorial so it can bring the button in front of overlay and show hand
+        
         if (_tutorial != null) _tutorial.OnRobotRoundFinished();
     }
 
@@ -224,8 +224,8 @@ public class EvaluationManager : MonoBehaviour
 
         _verdictGiven = false;
 
-        // Reuse the exact photos already shown on Canvas 1 — index i lines up
-        // with EvaluationData.labelTexts[i], the word the robot just placed there.
+        
+        
         currentP2Images = robotController.GetCurrentLevelImages();
 
         foreach (var c in levelCanvases) if (c != null) c.SetActive(false);
@@ -246,7 +246,7 @@ public class EvaluationManager : MonoBehaviour
         correctButton.interactable = false;
         wrongButton.interactable = false;
 
-        // Put the previous photo back on the Canvas-1 board before grabbing the next one
+        
         RestoreCurrentP2Image();
         if (p2LabelImage != null) p2LabelImage.SetActive(false);
         if (p2LabelText != null) p2LabelText.text = "";
@@ -269,12 +269,12 @@ public class EvaluationManager : MonoBehaviour
         wrongButton.interactable = true;
     }
 
-    /// <summary>
-    /// Temporarily reparents a Canvas-1 board photo onto Canvas 2 so it's visible
-    /// there too (a child never renders while its current parent is inactive,
-    /// which is why just SetActive(true) on it while Canvas 1 is hidden did nothing).
-    /// Remembers its original parent/position/scale so it can be restored later.
-    /// </summary>
+    
+    
+    
+    
+    
+    
     void ShowImageOnP2(GameObject img)
     {
         if (img == null) return;
@@ -298,13 +298,13 @@ public class EvaluationManager : MonoBehaviour
         CanvasGroup cg = img.GetComponent<CanvasGroup>();
         if (cg == null) cg = img.AddComponent<CanvasGroup>();
         cg.alpha = 1f;
-        cg.blocksRaycasts = false; // it's just a picture — don't let it eat clicks meant for the verdict buttons
+        cg.blocksRaycasts = false; 
         cg.ignoreParentGroups = true;
 
         img.SetActive(true);
     }
 
-    /// <summary>Moves the currently-borrowed photo back to its original spot on Canvas 1's board.</summary>
+    
     void RestoreCurrentP2Image()
     {
         if (_currentP2DisplayedImage == null) return;
@@ -350,8 +350,8 @@ public class EvaluationManager : MonoBehaviour
     {
         _verdictGiven = false;
 
-        // Last item evaluated never gets replaced by a "next" ShowP2Current call —
-        // put it back on the Canvas-1 board now so the board looks right next round.
+        
+        
         RestoreCurrentP2Image();
 
         EvaluationData.previousAccuracy = EvaluationData.accuracy;
@@ -370,7 +370,7 @@ public class EvaluationManager : MonoBehaviour
 
         Debug.Log($"[EvaluationManager] FinishRound level={currentLevel} round={currentRound}/{ROUNDS_PER_LEVEL} isLastRound={isLastRound}");
 
-        // If tutorial is watching, animate bar then notify it — tutorial takes over from here
+        
         if (_tutorial != null)
         {
             StartCoroutine(AnimateBarForTutorial());
@@ -379,14 +379,14 @@ public class EvaluationManager : MonoBehaviour
 
         if (isLastRound)
         {
-            // All rounds in this level done — show results then go to map
+            
             Debug.Log($"[EvaluationManager] Level {currentLevel} complete");
             ShowResults();
             StartCoroutine(DelayedLevelComplete(currentLevel));
         }
         else
         {
-            // More rounds remaining — stay in scene
+            
             StartRound();
         }
     }

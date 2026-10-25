@@ -12,8 +12,8 @@ using FirebaseWebGL.Scripts.Objects;
 
 #elif !UNITY_EDITOR
 
-//using Firebase.Database;
-//using Firebase.Extensions;
+
+
 
 #endif
 
@@ -40,7 +40,7 @@ public class Game_Over_2_FB_Interactions : MonoBehaviour
         isWebGLTransactionDone = false;
         FirebaseDatabase.PostJSON(path, value.ToString(), Get_Instance().name, "Success_Transaction", "Success_Transaction");
 #elif !UNITY_EDITOR
-        //FirebaseDatabase.DefaultInstance.GetReference(path).SetValueAsync(value);
+        
 #endif
     }
 
@@ -54,22 +54,22 @@ public class Game_Over_2_FB_Interactions : MonoBehaviour
             yield return null;
         }
 #elif !UNITY_EDITOR
-        //bool isDoneFetching = false;
-        //FirebaseDatabase.DefaultInstance.RootReference.UpdateChildrenAsync(dictionary).ContinueWithOnMainThread(task =>
-        //{
-        //    if (task.IsFaulted)
-        //    {
-        //        isDoneFetching = true;
-        //    }
-        //    else if (task.IsCompleted)
-        //    {
-        //        isDoneFetching = true;
-        //    }
-        //});
-        //while (!isDoneFetching)
-        //{
-        //    yield return null;
-        //}
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         yield return result;
 #else
         yield return null;

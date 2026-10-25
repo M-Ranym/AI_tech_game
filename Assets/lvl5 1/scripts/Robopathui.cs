@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using ArabicSupport;
@@ -19,7 +19,7 @@ public class RoboPathUI : MonoBehaviour
     public GameObject wrongPanel;
     public Text wrongMessage;
 
-    // Arabic strings
+    
     private const string MSG_WIN = "احسنت! لقد اجتزت جميع المراحل";
     private const string MSG_WRONG = "اجابة خاطئة! حاول مجددا";
     private const string MSG_LEVEL_DONE = "أحسنت! انتقل إلى المرحلة التالية";
@@ -90,9 +90,9 @@ public class RoboPathUI : MonoBehaviour
             Game_Over_2_AudioManager.audioManInstance.Play_Sfx("RoboWrongAnswer");
     }
 
-    // Guards against the click/action that triggered a panel being immediately
-    // re-read in Update() on the same frame, which used to close the panel
-    // instantly and skip straight to the next step.
+    
+    
+    
     private IEnumerator ArmPanelNextFrame(System.Action<bool> setArmed)
     {
         yield return null;
@@ -112,7 +112,7 @@ public class RoboPathUI : MonoBehaviour
 
     void Update()
     {
-        // Wrong panel - click to retry
+        
         if (wrongPanel.activeSelf && wrongPanelArmed)
         {
             if (Input.GetMouseButtonDown(0) ||
@@ -123,7 +123,7 @@ public class RoboPathUI : MonoBehaviour
             }
         }
 
-        // Success panel - click to continue (except final win)
+        
         if (levelCompletePanel.activeSelf && levelCompletePanelArmed)
         {
             if (Input.GetMouseButtonDown(0) ||
@@ -134,7 +134,7 @@ public class RoboPathUI : MonoBehaviour
                     levelCompletePanel.SetActive(false);
                     RoboPathCore.Instance.GoToNextLevel();
                 }
-                // Final win stays on screen
+                
             }
         }
     }

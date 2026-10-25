@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,9 +6,9 @@ using System.Text;
 using UnityEngine;
 
 namespace NoSuchStudio.Localization.Source {
-    /// <summary>
-    /// Use this class to translate phrases in Unity Editor.
-    /// </summary>
+    
+    
+    
     [ExecuteAlways]
     public partial class StandaloneTranslationSource : BaseTranslationSource, ITranslationSource
         , ISerializationCallbackReceiver {
@@ -48,17 +48,17 @@ namespace NoSuchStudio.Localization.Source {
             get { return _persistChangesToFile; }
         }
         [SerializeField] private string _persistentFileName;
-        /// <summary>
-        /// The name of the persistent file to back up the translations to. If the <see cref="persistChangesToFile"/> flag is set, this file gets used to store translations between sessions.
-        /// </summary>
+        
+        
+        
         public string persistentFileName {
             set { _persistentFileName = value; }
             get { return _persistentFileName; }
         }
 
-        /// <summary>
-        /// Writes the current translations to a file. If <see cref="persistChangesToFile"/> flag is set, the file is loaded on load automatically.
-        /// </summary>
+        
+        
+        
         public void SaveTranslationsToFile() {
             try {
                 if (string.IsNullOrEmpty(_persistentFileName)) throw new ApplicationException("Persistent file name empty.");
@@ -73,10 +73,10 @@ namespace NoSuchStudio.Localization.Source {
             }
         }
 
-        /// <summary>
-        /// Delete the presistent translations file.
-        /// <seealso cref="persistentFileName"/>
-        /// </summary>
+        
+        
+        
+        
         public void DeletePersistentFile() {
             try {
                 if (string.IsNullOrEmpty(_persistentFileName)) throw new ApplicationException("Persistent file name empty.");
@@ -87,10 +87,10 @@ namespace NoSuchStudio.Localization.Source {
             }
         }
 
-        /// <summary>
-        /// Load translations from the persistent file. Load is additive, meaning new translations will be added, duplicate ones will get overriden but no translations will get deleted.
-        /// <seealso cref="persistentFileName"/>
-        /// </summary>
+        
+        
+        
+        
         public void LoadTranslationsFromFile() {
             try {
                 if (string.IsNullOrEmpty(_persistentFileName)) throw new ApplicationException("Persistent file name empty.");
@@ -174,7 +174,7 @@ namespace NoSuchStudio.Localization.Source {
             }
         }
 
-        // TODO proper diff of translations
+        
         public void OnAfterDeserialize() {
             Init();
             _translations.Clear();

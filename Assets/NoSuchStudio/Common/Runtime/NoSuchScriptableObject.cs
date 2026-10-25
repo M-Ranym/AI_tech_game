@@ -3,10 +3,10 @@ using System;
 using UnityEngine;
 
 namespace NoSuchStudio.Common {
-    /// <summary>
-    /// Base class for MonoBehaviours that have helper functions from <see cref="UnityObjectLoggerExt"/> and <see cref="MonoBehaviourRunDelayedExt"/>
-    /// included in them.
-    /// </summary>
+    
+    
+    
+    
     public abstract class NoSuchScriptableObject : ScriptableObject {
         
         public Logger logger {

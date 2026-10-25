@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using DentedPixel;
 
@@ -22,7 +22,7 @@ public class TestingIssue : MonoBehaviour {
 	void Update () {
 		if(Input.GetKeyDown(KeyCode.A))
 		{
-			// Debug.Log("id:"+id);
+			
 			LeanTween.resume(id);
 		}
 		if(Input.GetKeyDown(KeyCode.D))

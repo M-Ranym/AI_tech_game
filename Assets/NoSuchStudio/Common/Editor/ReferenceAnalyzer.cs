@@ -1,9 +1,9 @@
-﻿using UnityEditor;
+using UnityEditor;
 using UnityEngine;
 
 namespace NoSuchStudio.Common.Editor {
     public class ReferenceAnalyzer {
-        // https://www.gamasutra.com/blogs/LiorTal/20141208/231690/Finding_Missing_Object_References_in_Unity.php
+        
         [MenuItem("Tools/Find Missing references in scene")]
         public static void FindMissingReferences() {
             var objects = GameObject.FindObjectsOfType<GameObject>();

@@ -33,7 +33,7 @@ namespace horizon.Models
             }
             else
             {
-                return "غير محدد"; // Not specified
+                return "غير محدد"; 
             }
         }
 
@@ -45,7 +45,7 @@ namespace horizon.Models
                 return "سنتان";
             if (age >= 3 && age <= 10)
                 return $"{age} سنوات";
-            return $"{age} سنة"; // 11+
+            return $"{age} سنة"; 
         }
 
         private string GetAgeWord(int age)
@@ -56,7 +56,7 @@ namespace horizon.Models
                 return "سنتين";
             if (age >= 3 && age <= 10)
                 return "سنوات";
-            return "سنة"; // 11+
+            return "سنة"; 
         }
 
 
@@ -92,7 +92,7 @@ namespace horizon.Models
         [JsonProperty("displayTitle")]
         public string DisplayTitle { get; set; }
 
-        // ------------------------ Added for localization 
+        
         [JsonProperty("description_translations")]
         public TranslationFields DescriptionTranslations { get; set; }
 
@@ -129,7 +129,7 @@ namespace horizon.Models
         [JsonProperty("updatedAt")]
         public DateTime UpdatedAt { get; set; }
 
-        // Computed properties
+        
         [JsonIgnore]
         public string AgeDisplay => AgeRange?.GetDisplayText() ?? "Unknown";
 
@@ -139,7 +139,7 @@ namespace horizon.Models
         [JsonIgnore]
         public bool IsExclusive => Label?.ToLower() == "exclusive";
 
-        // Methods
+        
         public bool IsSuitableForAge(int age)
         {
             return AgeRange?.IsSuitableForAge(age) ?? false;
@@ -168,7 +168,7 @@ namespace horizon.Models
 #endif
         }
 
-        // ------ Added for Localization
+        
 
         public string GetTranslatedDisplayTitle()
         {
@@ -233,7 +233,7 @@ namespace horizon.Models
 
         }
 
-        private string GetFallbackDescription() //to add log
+        private string GetFallbackDescription() 
         {
             if (string.IsNullOrEmpty(Description))
                 UnityEngine.Debug.LogError(nameof(Description) + " string is null or empty , " +
@@ -242,7 +242,7 @@ namespace horizon.Models
             return Description;
         }
 
-        private string GetFallbackDisplayDisplayTitle() //to add log
+        private string GetFallbackDisplayDisplayTitle() 
         {
             if (string.IsNullOrEmpty(DisplayTitle))
                 UnityEngine.Debug.LogError(nameof(DisplayTitle) + " string is null or empty , " +
@@ -250,9 +250,9 @@ namespace horizon.Models
 
             return DisplayTitle;
         }
-        // ------
+        
     }
-    // ------------------------ Added for localization 
+    
     public class TranslationFields
     {
         [JsonProperty("ar")]
@@ -277,10 +277,10 @@ namespace horizon.Models
                 "ar" => Ar,
                 "fr" => Fr,
                 "en" => En,
-                _ => Ar // default
+                _ => Ar 
             };
         }
     }
-    // ------------------------ 
+    // ------------------------
 
 }

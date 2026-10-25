@@ -1,14 +1,14 @@
-﻿using TMPro;
+using TMPro;
 
 using UnityEngine;
 
 using UnityEngine.UI;
 
 namespace NoSuchStudio.Localization.Localizers {
-    /// <summary>
-    /// Localizes <see cref="GridLayoutGroup"/> by setting its child alignment and starting corner properties
-    /// based on the RTL-ness of <see cref="LocalizationService.CurrentLanguage"/>.
-    /// </summary>
+    
+    
+    
+    
     [RequireComponent(typeof(GridLayoutGroup))]
     [AddComponentMenu(LocalizationService.ComponentMenuPath + "/Grid Layout Group Localizer")]
     public class GridLayoutGroupLocalizer : ComponentLocalizer<GridLayoutGroupLocalizer, GridLayoutGroup> {

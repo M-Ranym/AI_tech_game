@@ -1,18 +1,18 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace NoSuchStudio.Localization {
-    /// <summary>
-    /// Base class for translation sources that are backed by a file.
-    /// This class reads the translations from the backing file and registers them with
-    /// <see cref="LocalizationService"/>. 
-    /// </summary>
+    
+    
+    
+    
+    
     [ExecuteInEditMode]
     public abstract class FileTranslationSource : BaseTranslationSource {
-        /// <summary>
-        /// The backing text asset.
-        /// </summary>
+        
+        
+        
         [SerializeField] protected TextAsset _textAsset;
         public TextAsset textAsset {
             get { return _textAsset; }
@@ -33,10 +33,10 @@ namespace NoSuchStudio.Localization {
             }
         }
 
-        /// <summary>
-        /// Subclasses should implement this method to read the file contents and populate
-        /// the <see cref="BaseTranslationSource._translations"/> field.
-        /// </summary>
+        
+        
+        
+        
         protected abstract List<TranslationEntry> ReadTranslationsFromFile();
         public void Reload() {
             _error = "";

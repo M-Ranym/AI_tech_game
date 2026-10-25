@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using DentedPixel;
 
@@ -10,7 +10,7 @@ public class Testing240 : MonoBehaviour {
 
 	public GameObject sprite2;
 
-	// Use this for initialization
+	
 	void Start () {
         LeanTween.moveY(cube1, cube1.transform.position.y - 15.0f, 10f).setEase(LeanTweenType.easeInQuad).setDestroyOnComplete(false).setOnComplete(()=>{
             Debug.Log("Done");
@@ -22,7 +22,7 @@ public class Testing240 : MonoBehaviour {
 		});
 
         LeanTween.value(gameObject, new Vector3(1f,1f,1f), new Vector3(10f,10f,10f), 1f).setOnUpdate( ( Vector3 val )=>{
-//            Debug.Log("val:"+val);
+
         });
 
         LeanTween.value(gameObject, ScaleGroundColor, new Color(1f, 0f, 0f, 0.2f), Color.blue, 2f).setEaseInOutBounce();
@@ -48,20 +48,20 @@ public class Testing240 : MonoBehaviour {
 		LeanTween.moveSplineLocal(sprite2,path,4f)
 			.setOrientToPath2d(true).setRepeat(-1);
 
-//		int tweenId = LeanTween.move (gameObject, new Vector3 (4f, 4f, 4f), 1f).setUseManualTime (true).id;
 
-		// Later
-//		LTDescr d = LeanTween.description( tweenId );
-//		d.setTime = 0.2f;
+
+		
+
+
 	}
 
     public static void ScaleGroundColor(Color to)
     {
-//        Debug.Log("Color col:"+to);
+
         RenderSettings.ambientGroundColor = to;
     }
 	
-	// Update is called once per frame
+	
 	void Update () {
 	
 	}

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 using UPersian.Components;
 
@@ -17,7 +17,7 @@ public class MyGameManager : MonoBehaviour
     private GameFinishTrigger _trigger;
     private bool _gameFinished = false;
     private bool _successArmed = false;
-    private bool _tutorialDone = false;   // set to true by TutorialManager when done
+    private bool _tutorialDone = false;   
 
     void Awake()
     {
@@ -31,16 +31,16 @@ public class MyGameManager : MonoBehaviour
         _trigger = FindObjectOfType<GameFinishTrigger>();
     }
 
-    /// <summary>Called by TutorialManager when the tutorial ends.</summary>
+    
     public void OnTutorialFinished()
     {
         _tutorialDone = true;
     }
 
-    /// <summary>Called by TargetBox on every correct drop.</summary>
+    
     public void ItemPlaced()
     {
-        if (!_tutorialDone) return;   // ignore drops during tutorial
+        if (!_tutorialDone) return;   
         CheckIfComplete();
     }
 
@@ -65,9 +65,9 @@ public class MyGameManager : MonoBehaviour
         StartCoroutine(ArmSuccessNextFrame());
     }
 
-    // Guards against the drop/tap that triggered the panel being immediately
-    // re-read here on the same frame, which used to close the panel instantly
-    // and skip straight to the next step.
+    
+    
+    
     IEnumerator ArmSuccessNextFrame()
     {
         yield return null;
@@ -78,7 +78,7 @@ public class MyGameManager : MonoBehaviour
     void Update()
     {
         if (!_gameFinished) return;
-        if (!_tutorialDone) return;   // don't intercept taps during tutorial
+        if (!_tutorialDone) return;   
         if (!_successArmed) return;
         if (Input.GetMouseButtonDown(0) || (Input.touchCount > 0
             && Input.GetTouch(0).phase == TouchPhase.Began))

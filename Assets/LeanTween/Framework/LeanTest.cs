@@ -52,7 +52,7 @@ public class LeanTest : object {
 			passes++;
 		tests++;
 		
-		// Debug.Log("tests:"+tests+" expected:"+expected);
+		
 		if(tests==expected && testsFinished==false){
 			overview();
 		}else if(tests>expected){

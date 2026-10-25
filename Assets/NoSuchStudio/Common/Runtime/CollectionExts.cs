@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace NoSuchStudio.Common {
@@ -28,15 +28,15 @@ namespace NoSuchStudio.Common {
             return res;
         }
 
-        /// <summary>
-        /// Returns t
-        /// </summary>
-        /// <typeparam name="TKey"></typeparam>
-        /// <typeparam name="TValue"></typeparam>
-        /// <param name="dic1"></param>
-        /// <param name="dic2"></param>
-        /// <param name="duplicatesRule"></param>
-        /// <returns>The number of added entries.</returns>
+        
+        
+        
+        
+        
+        
+        
+        
+        
         public static int MergeWith<TKey, TValue>(this Dictionary<TKey, TValue> dic1, Dictionary<TKey, TValue> dic2, MergeDuplicateRule duplicatesRule = MergeDuplicateRule.Keep) {
             int mergedEntries = 0;
             foreach (KeyValuePair<TKey, TValue> kvp in dic2) {

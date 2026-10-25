@@ -5,7 +5,7 @@ using horizon.Models;
 
 public class Game_Over_2_DataBase_Manager : MonoBehaviour
 {
-    //leader board game object
+    
 
     [HideInInspector]
     public bool isFailureTransaction;
@@ -38,6 +38,6 @@ public class Game_Over_2_DataBase_Manager : MonoBehaviour
 
     public async Task LoadScoreBoardData_Async()
     {
-        //_leaderBoard = await Connect.Instance.GetPlayerRank(gameID: myUserData.GameID, parentID: Account.GetAccount().userID, Account.currentWorkingUserIndex);
+        
     }
 }

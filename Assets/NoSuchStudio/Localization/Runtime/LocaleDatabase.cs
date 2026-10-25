@@ -1,4 +1,4 @@
-﻿using NoSuchStudio.Common;
+using NoSuchStudio.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,18 +9,18 @@ using Newtonsoft.Json;
 #endif
 namespace NoSuchStudio.Localization {
 
-    /// <summary>
-    /// Class for managing locales. This class loads the locales from a backing json file, validates the locales and provides utility methods for handling locales.
-    /// Each LocaleDatabase can be loaded only once. To load another json, create a new instance.
-    /// </summary>
-    /// <remarks>
-    /// There are two locale database files included with the Unity package.
-    /// <para>"alllocales.json" contains a large list of all locales (~850). It includes languages like "English" as well as specific locales
-    /// like "United States English" and "United Kingdom English". This is intended for more in-depth use cases.</para>
-    /// <para>"neutrallocales.json" includes only the neutral locales a.k.a languages. For example there is only "English" in it without the region specifications.
-    /// This is suitable for most cases.
-    /// </para>
-    /// </remarks>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     public class LocaleDatabase {
 
         public static readonly LocaleDatabase EmptyDatabase;
@@ -66,84 +66,78 @@ namespace NoSuchStudio.Localization {
         }
         private Dictionary<string, List<string>> _parentToChildren;
         
-        /// <summary>
-        /// Returns list of all locales that are curretnly loaded, sorted in ascending alphbetic (a-z) order of their name.
-        /// </summary>
+        
+        
+        
         public IList<Locale> allLocalesByName {
             get {
                 return _allLocalesListByName;
             }
         }
 
-        /// <summary>
-        /// Returns list of all locales that are curretnly loaded, sorted in ascending alphbetic (a-z) order of their <b>english</b> name.
-        /// </summary>
+        
+        
+        
         public IList<Locale> allLocalesByEnglishName {
             get {
-                /*var ret = new List<Locale>(_allLocales.Count);
-                var sortedNames = _englishNameToName.Values.ToList();
-                sortedNames.ForEach(n => ret.Add(_allLocales[n]));
-                return ret;*/
+                
                 return _allLocalesListByEnglishName;
             }
         }
 
-        /// <summary>
-        /// Returns list of all neutral locales that are curretnly loaded, sorted in ascending alphbetic (a-z) order of their name.
-        /// </summary>
+        
+        
+        
         public IList<Locale> neutralLocalesByName {
             get {
                 return _neutralLocalesByName.Values.ToList();
             }
         }
 
-        /// <summary>
-        /// Returns list of all neutral locales that are curretnly loaded, sorted in ascending alphbetic (a-z) order of their <b>english</b> name.
-        /// </summary>
+        
+        
+        
         public IList<Locale> neutralLocalesByEnglishName {
             get {
-                /*var ret = new List<Locale>(_neutralLocales.Count);
-                var sortedNames = _englishNameToName.Values.ToList();
-                sortedNames.Where(n => _neutralLocales.ContainsKey(n)).ToList().ForEach(n => ret.Add(_allLocales[n]));
-                return ret;*/
+                
                 return _neutralLocalesListByEnglishName;
             }
         }
 
-        /// <summary>
-        /// Returns list of all specific locales that are curretnly loaded, sorted in ascending alphbetic (a-z) order of their name.
-        /// </summary>
+        
+        
+        
         public IList<Locale> specificLocalesByName {
             get {
                 return _specificLocalesListByName;
             }
         }
 
-        /// <summary>
-        /// Returns list of all specific locales that are curretnly loaded, sorted in ascending alphbetic (a-z) order of their <b>english</b> name.
-        /// </summary>
+        
+        
+        
         public IList<Locale> specificLocalesByEnglishName {
             get {
                 return _specificLocalesListByEnglishName;
             }
         }
  
-        /// <summary>
-        /// Whether the locale database contains a locale. 
-        /// </summary>
-        /// <param name="localeName">The code name or english name of the locale. For example any of these 
-        /// ("en", "EN", "English", "english") will return true if the database contain the neutral English locale.</param>
-        /// <returns>true if a locale with the provided code name or english name exists in the database.</returns>
+        
+        
+        
+        
+        
+        
         public bool ContainsLocale(string localeName) {
             if (string.IsNullOrEmpty(localeName)) return false;
             var normalizedName = Locale.NormalizeLocaleName(localeName);
             return _allLocalesByName.ContainsKey(normalizedName) || _allLocalesByEnglishName.ContainsKey(normalizedName);
         }
 
-        /// <summary>Retrieve a locale by its code name or english name.</summary>
-        /// <param name="locale">The name of the locale. The name will be normalized. For example any of these
-        /// ("en" or "EN" or "English" or "english") will return the neutral English locale.</param>
-        /// <returns>Locale with the given code or english name if one exists, null otherwise.</returns>
+        
+        
+        
+        
         public Locale this[string locale]
         {
             get {
@@ -181,13 +175,13 @@ namespace NoSuchStudio.Localization {
             ComputeSortedListsAndCaches();
         }
 
-        /// <summary>
-        /// Remove all locales. This instance of LocaleDatabase will be empty after this call.
-        /// </summary>
-        /// <remarks>
-        /// Intended for internal use only. 
-        /// LocaleDatabase instances are immutable once loaded.
-        /// </remarks>
+        
+        
+        
+        
+        
+        
+        
         private void Clear() {
             _allLocalesByName.Clear();
             _allLocalesByEnglishName.Clear();
@@ -199,19 +193,19 @@ namespace NoSuchStudio.Localization {
             ComputeSortedListsAndCaches();
         }
 
-        /// <param name="l"></param>
-        /// <returns>The neutral locale (i.e. language) for the provided specific locale. If the provided locale is already neutral, it will be returned.</returns>
+        
+        
         public Locale GetNeutralLocale(Locale l) {
             return this[l.LanguageInName];
         }
 
-        /// <summary>
-        /// Returns a string with names of locales from the most general to the most specific provided to the call.
-        /// </summary>
-        /// <param name="locale">Locale to get path for.</param>
-        /// <param name="delimiter">Delimiter between the locale names.</param>
-        /// <returns>For English (Australia) it returns: "en/en-AU"</returns>
-        public string GetLocaleNamePath(Locale locale, string delimiter = "/"/*, string suffixIfHasChildren = ""*/) {
+        
+        
+        
+        
+        
+        
+        public string GetLocaleNamePath(Locale locale, string delimiter = "/") {
             var curLocale = locale;
             string res = curLocale.Name;
             while (!string.IsNullOrEmpty(curLocale.Parent)) {
@@ -219,20 +213,18 @@ namespace NoSuchStudio.Localization {
                 res = curLocale.Name + delimiter + res;
             }
 
-            /*if (locale.IsNeutral && !string.IsNullOrEmpty(suffixIfHasChildren)) {
-                res = res + delimiter + suffixIfHasChildren;
-            }*/
+            
 
             return res;
         }
 
-        /// <summary>
-        /// Similar to <see cref="GetLocaleNamePath(Locale, string)"/>
-        /// </summary>
-        /// <param name="locale">Locale to get path for.</param>
-        /// <param name="delimiter">Delimiter between the locale names.</param>
-        /// <returns>For English (Australia) it returns: "English/English (Australia)"</returns>
-        public string GetLocaleEnglishNamePath(Locale locale, string delimiter = "/"/*, string suffixIfHasChildren = ""*/) {
+        
+        
+        
+        
+        
+        
+        public string GetLocaleEnglishNamePath(Locale locale, string delimiter = "/") {
             var curLocale = locale;
             string res = curLocale.EnglishName;
             while (!string.IsNullOrEmpty(curLocale.Parent)) {
@@ -240,23 +232,21 @@ namespace NoSuchStudio.Localization {
                 res = curLocale.EnglishName + delimiter + res;
             }
 
-            /*if (locale.IsNeutral && !string.IsNullOrEmpty(suffixIfHasChildren)) {
-                res = res + delimiter + suffixIfHasChildren;
-            }*/
+            
 
             return res;
         }
 
-        /// <param name="l">query locale</param>
-        /// <returns>true if locale has child locales, false otherwise.</returns>
+        
+        
         public bool HasChildren(Locale l) {
             var key = l.NormalizedName;
             return _parentToChildren.ContainsKey(key) && _parentToChildren[key].Count > 0;
         }
 
-        /// <param name="l">The neutral locale (i.e. language) for which to get specific locales.</param>
-        /// <param name="includeNeutral">if true, the first locale in the list will be the provided neutral locale.</param>
-        /// <returns>All the specific locales for the provided neutral locale.</returns>
+        
+        
+        
         public List<Locale> GetSpecificLocales(Locale l, bool includeNeutral = false) {
             if (!l.IsNeutral) {
                 throw new ApplicationException(string.Format("GetSpecificLocales must be called with neutral locales. {0} is specific.", l));
@@ -269,16 +259,16 @@ namespace NoSuchStudio.Localization {
             return ret;
         }
 
-        /// <summary>
-        /// Validation includes:
-        /// <ul>
-        /// <li>Locales parent-child relationships don't form a loop.</li>
-        /// <li>All locales have a valid parent.</li>
-        /// </ul>
-        /// </summary>
-        /// <returns>true if validation passes, false otherwise.</returns>
+        
+        
+        
+        
+        
+        
+        
+        
         private bool ValidateDatabase() {
-            // No Loops Validation
+            
             bool noLoops = true;
             _allLocalesByName.Values.ToList().ForEach(l => {
                 int depth = 0;
@@ -293,7 +283,7 @@ namespace NoSuchStudio.Localization {
                     noLoops = false;
                 }
             });
-            // Parents Validation: parents exist and are neutral
+            
             bool validParents = true;
             _allLocalesByName.Values.ToList().ForEach(l => {
                 if (string.IsNullOrEmpty(l.Parent)) {
@@ -333,10 +323,10 @@ namespace NoSuchStudio.Localization {
             return isValid;
         }
 
-        /// <summary>
-        /// Load database from the provided json string. If the database is already loaded, doesn't do anything.
-        /// </summary>
-        /// <param name="jsonText">json containing all locales.</param>
+        
+        
+        
+        
         internal void LoadFromJson(string jsonText) {
 #if NEWTONSOFTJSON_PRESENT
             var loadedLocales = JsonConvert.DeserializeObject<List<Locale>>(jsonText);
@@ -347,17 +337,17 @@ namespace NoSuchStudio.Localization {
 #endif
         }
 
-        /// <summary>
-        /// Load database from the provided list of locales. If the database is already loaded, doesn't do anything.
-        /// </summary>
-        /// <param name="locales">list of locales.</param>
+        
+        
+        
+        
         internal void LoadFromCollection(List<Locale> locales, bool validate = false) {
             if (loaded) {
                 UnityObjectLoggerExt.LogLog<LocaleDatabase>($"db already loaded with {_allLocalesByName.Count} entries. LocaleDatabases are immutable once loaded.\n{_allLocalesByName.Values.ToList().ToStringExt()}");
                 return;
             }
             loaded = true;
-            // Clear();
+            
             locales.ForEach(l => {
                 var normalizedName = l.NormalizedName;
                 var normalizedEnglishName = l.NormalizedEnglishName;

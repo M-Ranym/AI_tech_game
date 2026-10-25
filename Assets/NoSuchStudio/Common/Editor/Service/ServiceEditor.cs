@@ -4,9 +4,9 @@ using UnityEditor;
 using UnityEngine;
 
 namespace NoSuchStudio.Common.Service.Editor {
-    /// <summary>
-    /// Base <see cref="UnityEditor.Editor"/> class for editors of <see cref="Service{T}"/> types.
-    /// </summary>
+    
+    
+    
     public abstract class ServiceEditor<SE, S> : NoSuchEditor
         where S : Service<S>
         where SE : ServiceEditor<SE, S> {
@@ -45,16 +45,16 @@ namespace NoSuchStudio.Common.Service.Editor {
         }
 
         public override void OnInspectorGUI() {
-            // status
+            
             DrawServiceStatus();
 
-            // restart button
+            
             if (GUILayout.Button("Restart")) {
                 serviceInstance.ReRegisterService();
             }
             EditorGUILayout.Separator();
 
-            // default editor
+            
             DrawDefaultInspector();
         }
     }

@@ -1,4 +1,4 @@
-﻿#if NEWTONSOFTJSON_PRESENT
+#if NEWTONSOFTJSON_PRESENT
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -6,22 +6,22 @@ using System.Linq;
 using UnityEngine;
 
 namespace NoSuchStudio.Localization.Source {
-    /// <summary>
-    /// Parses a JSON file and provides the entries to <see cref="LocalizationService"/>.
-    /// The Json should be in this format:
-    /// <code>
-    /// {
-    ///     "phrase-title": {
-    ///         "en": "Title",
-    ///         "es": "Topico",
-    ///         "ar": "عربی"
-    ///     },
-    ///     "phrase-back": {
-    ///        ...
-    ///     }
-    /// }
-    /// </code>
-    /// </summary>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     [ExecuteAlways]
     public class JsonTranslationSource : FileTranslationSource, ITranslationSource {
         private List<TranslationEntry> ParseJsonString(string rawText) {

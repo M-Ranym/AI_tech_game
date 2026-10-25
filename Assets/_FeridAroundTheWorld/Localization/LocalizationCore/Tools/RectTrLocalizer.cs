@@ -11,7 +11,7 @@ namespace com.horizon.LocalizationSystem
 
         public void Start()
         {
-            LocalizeBlocks(); // in start cuz the localization system is not fully set when called in awake
+            LocalizeBlocks(); 
         }
 
         private void LocalizeBlocks()
@@ -40,7 +40,7 @@ namespace com.horizon.LocalizationSystem
     public class Block
     {
         public RectTransform uiElementRectTr;
-        public RectTransform RtlRectTr;//recttr for the anchor point and position
+        public RectTransform RtlRectTr;
         public RectTransform LtrRectTr;
 
         public bool IsValid()

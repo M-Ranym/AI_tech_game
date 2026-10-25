@@ -22,7 +22,7 @@ namespace com.horizon.LocalizationSystem
         }
 
 
-        // Import the JS functions
+        
 #if UNITY_WEBGL && !UNITY_EDITOR
     [DllImport("__Internal")]
     private static extern string GetLocalStorageValue(string key);
@@ -36,12 +36,12 @@ namespace com.horizon.LocalizationSystem
 #if UNITY_WEBGL && !UNITY_EDITOR
         return GetLocalStorageValue(key);
 #else
-            // Fallback for Editor testing
+            
             return "";
 #endif
         }
 
-        /// <summary>Set a value in localStorage</summary>
+        
         public static void SetBrowserLanguage(string key, string value)
         {
 #if UNITY_WEBGL && !UNITY_EDITOR

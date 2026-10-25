@@ -1,4 +1,4 @@
-﻿// Electro Gryphon Games - 2016
+
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,32 +6,32 @@ using UPersian.Components;
 
 namespace UPersian.Editor
 {
-    /// <summary>
-    /// RTL Context Menu adds functions to Right Click Context Menu in hierarchy.
-    /// </summary>
+    
+    
+    
     public class UPersianContext : UnityEditor.Editor
     {
-        /// <summary>
-        /// Holds Loaded resource for _rtlInputField
-        /// </summary>
+        
+        
+        
         private static InputField _rtlInputField;
-        /// <summary>
-        /// Holds Loaded resource for _rtlText
-        /// </summary>
+        
+        
+        
         private static RtlText _rtlText;
-        /// <summary>
-        /// Holds Loaded resource for _rtlButton
-        /// </summary>
+        
+        
+        
         private static Button _rtlButton;
-        /// <summary>
-        /// Holds Loaded resource for _rtlToggle
-        /// </summary>
+        
+        
+        
         private static Toggle _rtlToggle;
 
-        /// <summary>
-        /// Right click in hierarchy > UPersian > Rtl InputField
-        /// Creates RTL inputField.
-        /// </summary>
+        
+        
+        
+        
         [MenuItem("GameObject/UPersian/Rtl InputField", false, 10)]
         private static void CreateRtlInputField()
         {
@@ -42,10 +42,10 @@ namespace UPersian.Editor
             inputField.transform.SetParent(parent, false);
         }
 
-        /// <summary>
-        /// Right click in hierarchy > UPersian > Rtl Text
-        /// Creates Rtl Text.
-        /// </summary>
+        
+        
+        
+        
         [MenuItem("GameObject/UPersian/Rtl Text", false, 10)]
         private static void CreateRtlText()
         {
@@ -56,10 +56,10 @@ namespace UPersian.Editor
             rtlText.transform.SetParent(parent, false);
         }
         
-        /// <summary>
-        /// Right click in hierarchy > UPersian > Rtl Button
-        /// Creates Rtl Button.
-        /// </summary>
+        
+        
+        
+        
         [MenuItem("GameObject/UPersian/Rtl Button", false, 10)]
         private static void CreateRtlButton()
         {
@@ -70,10 +70,10 @@ namespace UPersian.Editor
             rtlText.transform.SetParent(parent.transform, false);
         }
 
-        /// <summary>
-        /// Right click in hierarchy > UPersian > Rtl Toggle
-        /// Creates Rtl Toggle.
-        /// </summary>
+        
+        
+        
+        
         [MenuItem("GameObject/UPersian/Rtl Toggle", false, 10)]
         private static void CreateRtlToggle()
         {
@@ -84,10 +84,10 @@ namespace UPersian.Editor
             rtlText.transform.SetParent(parent.transform, false);
         }
 
-        /// <summary>
-        /// find selected parent or if nothing is selected, uses canvas as parent.
-        /// </summary>
-        /// <returns></returns>
+        
+        
+        
+        
         private static Transform FindCorrectParent()
         {
             Canvas canvas = FindObjectOfType<Canvas>();

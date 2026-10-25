@@ -6,9 +6,9 @@ using UnityEditor;
 #endif
 
 namespace NoSuchStudio.Localization {
-    /// <summary>
-    /// Utility methods for handling locales and common localization patterns.
-    /// </summary>
+    
+    
+    
     public static class LocalizationUtils {
 
         public static TextAlignment RTLReverse(this TextAlignment textAlignment) {

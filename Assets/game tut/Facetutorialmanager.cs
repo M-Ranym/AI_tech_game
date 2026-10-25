@@ -45,16 +45,16 @@ public class FaceTutorialManager : MonoBehaviour
     public float squareMoveSpeed = 500f;
     public float pauseDuration = 0.5f;
 
-    private const string V1 = "FaceTutorial_Step1";  // greeting
-    private const string V2 = "FaceTutorial_Step2";  // point at square
-    private const string V3 = "FaceTutorial_Step3";  // point at verdict buttons
-    private const string V4 = "FaceTutorial_Step4";  // robot got it wrong, press wrong
-    private const string V4Ok = "FaceTutorial_Step4b"; // correct, you caught the robot's mistake
-    private const string V5 = "FaceTutorial_Step5";  // now drag the square onto the face
-    private const string V5PressConfirm = "FaceTutorial_Step5b"; // now press confirm to check
-    private const string V5Ok = "FaceTutorial_Step5d"; // you corrected the robot
-    private const string V5Retry = "FaceTutorial_Step5c"; // not close enough, try again
-    private const string V6 = "FaceTutorial_Step6";  // ready to play
+    private const string V1 = "FaceTutorial_Step1";  
+    private const string V2 = "FaceTutorial_Step2";  
+    private const string V3 = "FaceTutorial_Step3";  
+    private const string V4 = "FaceTutorial_Step4";  
+    private const string V4Ok = "FaceTutorial_Step4b"; 
+    private const string V5 = "FaceTutorial_Step5";  
+    private const string V5PressConfirm = "FaceTutorial_Step5b"; 
+    private const string V5Ok = "FaceTutorial_Step5d"; 
+    private const string V5Retry = "FaceTutorial_Step5c"; 
+    private const string V6 = "FaceTutorial_Step6";  
 
     private GameFinishTrigger _trigger;
     private Canvas _canvas;
@@ -79,8 +79,8 @@ public class FaceTutorialManager : MonoBehaviour
     {
         _trigger = FindObjectOfType<GameFinishTrigger>();
 
-        // Level 1 is the real game (FaceDetectorManager) — this tutorial only
-        // runs for level 0.
+        
+        
         if (_trigger != null && _trigger.GetStartLevel() != 0)
         {
             enabled = false;
@@ -110,8 +110,8 @@ public class FaceTutorialManager : MonoBehaviour
         SetOneInteractable(wrongButton.gameObject, false);
         SetOneInteractable(confirmButton.gameObject, false);
 
-        // Everything interactive starts dimmed/behind the overlay — each step
-        // brings only what the child needs to touch right now back in front.
+        
+        
         SendBehindOverlay(new List<GameObject>
             { square.gameObject, robot.gameObject,
               correctButton.gameObject, wrongButton.gameObject, confirmButton.gameObject });
@@ -142,9 +142,9 @@ public class FaceTutorialManager : MonoBehaviour
         RectTransform rt = tutorialHand.GetComponent<RectTransform>();
         if (rt != null)
         {
-            // World position — the hand isn't necessarily under the same
-            // parent as the square/buttons it points at, so anchoredPosition
-            // values from those objects aren't comparable to the hand's own.
+            
+            
+            
             rt.position = new Vector2(_handBasePos.x, _handBasePos.y + bob);
             rt.localScale = new Vector3(scaleX, scaleY, 1f);
             rt.localRotation = Quaternion.Euler(0f, 0f, _handBaseRot + rock);
@@ -153,13 +153,13 @@ public class FaceTutorialManager : MonoBehaviour
 
     private IEnumerator RunTutorial()
     {
-        // ── Step 1 ── Greeting
+        
         _step = 1;
         ShowFerid();
         ShowSpeech("مرحباً بك في لعبة كشف الوجوه!", V1);
         yield return WaitForTap();
 
-        // ── Step 2 ── Point at the square
+        
         _step = 2;
         ShowSpeech("هذا المربع سيحاول أن يجد الوجه", V2);
         BringInFrontOfOverlay(new List<GameObject> { square.gameObject });
@@ -168,9 +168,9 @@ public class FaceTutorialManager : MonoBehaviour
         yield return WaitForTap();
         HideHand();
 
-        // ── Step 3 ── Point at the verdict buttons (hand loops between both
-        // real buttons — there are two of them so a single static point
-        // can't cover it, same idea as game 2's PointAtZonesLoop)
+        
+        
+        
         _step = 3;
         ShowSpeech("وهذان الزران يستخدمان للتحقق من إجابته", V3);
         correctButton.gameObject.SetActive(true);
@@ -185,10 +185,10 @@ public class FaceTutorialManager : MonoBehaviour
         wrongButton.gameObject.SetActive(false);
         SendBehindOverlay(new List<GameObject> { correctButton.gameObject, wrongButton.gameObject });
 
-        // Ferid steps back while the robot does its thing
+        
         HideFerid();
 
-        // ── Robot places the square in the WRONG spot (auto, like round 1) ──
+        
         Vector2 wrongPlacement = ClampInsideSafeArea(
             _faceCenter + (Vector2)Random.insideUnitCircle.normalized * farOffset);
 
@@ -203,7 +203,7 @@ public class FaceTutorialManager : MonoBehaviour
         yield return StartCoroutine(MoveRobot(_robotHome));
         yield return new WaitForSeconds(pauseDuration);
 
-        // ── Step 4 ── Robot was wrong, child must press the wrong button ──
+        
         _step = 4;
         ShowFerid();
         ShowSpeech("الروبوت أخطأ! اضغط على زر خطأ", V4);
@@ -211,7 +211,7 @@ public class FaceTutorialManager : MonoBehaviour
         correctButton.gameObject.SetActive(true);
         BringInFrontOfOverlay(new List<GameObject> { wrongButton.gameObject, correctButton.gameObject });
         PinUIToTop();
-        SetOneInteractable(correctButton.gameObject, false); // only "wrong" is the answer here
+        SetOneInteractable(correctButton.gameObject, false); 
         SetOneInteractable(wrongButton.gameObject, true);
         ShowHandAt(wrongButton.GetComponent<RectTransform>());
 
@@ -222,13 +222,13 @@ public class FaceTutorialManager : MonoBehaviour
         wrongButton.gameObject.SetActive(false);
         correctButton.gameObject.SetActive(false);
 
-        // Confirm the child was right to catch the robot's mistake — via
-        // Ferid's speech bubble, no separate result panel.
+        
+        
         ShowFerid();
         ShowSpeech("صحيح! لقد اكتشفت خطأ الروبوت!", V4Ok);
         yield return WaitForTap();
 
-        // ── Step 5 ── Child drags the square onto the face themselves ──
+        
         _step = 5;
         ShowFerid();
         ShowSpeech("الآن اسحب المربع إلى الوجه", V5);
@@ -238,18 +238,18 @@ public class FaceTutorialManager : MonoBehaviour
         SetOneInteractable(confirmButton.gameObject, true);
         _draggingEnabled = true;
 
-        StartHandAnim(square.position, tutorialFaceMarker.position, 1.4f); // world positions
+        StartHandAnim(square.position, tutorialFaceMarker.position, 1.4f); 
         yield return WaitForTap();
         HideFerid();
 
-        // Wait for the child to actually pick up and drop the square once
-        // before telling them the next step — no point saying "press
-        // confirm" while they haven't touched the square yet.
+        
+        
+        
         _dragReleased = false;
         yield return new WaitUntil(() => _dragReleased);
         StopAndHideHand();
 
-        // ── Step 5b ── Now tell them to press Confirm to check
+        
         ShowFerid();
         ShowSpeech("والآن اضغط على زر التأكيد للتحقق", V5PressConfirm);
         ShowHandAt(confirmButton.GetComponent<RectTransform>());
@@ -287,7 +287,7 @@ public class FaceTutorialManager : MonoBehaviour
         SetOneInteractable(confirmButton.gameObject, false);
         confirmButton.gameObject.SetActive(false);
 
-        // ── Step 6 ── Ready to play
+        
         _step = 6;
         ShowFerid();
         ShowSpeech("رائع! أنت الآن جاهز للعب", V6);
@@ -309,7 +309,7 @@ public class FaceTutorialManager : MonoBehaviour
     private void OnSquareDrag(PointerEventData eventData)
     {
         if (!_draggingEnabled) return;
-        StopAndHideHand(); // child started dragging themselves — remove the demo hand
+        StopAndHideHand(); 
 
         _dragSoundCooldown -= Time.deltaTime;
         if (_dragSoundCooldown <= 0f)
@@ -380,9 +380,9 @@ public class FaceTutorialManager : MonoBehaviour
         robot.anchoredPosition = new Vector2(target.x, _robotGroundY);
     }
 
-    // ══════════════════════════════════════════════════════════════════
-    //  FERID / SPEECH
-    // ══════════════════════════════════════════════════════════════════
+    
+    
+    
 
     private void ShowFerid()
     {
@@ -398,8 +398,8 @@ public class FaceTutorialManager : MonoBehaviour
 
     private void ShowSpeech(string arabic, string voiceName)
     {
-        // Ferid and the speech bubble stay put at whatever position they're
-        // placed at in the scene — no per-step repositioning.
+        
+        
         if (speechBubbleRect != null) speechBubbleRect.gameObject.SetActive(true);
 
         if (speechText != null) speechText.text = arabic;
@@ -429,10 +429,10 @@ public class FaceTutorialManager : MonoBehaviour
         }
     }
 
-    // ══════════════════════════════════════════════════════════════════
-    //  OVERLAY Z-ORDER — square/robot/buttons must be SIBLINGS of
-    //  darkOverlay (same parent) for SetSiblingIndex to mean anything here.
-    // ══════════════════════════════════════════════════════════════════
+    
+    
+    
+    
 
     private int OverlaySiblingIndex() =>
         darkOverlay != null ? darkOverlay.transform.GetSiblingIndex() : 0;
@@ -451,9 +451,9 @@ public class FaceTutorialManager : MonoBehaviour
             if (go != null) go.transform.SetSiblingIndex(insertAt);
     }
 
-    // ══════════════════════════════════════════════════════════════════
-    //  INTERACTABILITY
-    // ══════════════════════════════════════════════════════════════════
+    
+    
+    
 
     private void SetOneInteractable(GameObject go, bool state)
     {
@@ -464,9 +464,9 @@ public class FaceTutorialManager : MonoBehaviour
         cg.interactable = state;
     }
 
-    // ══════════════════════════════════════════════════════════════════
-    //  HAND ANIMATION
-    // ══════════════════════════════════════════════════════════════════
+    
+    
+    
 
     private void EnsureHandNonBlocking()
     {
@@ -476,16 +476,16 @@ public class FaceTutorialManager : MonoBehaviour
         cg.blocksRaycasts = false;
         cg.interactable = false;
 
-        // Always render above Ferid/speech bubble, otherwise the hand is
-        // active but visually hidden behind them until Ferid disappears.
+        
+        
         tutorialHand.transform.SetAsLastSibling();
     }
 
-    // Points at the exact live RectTransform of whatever Ferid is currently
-    // talking about (square, a button, ...) — always correct regardless of
-    // scene layout, no hand-tuned Inspector coordinates to get wrong. Uses
-    // WORLD position (not anchoredPosition) since the hand is not
-    // necessarily a sibling of the object it's pointing at.
+    
+    
+    
+    
+    
     private void ShowHandAt(RectTransform target)
     {
         if (tutorialHand == null || target == null) return;
@@ -497,8 +497,8 @@ public class FaceTutorialManager : MonoBehaviour
         if (rt != null) rt.position = _handBasePos;
     }
 
-    // Used while Ferid explains the two verdict buttons together: hand bobs
-    // over the wrong button, then the correct button, looping until tap.
+    
+    
     private IEnumerator PointAtButtonsLoop()
     {
         if (tutorialHand == null) yield break;
@@ -569,14 +569,14 @@ public class FaceTutorialManager : MonoBehaviour
         {
             elapsed += Time.deltaTime;
             _handBasePos = Vector2.Lerp(from, to, Mathf.SmoothStep(0f, 1f, elapsed / dur));
-            if (rt != null) rt.position = _handBasePos; // world — see ShowHandAt
+            if (rt != null) rt.position = _handBasePos; 
             yield return null;
         }
     }
 
-    // ══════════════════════════════════════════════════════════════════
-    //  END
-    // ══════════════════════════════════════════════════════════════════
+    
+    
+    
 
     private void EndTutorial()
     {
@@ -587,7 +587,7 @@ public class FaceTutorialManager : MonoBehaviour
         if (darkOverlay != null) darkOverlay.SetActive(false);
 
         if (_trigger != null)
-            _trigger.FinishLevel(0); // level 0 of 2 — unlocks level 1 (the real game)
+            _trigger.FinishLevel(0); 
         else
             Debug.LogError("[FaceTutorialManager] No GameFinishTrigger in scene!");
     }

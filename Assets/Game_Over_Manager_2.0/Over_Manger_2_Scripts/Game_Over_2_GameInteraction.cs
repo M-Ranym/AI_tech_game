@@ -7,7 +7,7 @@ using TMPro;
 using UPersian.Components;
 using System.Text;
 using UnityEngine.EventSystems;
-//using horizon.Logging;
+
 using com.horizon.LocalizationSystem;
 
 [System.Serializable]
@@ -24,7 +24,7 @@ public class Game_Over_2_GameInteraction : MonoBehaviour
     [SerializeField] private Animator _anim;
     [SerializeField] private Game_Over_2_LoadScene _loadScene;
 
-    // Level mode element
+    
 
     [SerializeField] private GameObject _winPanel;
     [SerializeField] private GameObject _losePanel;
@@ -35,7 +35,7 @@ public class Game_Over_2_GameInteraction : MonoBehaviour
     [SerializeField] private CanvasGroup _glow;
     [SerializeField] private Transform _vectoryBackgroundPatern;
 
-    //Infinite Mode Element
+    
 
     [SerializeField] private RtlText _bestScore;
     [SerializeField] private RtlText _currentScore;
@@ -56,7 +56,7 @@ public class Game_Over_2_GameInteraction : MonoBehaviour
     [SerializeField] private float _timer = 2;
     private float _currentTime = 0;
     [SerializeField] private string _goTxtLocalizationPhrase;
-    [SerializeField] private string _goTxt = "إنطلق!";//fallback
+    [SerializeField] private string _goTxt = "إنطلق!";
 
 
     private int _lvlindex;
@@ -224,7 +224,7 @@ public class Game_Over_2_GameInteraction : MonoBehaviour
         {
             _timerCount = 4;
 
-            //-- Localization
+            
             string goTxt = null;
             if (!string.IsNullOrEmpty(_goTxtLocalizationPhrase))
             {
@@ -237,7 +237,7 @@ public class Game_Over_2_GameInteraction : MonoBehaviour
             }
             else
             {
-                //fallback
+                
                 _timerTxt.text = _goTxt;
             }
 
@@ -280,17 +280,17 @@ public class Game_Over_2_GameInteraction : MonoBehaviour
         _lvlindex = Game_Over_2_LevelManager.LEVEl_INDEX;
         if (_lvlindex == _gameOverManager.numberOfLevel)
         {
-            //if (PlayerPrefs.GetInt(Constants.DLC_IS_OPEN_FROM_MAP, 0) == 0)
-            //{
-            //    _mapButton.SetActive(false);
-            //}
+            
+            
+            
+            
 
-            //if (!PlayerPrefs.HasKey(Game_Over_2_Constants.GAME_DATA_STARS + Game_Over_2_Constants.COOL_SEPERATOR + _lvlindex))
-            //{
-            //    _audioManager.Ferid_Talking(Game_Over_2_Constants.FERID_TALKS_YOU_UNLOCKINFINITE_INFINITE_MODE);
-            //    _infiniteModeisOpend = true;
-            //}
-            //Game_Over_2_SaveSystem.Final_Level_Reached(_lvlindex);
+            
+            
+            
+            
+            
+            
 
         }
 
@@ -330,7 +330,7 @@ public class Game_Over_2_GameInteraction : MonoBehaviour
 
     private void Save_User_Data(int stars)
     {
-        //Have check  number of Old user stars
+        
         if (PlayerPrefs.HasKey(Game_Over_2_Constants.GAME_DATA_STARS + Game_Over_2_Constants.COOL_SEPERATOR + _lvlindex))
         {
             if (stars - PlayerPrefs.GetInt(Game_Over_2_Constants.GAME_DATA_STARS + Game_Over_2_Constants.COOL_SEPERATOR + _lvlindex) > 0)
@@ -349,7 +349,7 @@ public class Game_Over_2_GameInteraction : MonoBehaviour
 
         if (starsList.Length <= _lvlindex)
         {
-            //Add stars Number
+            
             starsList += stars.ToString();
         }
         else
@@ -438,7 +438,7 @@ public class Game_Over_2_GameInteraction : MonoBehaviour
 
     public void Restart_Btn()
     {
-        string path = SceneManager.GetActiveScene().path; // Path Of the current Scene
+        string path = SceneManager.GetActiveScene().path; 
         _loadScene.LoadScene(path);
     }
 
@@ -473,16 +473,16 @@ public class Game_Over_2_GameInteraction : MonoBehaviour
         _audioManager.Play_Sfx(Game_Over_2_Constants.CLICK_SFX);
 
         Time.timeScale = 1;
-        //if (PlayerPrefs.GetInt(Constants.DLC_IS_OPEN_FROM_MAP, 0) == 0)
-        //{
-        //    AnalyticsTracker.Instance.TrackScreenVisit(Constants.SCENE_GAMES);
-        //    _loadScene.LoadScene(Constants.SCENE_GAMES);
-        //}
-        //else
-        //{
-        //    AnalyticsTracker.Instance.TrackScreenVisit(Constants.SCENE_MAP_SCENE);
-        //    _loadScene.LoadScene(Constants.SCENE_MAP_SCENE);
-        //}
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         Destroy(_audioManager.gameObject);
         Destroy(_gameOverManager.gameObject);
 

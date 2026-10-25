@@ -3,9 +3,9 @@ using NoSuchStudio.Common.Service;
 namespace NoSuchStudio.Variables {
 
     public partial class VariablesService : Service<VariablesService> {
-        /// <summary>
-        /// The value to use for variables that are undefined (No Variable Source provides the variable).
-        /// </summary>
+        
+        
+        
         public static string UndefinedVariableValue {
             get {
                 return IsReady ? Instance.undefinedVariableValue : null;

@@ -1,4 +1,4 @@
-﻿using NoSuchStudio.Localization;
+using NoSuchStudio.Localization;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -7,7 +7,7 @@ namespace com.horizon.LocalizationSystem
 {
     public class LocalizationHelper
     {
-        // -- Get those from the csv column 0 : phrase (localization key)
+        
         private const string ERROR_PHRASE = "error_123456";
         private const string CHECK_INTERNET_ERROR_PHRASE = "please_check_internet_81726";
         public const string ONE_DAY = "one_day_147852";
@@ -20,7 +20,7 @@ namespace com.horizon.LocalizationSystem
         public const string HOUR = "hour_000111";
         public const string SOME_MINUTES = "some_minutes_526541";
         public const string NOW = "now_454545";
-        // -- 
+        
 
         public static readonly LocalizedItem please_wait_remaining_time_63841 = new LocalizedItem("please_wait_remaining_time_63841", "الرّجاء انتظار الوقت المتبقّي");
         public static readonly LocalizedItem free_game_one_day_92754 = new LocalizedItem("free_game_one_day_92754", "يمكنك التمتّع بهذه الّلعبة ليوم كامل مجّانا.\nستجدها في القائمة الرّئيسيّة");
@@ -51,37 +51,37 @@ namespace com.horizon.LocalizationSystem
 
         public static readonly LocalizedItem page_phrase_1773132492 = new LocalizedItem("phrase_1773132492", "الصّفحة");
         public static readonly LocalizedItem main_page_phrase_1773132492 = new LocalizedItem("main_page_phrase_1773132492", "الصفحة الرئيسية");
-        // -- 
+        
 
 
-        //public static void Display_Check_Internet_Warning_Panel_Localized(AlertPanel alertPanel)
-        //{
-        //    if (alertPanel == null)
-        //    {
-        //        Debug.LogError(nameof(alertPanel) + " is null");
-        //        return;
-        //    }
-        //    alertPanel.Loading(false);
-        //    try
-        //    {
-        //        string errorLocalized = NoSuchStudio.Localization.LocalizationService.GetPhraseTranslation(ERROR_PHRASE);
-        //        string checkInternetLocalized = NoSuchStudio.Localization.LocalizationService.GetPhraseTranslation(CHECK_INTERNET_ERROR_PHRASE);
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
 
-        //        if (string.IsNullOrEmpty(checkInternetLocalized))
-        //        {
-        //            Debug.LogError(nameof(checkInternetLocalized) + " string is null or empty");
-        //            return;
-        //        }
+        
+        
+        
+        
+        
 
-        //        alertPanel.Display_Warning_Panel(errorLocalized, checkInternetLocalized);
-        //        return;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Debug.LogError(nameof(Display_Check_Internet_Warning_Panel_Localized) + " Error :" + e.Message);
-        //        alertPanel.Display_Warning_Panel("خطأ", "الرّجاء التّثبّت من الأنترنت");
-        //    }
-        //}
+        
+        
+        
+        
+        
+        
+        
+        
+        
 
 
         public static string GetLocalizedStr(string phrase)
@@ -120,8 +120,8 @@ namespace com.horizon.LocalizationSystem
 
         public class LocalizedItem
         {
-            public string phrase; // represent the key in the localization csv (column 0)
-            public string defaultValue; // fallback value if localization fail to get the proper string from the csv
+            public string phrase; 
+            public string defaultValue; 
 
             public LocalizedItem(string phrase, string defaultValue)
             {
@@ -158,7 +158,7 @@ namespace com.horizon.LocalizationSystem
         }
 
 
-        public static bool IsRTL()//current langauge
+        public static bool IsRTL()
         {
             try
             {
@@ -172,7 +172,7 @@ namespace com.horizon.LocalizationSystem
             }
         }
 
-        //lang is supposed to be "ar" , "en" , "fr" 
+        
         public static void SetCurrentLanguage(string lang)
         {
             bool isValidLang = true;
@@ -191,7 +191,7 @@ namespace com.horizon.LocalizationSystem
                 }
             }
             if (!isValidLang)
-                lang = "ar"; // fallback;
+                lang = "ar"; 
 
 
             try

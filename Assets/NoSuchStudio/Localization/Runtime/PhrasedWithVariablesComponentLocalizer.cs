@@ -1,4 +1,4 @@
-﻿//#if NOSUCHSTUDIO_VARIABLES_PRESENT
+
 using System;
 using System.Collections.Generic;
 
@@ -9,14 +9,14 @@ namespace NoSuchStudio.Localization {
     using Common.Service;
     using Variables;
 
-    /// <summary>
-    /// The base class for localized components that have a phrase and also use variable substitution.
-    /// Override <see cref="UpdateVariabledComponent"/> when inheriting from this class.
-    /// <see cref="_text"/> field is the <see cref="PhrasedComponentLocalizer{LT, CT}._translation"/> with its variables replaced. Use it 
-    /// when updating the component.
-    /// </summary>
-    /// <typeparam name="LT">The class that inherits PhrasedWithVariablesComponentLocalizer.</typeparam>
-    /// <typeparam name="CT">The component that is localized by LT.</typeparam>
+    
+    
+    
+    
+    
+    
+    
+    
     public abstract class PhrasedWithVariablesComponentLocalizer<LT, CT> : PhrasedComponentLocalizer<LT, CT>, IVariablesServiceComponent
         where CT : Component
         where LT : PhrasedWithVariablesComponentLocalizer<LT, CT> {
@@ -54,14 +54,14 @@ namespace NoSuchStudio.Localization {
             });
         }
 
-        // Need to implement variablesservice explicitly as this class is already an ILocalizationServiceComponent
+        
         bool IServiceComponent<VariablesService>.IsConnected<ST>() {
             return IsConnected<VariablesService>();
         }
 
         void IServiceComponent<VariablesService>.Connect<ST>() {
-            if (!_readyToConnect) return; // will connect later when ready
-            if (!VariablesService.IsReady) return; // will connect when service is ready
+            if (!_readyToConnect) return; 
+            if (!VariablesService.IsReady) return; 
             if (IsConnected<VariablesService>()) ((IVariablesServiceComponent)this).Disconnect<VariablesService>();
             RegisterToVariables();
             _connected[typeof(VariablesService)] = true;
@@ -108,4 +108,3 @@ namespace NoSuchStudio.Localization {
 #endif
     }
 }
-//#endif

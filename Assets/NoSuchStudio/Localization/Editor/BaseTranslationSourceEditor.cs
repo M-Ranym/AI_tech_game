@@ -3,11 +3,11 @@ using UnityEditor;
 using NoSuchStudio.Common.Editor;
 
 namespace NoSuchStudio.Localization.Editor {
-    /// <summary>
-    ///  Base Editor type for Translation Source components. <seealso cref="BaseTranslationSource"/>.
-    /// </summary>
-    /// <typeparam name="ET">The Editor type that inherits BaseTranslationSourceEditor.</typeparam>
-    /// <typeparam name="ST">The TranslationSource component type.</typeparam>
+    
+    
+    
+    
+    
     public abstract class BaseTranslationSourceEditor<ET, ST> : NoSuchEditor
         where ST : BaseTranslationSource {
         protected ST tsTarget;
@@ -22,11 +22,11 @@ namespace NoSuchStudio.Localization.Editor {
         }
 
         public override void OnInspectorGUI() {
-            // connection status
+            
             DrawServiceConnectionStatus(tsTarget);
             EditorGUILayout.Separator();
 
-            // editor 
+            
             DrawDefaultInspector();
         }
     }

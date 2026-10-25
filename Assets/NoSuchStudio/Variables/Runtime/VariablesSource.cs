@@ -1,4 +1,4 @@
-﻿using NoSuchStudio.Common;
+using NoSuchStudio.Common;
 using NoSuchStudio.Common.Service;
 using System;
 using System.Collections.Generic;
@@ -6,13 +6,13 @@ using System.Linq;
 using UnityEngine;
 
 namespace NoSuchStudio.Variables {
-    /// <summary>
-    /// Use this class to define variables for other components to use.
-    /// Use <see cref="AddVariable(string)"/>, <see cref="RemoveVariable(string)"/> and <see cref="SetVariable(string, string)"/>
-    /// to manage variables in the source. 
-    /// Any class can register to the <see cref="VariablesService"/> to get notified of changes to variables.!--
-    /// Changes to variable values should happen through the VariableSource that defines the variable.
-    /// </summary>
+    
+    
+    
+    
+    
+    
+    
     [ExecuteInEditMode]
     public partial class VariablesSource : NoSuchMonoBehaviour, IVariableSource,
         ISerializationCallbackReceiver {
@@ -175,42 +175,42 @@ namespace NoSuchStudio.Variables {
                 _variables[td.key] = td.value;
             }
 
-            // // new variables
-            // Dictionary<string, string> newVariables = new Dictionary<string, string>();
-            // foreach (StringPair td in _variableList)
-            // {
-            //     while (string.IsNullOrEmpty(td.key) || newVariables.ContainsKey(td.key))
-            //     {
-            //         td.SetKey(string.Format("variable_{0}", idCounter++));
-            //     }
-            //     newVariables[td.key] = td.value;
-            // }
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
 
-            // // diff variables
-            // HashSet<string> variableKeys = new HashSet<string>(newVariables.Keys.Union(_variables.Keys));
-            // foreach (string t in variableKeys)
-            // {
-            //     if (_variables.ContainsKey(t) && newVariables.ContainsKey(t))
-            //     {
-            //         if (_variables[t] != newVariables[t])
-            //         {
-            //             // variable value change
-            //             _variables[t] = newVariables[t];
-            //             _dataChanged = true;
-            //         }
-            //     }
-            //     else if (_variables.ContainsKey(t))
-            //     {
-            //         // removed variables
-            //         _variables.Remove(t);
-            //     }
-            //     else
-            //     {
-            //         // added variables
-            //         _variables[t] = newVariables[t];
-            //         _dataChanged = true;
-            //     }
-            // }
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
         }
 #if UNITY_EDITOR
         public void Reset() {

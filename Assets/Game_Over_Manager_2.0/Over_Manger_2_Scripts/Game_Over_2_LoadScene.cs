@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-//using horizon.Logging;
+
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -32,7 +32,7 @@ public class Game_Over_2_LoadScene : MonoBehaviour
 
     private void Show_Loading_Panel()
     {
-        //Play_Sfx("Bubble_Sfx");
+        
         _LoadingContainer.SetActive(true);
         switch (_animType)
         {
@@ -70,16 +70,16 @@ public class Game_Over_2_LoadScene : MonoBehaviour
     public void ExitBtn()
     {
         Drop_Down_Anim();
-        //if (PlayerPrefs.GetInt(Constants.DLC_IS_OPEN_FROM_MAP, 0) == 0)
-        //{
-        //    AnalyticsTracker.Instance.TrackScreenVisit(Constants.SCENE_GAMES);
-        //    LoadScene(Constants.SCENE_GAMES);
-        //}
-        //else
-        //{
-        //    AnalyticsTracker.Instance.TrackScreenVisit(Constants.SCENE_MAP_SCENE);
-        //    LoadScene(Constants.SCENE_MAP_SCENE);
-        //}
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         Destroy(Game_Over_2_AudioManager.audioManInstance.gameObject);
         Destroy(Game_Over_2_Manager.instance.gameObject);
     }
@@ -87,22 +87,22 @@ public class Game_Over_2_LoadScene : MonoBehaviour
     private IEnumerator Load_Scene(string sceneName_Path)
     {
         yield return new WaitForSeconds(.6f);
-        //Timer
+        
         _sliderLoading.SetActive(true);
         if (_sliderLoading.activeInHierarchy)
         {
-            //Begin to load the Scene you specify
+            
             AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(sceneName_Path);
-            //Don't let the Scene activate until you allow it to
+            
             asyncOperation.allowSceneActivation = false;
-            //When the load is still in progress, output the Text and progress bar
+            
 
             while (!asyncOperation.isDone)
             {
-                //Output the current progress
+                
                 _fill.value = Mathf.Lerp(_fill.value, asyncOperation.progress, 2 * Time.deltaTime);
 
-                //Check if the load has finished
+                
                 if (asyncOperation.progress >= 0.9f)
                 {
                     _fill.value = 1f;

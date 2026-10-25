@@ -1,4 +1,4 @@
-// Compile only if TextMeshPro is present in the project.
+
 #if TMPRO_PRESENT
 using NoSuchStudio.Localization.Editor;
 using NoSuchStudio.Variables;

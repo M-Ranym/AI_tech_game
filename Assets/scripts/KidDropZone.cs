@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -74,7 +74,7 @@ public class KidDropZone : MonoBehaviour, IDropHandler
         AddItem(draggable);
         bool correct = eventData.pointerDrag.CompareTag(allowedTag);
 
-        // Notify the tutorial manager if a tutorial is running
+        
         KidTutorialManager tm = FindObjectOfType<KidTutorialManager>();
         if (tm != null && tm.IsTutorialActive())
             tm.OnTutorialDrop(eventData.pointerDrag, correct);
@@ -115,11 +115,11 @@ public class KidDropZone : MonoBehaviour, IDropHandler
 
     // ==================== Tutorial Flash ====================
 
-    /// <summary>
-    /// Called by KidTutorialManager to flash the zone colour during tutorial demos.
-    /// After calling this, the caller should yield for flashDuration seconds
-    /// and then call ResetFlash() to restore the original colour.
-    /// </summary>
+    
+    
+    
+    
+    
     public IEnumerator TutorialFlash(bool correct)
     {
         if (boxImage == null) yield break;
@@ -137,10 +137,10 @@ public class KidDropZone : MonoBehaviour, IDropHandler
         boxImage.color = original;
     }
 
-    /// <summary>
-    /// Immediately restores the zone image to its original colour.
-    /// Called by KidTutorialManager after FlashAndWait completes.
-    /// </summary>
+    
+    
+    
+    
     public void ResetFlash()
     {
         if (boxImage != null)

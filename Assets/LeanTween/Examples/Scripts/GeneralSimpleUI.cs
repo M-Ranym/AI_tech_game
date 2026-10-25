@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using DentedPixel;
 
@@ -14,7 +14,7 @@ public class GeneralSimpleUI : MonoBehaviour {
 			return;
 		}
 		
-		// Tweening various values in a block callback style
+		
 		LeanTween.value(button.gameObject, button.anchoredPosition, new Vector2(200f,100f), 1f ).setOnUpdate( 
 			(Vector2 val)=>{
 				button.anchoredPosition = val;
@@ -40,7 +40,7 @@ public class GeneralSimpleUI : MonoBehaviour {
 			}
 		);
 
-		// Tweening Using Unity's new Canvas GUI System
+		
 		LeanTween.move(button, new Vector3(200f,-100f,0f), 1f).setDelay(1f);
 		LeanTween.rotateAround(button, Vector3.forward, 90f, 1f).setDelay(2f);
 		LeanTween.scale(button, button.localScale*2f, 1f).setDelay(3f);

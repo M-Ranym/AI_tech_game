@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,7 +17,7 @@ namespace NoSuchStudio.Common {
                 curText.Length = 0;
                 curVariable.Length = 0;
 
-                // bool backslash = false; TODO support skip chars
+                
                 bool buffering = false;
                 for (var i = 0; i < text.Length; i++) {
                     var curChar = text[i];

@@ -4,7 +4,7 @@ using System;
 using System.Linq;
 using UnityEngine;
 using Unity.Mathematics;
-//using horizon.Models;
+
 
 public class Game_Over_2_DataBase_Interactions : MonoBehaviour
 {
@@ -23,7 +23,7 @@ public class Game_Over_2_DataBase_Interactions : MonoBehaviour
         {
             if (Application.internetReachability != NetworkReachability.NotReachable)
             {
-                //await _dbManager.LoadScoreBoardData_Async();
+                
                 Set_Player_Data_Element();
             }
             else
@@ -45,32 +45,32 @@ public class Game_Over_2_DataBase_Interactions : MonoBehaviour
 
     private async void Start()
     {
-        //await _dbManager.Fech_Players_Data();
-        //Set_Player_Data_Element();
+        
+        
     }
 
     private void Set_Player_Data_Element()
     {
-        //List<LeaderboardModel> users = _dbManager.Users_Data();
+        
         bool isPlayerFound = false;
 
-        //foreach (LeaderboardModel PlayerData in users)
-        //{
-        //    GameObject newElement = Instantiate(_elementPrefab, _tableFrame);
-        //    if (PlayerData.isCurrentPlayer)
-        //    {
-        //        _userElement.Assgin_Player_Stats(PlayerData.KidName, PlayerData.BestScore, PlayerData.Rank.ToString(), PlayerData.UpperBodyAccessoriesWeared);
-        //        isPlayerFound = true;
-        //    }
+        
+        
+        
+        
+        
+        
+        
+        
 
-        //    newElement.GetComponent<Game_Over_2_ScoreboardElement>().Set_User_Data(PlayerData.KidName, PlayerData.BestScore, PlayerData.Xp, PlayerData.UpperBodyAccessoriesWeared, PlayerData.Rank, PlayerData.isCurrentPlayer);
-        //}
+        
+        
 
-        //if (!isPlayerFound)
-        //{
-        //    _userElement.Assgin_Player_Stats(_dbManager.myUserData.KidName, _dbManager.myUserData.BestScore, "غير مصنف", _dbManager.myUserData.UpperBodyAccessoriesWeared);
-        //}
+        
+        
+        
+        
 
-        //users.Clear();
+        
     }
 }

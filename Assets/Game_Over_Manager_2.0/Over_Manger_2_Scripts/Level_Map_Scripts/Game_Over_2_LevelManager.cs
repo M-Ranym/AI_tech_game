@@ -53,7 +53,7 @@ public class Game_Over_2_LevelManager : MonoBehaviour
         int numLevel = _manager.numberOfLevel;
         _chunkIndex = 0;
 
-        //----Localization 
+        
         if (LocalizationHelper.IsRTL())
         {
             Tutorial_Nodes();
@@ -76,7 +76,7 @@ public class Game_Over_2_LevelManager : MonoBehaviour
 
         }
 
-        //----
+        
 
         SnapTo(_levelReached);
         if (Game_Over_2_GameInteraction.isLevelUp)
@@ -98,7 +98,7 @@ public class Game_Over_2_LevelManager : MonoBehaviour
     {
         Vector2 anchorPivot = contentPanel.pivot;
         float distance = 1.0f / (_manager.numberOfLevel + 4);
-        // --- localization
+        
         if (LocalizationHelper.IsRTL())
         {
             anchorPivot.x = 1 - (distance * reachedLevel);
@@ -108,7 +108,7 @@ public class Game_Over_2_LevelManager : MonoBehaviour
             int invertedLevel = _manager.numberOfLevel - reachedLevel + 4;
             anchorPivot.x = 1 - (distance * invertedLevel);
         }
-        // --- 
+        
         contentPanel.pivot = anchorPivot;
     }
 

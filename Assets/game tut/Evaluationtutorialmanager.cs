@@ -31,13 +31,13 @@ public class EvaluationTutorialManager : MonoBehaviour
     public Vector2[] speechBubblePositions = new Vector2[12];
 
     [Header("Game References — Canvas 1")]
-    public GameObject levelCanvas;        // the level 0 canvas
-    public GameObject[] levelImages;        // the photos on the board
-    public GameObject[] labelImages;        // the label slots on the board
-    public Button evaluateButton;     // the evaluate button — listener wired in code
-    public HealthBar healthBar;          // the accuracy bar (faces are children — come with it)
-    public GameObject[] gradientImages;     // gradient images behind bar
-    public RectTransform robotRect;         // robot root RectTransform — set as last sibling while moving
+    public GameObject levelCanvas;        
+    public GameObject[] levelImages;        
+    public GameObject[] labelImages;        
+    public Button evaluateButton;     
+    public HealthBar healthBar;          
+    public GameObject[] gradientImages;     
+    public RectTransform robotRect;         
 
     [Header("Game References — Canvas 2")]
     public GameObject p2Canvas;
@@ -48,23 +48,23 @@ public class EvaluationTutorialManager : MonoBehaviour
     [Header("Timing")]
     public float afterStepPause = 0.3f;
 
-    // ── Voice clip names ───────────────────────────────────────────
-    private const string V1 = "EvalTutorial_Step1";   // welcome
-    private const string V2 = "EvalTutorial_Step2";   // here are the photos
-    private const string V3 = "EvalTutorial_Step3";   // here are the labels
-    private const string V4 = "EvalTutorial_Step4";   // this bar shows learning
-    private const string V5 = "EvalTutorial_Step5";   // press this button when robot finishes
-    private const string V6 = "EvalTutorial_Step6";   // robot is working, watch
-    private const string V7 = "EvalTutorial_Step7";   // press evaluate
-    private const string V8 = "EvalTutorial_Step8";   // look at image and label, decide
-    private const string V9 = "EvalTutorial_Step9";   // bar went up/down because...
-    private const string V10 = "EvalTutorial_Step10";  // ready to play!
+    
+    private const string V1 = "EvalTutorial_Step1";   
+    private const string V2 = "EvalTutorial_Step2";   
+    private const string V3 = "EvalTutorial_Step3";   
+    private const string V4 = "EvalTutorial_Step4";   
+    private const string V5 = "EvalTutorial_Step5";   
+    private const string V6 = "EvalTutorial_Step6";   
+    private const string V7 = "EvalTutorial_Step7";   
+    private const string V8 = "EvalTutorial_Step8";   
+    private const string V9 = "EvalTutorial_Step9";   
+    private const string V10 = "EvalTutorial_Step10";  
 
-    // ── State ──────────────────────────────────────────────────────
+    
     private int _step = 0;
     private bool _tutorialFinished = false;
 
-    // ── Verdict waiting ────────────────────────────────────────────
+    
     private bool _waitingForVerdict = false;
     private bool _verdictReceived = false;
     private bool _waitingForEvaluate = false;
@@ -74,17 +74,17 @@ public class EvaluationTutorialManager : MonoBehaviour
     private bool _waitingForBarEnd = false;
     private bool _barEndReceived = false;
 
-    // ── Hand animation ─────────────────────────────────────────────
+    
     private Vector2 _handBasePos;
     private float _handBaseRot;
     private float _handTimer = 0f;
     private Coroutine _handCoroutine = null;
 
-    // ══════════════════════════════════════════════════════════════
+    
     void OnEvaluateButtonClicked()
     {
-        // EvaluationManager has already wired its own listener to this button.
-        // p2Canvas stays an independent canvas — no reparenting, just toggle active state.
+        
+        
         if (levelCanvas != null) levelCanvas.SetActive(false);
         if (p2Canvas != null) p2Canvas.SetActive(true);
 
@@ -100,8 +100,8 @@ public class EvaluationTutorialManager : MonoBehaviour
         if (tutorialHand != null) tutorialHand.SetActive(false);
         if (speechBubbleRect != null) speechBubbleRect.gameObject.SetActive(false);
 
-        // Add our listener on top of EvaluationManager's — never RemoveAllListeners
-        // or we wipe out EvaluationManager's OnEvaluateClicked which does the actual canvas switch
+        
+        
         if (evaluateButton != null)
         {
             evaluateButton.onClick.AddListener(OnEvaluateButtonClicked);
@@ -111,18 +111,18 @@ public class EvaluationTutorialManager : MonoBehaviour
         StartCoroutine(RunTutorial());
     }
 
-    // ══════════════════════════════════════════════════════════════
-    //  MAIN TUTORIAL COROUTINE
-    // ══════════════════════════════════════════════════════════════
+    
+    
+    
     IEnumerator RunTutorial()
     {
-        yield return null; // let Unity settle
+        yield return null; 
 
-        // ── STEP 1 — Introduction ─────────────────────────────────
+        
         _step = 1;
-        // Hide everything behind overlay
+        
         if (levelCanvas != null) SendBehindOverlay(new List<GameObject> { levelCanvas });
-        if (p2Canvas != null) p2Canvas.SetActive(false); // separate canvas — never reparented, just toggled
+        if (p2Canvas != null) p2Canvas.SetActive(false); 
         if (evaluateButton.gameObject != null) SendBehindOverlay(new List<GameObject> { evaluateButton.gameObject });
         SendBehindOverlay(gradientImages != null ? new List<GameObject>(gradientImages) : new List<GameObject>());
         if (healthBar != null) SendBehindOverlay(new List<GameObject> { healthBar.gameObject });
@@ -132,44 +132,44 @@ public class EvaluationTutorialManager : MonoBehaviour
         PinUIToTop();
         yield return WaitForTap();
 
-        // ── STEP 2 — Show the photos ──────────────────────────────
+        
         _step = 2;
         ShowSpeech("هذه هي الصور التي يتعلمها الروبوت", V2);
-        // Bring level canvas in front but only show images, hide labels
+        
         if (levelCanvas != null) BringInFrontOfOverlay(new List<GameObject> { levelCanvas });
         SetImagesVisible(true);
         SetLabelsVisible(false);
         if (evaluateButton.gameObject != null) SendBehindOverlay(new List<GameObject> { evaluateButton.gameObject });
         if (healthBar != null) SendBehindOverlay(new List<GameObject> { healthBar.gameObject });
         PinUIToTop();
-        // Hand loops over photos
+        
         _handCoroutine = StartCoroutine(PointAtImagesLoop());
         yield return WaitForTap();
         StopAndHideHand();
 
-        // ── STEP 3 — Show the labels ──────────────────────────────
+        
         _step = 3;
         ShowSpeech("وهذه هي التسميات التي سيضعها الروبوت", V3);
         SetImagesVisible(false);
         SetLabelsVisible(true);
         PinUIToTop();
-        // Hand loops over labels
+        
         _handCoroutine = StartCoroutine(PointAtLabelsLoop());
         yield return WaitForTap();
         StopAndHideHand();
 
-        // ── STEP 4 — Show the bar ─────────────────────────────────
+        
         _step = 4;
         ShowSpeech("هذا الشريط يُظهر مدى تعلّم الروبوت", V4);
         SetImagesVisible(false);
         SetLabelsVisible(false);
-        // Bring bar in front — faces and fill are children so they come with it
+        
         if (healthBar != null) BringInFrontOfOverlay(new List<GameObject> { healthBar.gameObject });
         if (gradientImages != null) BringInFrontOfOverlay(new List<GameObject>(gradientImages));
         PinUIToTop();
         yield return WaitForTap();
 
-        // ── STEP 5 — Show evaluate button ─────────────────────────
+        
         _step = 5;
         ShowSpeech("اضغط هذا الزر بعد انتهاء الروبوت من وضع التسميات", V5);
         if (evaluateButton.gameObject != null)
@@ -182,18 +182,18 @@ public class EvaluationTutorialManager : MonoBehaviour
         yield return WaitForTap();
         StopAndHideHand();
 
-        // ── STEP 6 — Robot works, player watches ──────────────────
+        
         _step = 6;
         HideFerid();
-        // Bring everything in front — full game visible
+        
         SetImagesVisible(true);
         SetLabelsVisible(true);
         if (levelCanvas != null) BringInFrontOfOverlay(new List<GameObject> { levelCanvas });
         if (healthBar != null) BringInFrontOfOverlay(new List<GameObject> { healthBar.gameObject });
         if (gradientImages != null) BringInFrontOfOverlay(new List<GameObject>(gradientImages));
-        // Robot stays in its own hierarchy — just push it to last sibling so it renders on top
+        
         if (robotRect != null) robotRect.SetAsLastSibling();
-        // Hide evaluate button until robot finishes
+        
         if (evaluateButton.gameObject != null)
         {
             evaluateButton.gameObject.SetActive(false);
@@ -201,17 +201,17 @@ public class EvaluationTutorialManager : MonoBehaviour
         }
         PinUIToTop();
 
-        // Signal EvaluationManager to run its round
+        
         EvaluationManager em = FindObjectOfType<EvaluationManager>();
         if (em != null) em.OnTutorialStartRound();
 
-        // Wait for robot to finish (EvaluationManager calls OnRobotRoundFinished)
+        
         _robotEndReceived = false;
         _waitingForRobotEnd = true;
         yield return new WaitUntil(() => _robotEndReceived);
         _waitingForRobotEnd = false;
 
-        // ── STEP 7 — Press evaluate ───────────────────────────────
+        
         _step = 7;
         ShowFerid();
         ShowSpeech("اضغط زر التقييم الآن", V7);
@@ -225,9 +225,9 @@ public class EvaluationTutorialManager : MonoBehaviour
         StopAndHideHand();
         HideFerid();
 
-        // ── STEP 8 — Canvas 2: Item 1 — speech + hand ────────────
+        
         _step = 8;
-        // Wait for ShowP2Current to fully finish: delayBetween(0.5) + image show(0.2) + fade(0.35) = ~1.1s
+        
         yield return new WaitForSeconds(1.5f);
 
         ShowFerid();
@@ -236,7 +236,7 @@ public class EvaluationTutorialManager : MonoBehaviour
         yield return WaitForTap();
         HideFerid();
 
-        // ShowP2Current already enables buttons — just show hand and wait for verdict
+        
         _handCoroutine = StartCoroutine(PointAtVerdictButtonsLoop());
         _verdictReceived = false;
         _waitingForVerdict = true;
@@ -244,9 +244,9 @@ public class EvaluationTutorialManager : MonoBehaviour
         _waitingForVerdict = false;
         StopAndHideHand();
 
-        // ── STEP 9 — Canvas 2: Item 2 — hand only ────────────────
+        
         _step = 9;
-        // Wait for ShowP2Current to show next item
+        
         yield return new WaitForSeconds(1.5f);
 
         _handCoroutine = StartCoroutine(PointAtVerdictButtonsLoop());
@@ -256,7 +256,7 @@ public class EvaluationTutorialManager : MonoBehaviour
         _waitingForVerdict = false;
         StopAndHideHand();
 
-        // ── STEP 10 — Canvas 2: Item 3 — hand only ───────────────
+        
         _step = 10;
         yield return new WaitForSeconds(1.5f);
 
@@ -267,15 +267,15 @@ public class EvaluationTutorialManager : MonoBehaviour
         _waitingForVerdict = false;
         StopAndHideHand();
 
-        // ── STEP 11 — Back to Canvas 1, bar animates ─────────────
+        
         _step = 11;
-        // Wait for EvaluationManager to finish round + animate bar
+        
         _barEndReceived = false;
         _waitingForBarEnd = true;
         yield return new WaitUntil(() => _barEndReceived);
         _waitingForBarEnd = false;
 
-        // Show feedback speech based on accuracy direction
+        
         ShowFerid();
         bool wentUp = EvaluationData.accuracy >= EvaluationData.previousAccuracy;
         string barSpeech = wentUp
@@ -285,7 +285,7 @@ public class EvaluationTutorialManager : MonoBehaviour
         PinUIToTop();
         yield return WaitForTap();
 
-        // ── STEP 12 — End ─────────────────────────────────────────
+        
         _step = 12;
         ShowSpeech("أنت الآن جاهز للعب! حظاً موفقاً", V10);
         PinUIToTop();
@@ -294,34 +294,34 @@ public class EvaluationTutorialManager : MonoBehaviour
         EndTutorial();
     }
 
-    // ══════════════════════════════════════════════════════════════
-    //  PUBLIC CALLBACKS (called by EvaluationManager)
-    // ══════════════════════════════════════════════════════════════
+    
+    
+    
 
-    /// <summary>Called by EvaluationManager when the robot finishes its round and evaluate button appears.</summary>
+    
     public void OnRobotRoundFinished()
     {
-        // Button is now active — bring it in front of overlay so it's visible and clickable
+        
         if (evaluateButton.gameObject != null)
             BringInFrontOfOverlay(new List<GameObject> { evaluateButton.gameObject });
         if (_waitingForRobotEnd) _robotEndReceived = true;
     }
 
-    /// <summary>Called by EvaluationManager when the evaluate button is pressed.</summary>
+    
     public void OnEvaluatePressed()
     {
-        // p2Canvas is enabled by OnEvaluateButtonClicked (our own button listener)
+        
         if (_waitingForEvaluate) _evaluateReceived = true;
     }
 
-    /// <summary>Called by EvaluationManager when a verdict button is pressed in Canvas 2.</summary>
+    
     public void OnVerdictPressed()
     {
-        // ShowP2Current in EvaluationManager already disables buttons after verdict
+        
         if (_waitingForVerdict) _verdictReceived = true;
     }
 
-    /// <summary>Called by EvaluationManager after bar animation completes at end of round.</summary>
+    
     public void OnBarAnimationFinished()
     {
         if (_waitingForBarEnd) _barEndReceived = true;
@@ -329,9 +329,9 @@ public class EvaluationTutorialManager : MonoBehaviour
 
     public bool IsTutorialActive() => !_tutorialFinished;
 
-    // ══════════════════════════════════════════════════════════════
-    //  HAND LOOPS
-    // ══════════════════════════════════════════════════════════════
+    
+    
+    
 
     IEnumerator PointAtImagesLoop()
     {
@@ -381,7 +381,7 @@ public class EvaluationTutorialManager : MonoBehaviour
         RectTransform handRt = tutorialHand.GetComponent<RectTransform>();
         while (true)
         {
-            // Point at correct button
+            
             if (correctButton != null)
             {
                 _handBasePos = GetWorldPos(correctButton.gameObject);
@@ -390,7 +390,7 @@ public class EvaluationTutorialManager : MonoBehaviour
             }
             yield return new WaitForSeconds(2.0f);
 
-            // Point at wrong button
+            
             if (wrongButton != null)
             {
                 _handBasePos = GetWorldPos(wrongButton.gameObject);
@@ -401,9 +401,9 @@ public class EvaluationTutorialManager : MonoBehaviour
         }
     }
 
-    // ══════════════════════════════════════════════════════════════
-    //  FERID / SPEECH
-    // ══════════════════════════════════════════════════════════════
+    
+    
+    
 
     void ShowFerid()
     {
@@ -433,9 +433,9 @@ public class EvaluationTutorialManager : MonoBehaviour
             audioManager.Play_Sfx(voiceName);
     }
 
-    // ══════════════════════════════════════════════════════════════
-    //  VERDICT BUTTON ACCESS
-    // ══════════════════════════════════════════════════════════════
+    
+    
+    
 
     void SetVerdictButtonsInteractable(bool state)
     {
@@ -446,13 +446,13 @@ public class EvaluationTutorialManager : MonoBehaviour
     void SetButtonInteractable(Button btn, bool state)
     {
         if (btn == null) return;
-        // Use Button.interactable — no CanvasGroup needed, works with any button
+        
         btn.interactable = state;
     }
 
-    // ══════════════════════════════════════════════════════════════
-    //  VISIBILITY HELPERS
-    // ══════════════════════════════════════════════════════════════
+    
+    
+    
 
     void SetImagesVisible(bool visible)
     {
@@ -468,9 +468,9 @@ public class EvaluationTutorialManager : MonoBehaviour
             if (lbl != null) lbl.SetActive(visible);
     }
 
-    // ══════════════════════════════════════════════════════════════
-    //  OVERLAY Z-ORDER
-    // ══════════════════════════════════════════════════════════════
+    
+    
+    
 
     void BringInFrontOfOverlay(List<GameObject> targets)
     {
@@ -509,9 +509,9 @@ public class EvaluationTutorialManager : MonoBehaviour
         if (tutorialHand != null) tutorialHand.transform.SetAsLastSibling();
     }
 
-    // ══════════════════════════════════════════════════════════════
-    //  HAND ANIMATION
-    // ══════════════════════════════════════════════════════════════
+    
+    
+    
 
     void EnsureHandNonBlocking()
     {
@@ -561,9 +561,9 @@ public class EvaluationTutorialManager : MonoBehaviour
         if (tutorialHand != null) tutorialHand.SetActive(false);
     }
 
-    // ══════════════════════════════════════════════════════════════
-    //  INPUT
-    // ══════════════════════════════════════════════════════════════
+    
+    
+    
 
     IEnumerator WaitForTap()
     {
@@ -578,9 +578,9 @@ public class EvaluationTutorialManager : MonoBehaviour
         }
     }
 
-    // ══════════════════════════════════════════════════════════════
-    //  UTILITY
-    // ══════════════════════════════════════════════════════════════
+    
+    
+    
 
     Vector2 GetWorldPos(GameObject go)
     {
@@ -589,9 +589,9 @@ public class EvaluationTutorialManager : MonoBehaviour
         return rt != null ? (Vector2)rt.position : Vector2.zero;
     }
 
-    // ══════════════════════════════════════════════════════════════
-    //  END
-    // ══════════════════════════════════════════════════════════════
+    
+    
+    
 
     void EndTutorial()
     {

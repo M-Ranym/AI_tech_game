@@ -1,4 +1,4 @@
-﻿using NoSuchStudio.Common;
+using NoSuchStudio.Common;
 using NoSuchStudio.Common.Service;
 using NoSuchStudio.Localization.Database;
 using System;
@@ -9,15 +9,15 @@ using UnityEngine;
 
 namespace NoSuchStudio.Localization {
 
-    /// <summary>
-    /// Is responsible for connecting translation sources and localized components together. 
-    /// This service acts as a central hub. Essentially implementing a publisher-consumer pattern.
-    /// Translation sources publish their translations to the service.
-    /// Localized components read the corresponding values from the service.
-    /// </summary>
-    /// <remarks>
-    /// For common usage, you should use the static methods of this class.
-    /// </remarks>
+    
+    
+    
+    
+    
+    
+    
+    
+    
     [ExecuteAlways]
     public partial class LocalizationService : Service<LocalizationService> {
         public enum DatabasePreset {
@@ -57,9 +57,9 @@ namespace NoSuchStudio.Localization {
 
         private HashSet<(string, string)> _changedTranslations;
 
-        // populated from registered sources
+        
         [NonSerialized] private Dictionary<string, Dictionary<string, ITranslationSource>> _translationSources;
-        // Visible for editor access.
+        
         public Dictionary<string, Dictionary<string, ITranslationSource>> translationSources {
             get { return _translationSources; }
         }
@@ -118,11 +118,11 @@ namespace NoSuchStudio.Localization {
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="locale">locale name to switch to. Assumes Locale is valid for switching.</param>
-        /// <param name="dontSave">if true, the locale won't be saved for prefs.</param>
+        
+        
+        
+        
+        
         private void SetCurrentLocale(string locale, bool dontSave = false) {
             _currentLocale = locale;
             if (_saveLocale && !dontSave) {
@@ -143,13 +143,13 @@ namespace NoSuchStudio.Localization {
             return false;
         }
 
-        /// <summary>
-        /// Tries to select the provided locale. If the locale is not in database, will fall back to neutral and default locales if allowed by parameters.
-        /// </summary>
-        /// <param name="localeName">name of locale to switch to</param>
-        /// <param name="useNeutralIfFailed">try the neutral locale if exact locale fails</param>
-        /// <param name="useDefaultIfFailed">try the default locale if previous resorts fail</param>
-        /// <returns>true if locale was changed as a result of this call.</returns>
+        
+        
+        
+        
+        
+        
+        
         private bool SelectLocale(string localeName, bool useNeutralIfFailed = true, bool useDefaultIfFailed = true) {
             if (!_localeDatabase.ContainsLocale(localeName)) {
                 if (useNeutralIfFailed) {
@@ -189,23 +189,7 @@ namespace NoSuchStudio.Localization {
             return SelectLocale(systemLocaleName, useDefaultIfFailed);
         }
 
-        /*private bool DoAddLocale(string locale) {
-            if (_locales.Contains(locale)) {
-                return false;
-            } else {
-                _locales.Add(locale);
-                return true;
-            }
-        }
-
-        private bool DoRemoveLocale(string locale) {
-            if (_locales.Contains(locale)) {
-                _locales.Remove(locale);
-                return true;
-            } else {
-                return false;
-            }
-        }*/
+        
 
         private bool DoAddPhrase(string phrase) {
             if (_translationSources.ContainsKey(phrase)) {
@@ -259,7 +243,7 @@ namespace NoSuchStudio.Localization {
         }
 
         private string DoGetPhraseTranslation(string phrase, Locale locale) {
-            // LogLog("getphrasetrans curlocale", _currentLocale);
+            
             if (string.IsNullOrEmpty(phrase)) {
                 return "Error: phrase is null or empty";
             } else if (string.IsNullOrEmpty(locale)) {
@@ -281,7 +265,7 @@ namespace NoSuchStudio.Localization {
         public override void OnServiceRegister() {
             Clear();
 
-            // decide current locale
+            
             bool autoDetectLocale = _autoDetectLocale;
             if (!CommonHelpers.IsEditMode) {
                 if (_saveLocale) {
@@ -293,7 +277,7 @@ namespace NoSuchStudio.Localization {
                 }
             }
 
-            // connect all components
+            
             MonoBehaviour[] monos = GameObject.FindObjectsOfType<MonoBehaviour>();
             monos.ToList()
                 .Where(m => m is ILocalizationServiceComponent)

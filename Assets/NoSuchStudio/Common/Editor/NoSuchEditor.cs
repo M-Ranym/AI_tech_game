@@ -8,14 +8,7 @@ namespace NoSuchStudio.Common.Editor {
         protected GUIStyle styleOn;
         protected GUIStyle styleOff;
 
-        /*protected void DrawObjectType(GameObject go) {
-            EditorGUILayout.BeginFoldoutHeaderGroup(true, new GUIContent("Stage Info", GameObjectTypeLogging.StageInformationStr(go)));
-            EditorGUILayout.TextArea(GameObjectTypeLogging.StageInformationStr(go));
-            EditorGUILayout.EndFoldoutHeaderGroup();
-            EditorGUILayout.BeginFoldoutHeaderGroup(true, new GUIContent("Prefab Info", GameObjectTypeLogging.PrefabInformationStr(go)));
-            EditorGUILayout.TextArea(GameObjectTypeLogging.PrefabInformationStr(go));
-            EditorGUILayout.EndFoldoutHeaderGroup();
-        }*/
+        
 
         protected void DrawStage(GameObject go) {
             bool isMainStage = EditorUtilities.IsInMainStage(go);
@@ -56,14 +49,14 @@ namespace NoSuchStudio.Common.Editor {
         protected virtual void OnEnable() {
             styleOn = new GUIStyle();
             Texture2D tex = new Texture2D(2, 2);
-            SetTextureColor(tex, new Color(0, 255, 0, 255));//r,g,b,a 
-            // styleOn.normal.background = tex;
+            SetTextureColor(tex, new Color(0, 255, 0, 255));
+            
             styleOn.normal.textColor = new Color(0f, 0.5f, 0f, 1f);
 
             styleOff = new GUIStyle();
             tex = new Texture2D(2, 2);
-            SetTextureColor(tex, new Color(255, 0, 0, 255));//r,g,b,a 
-            //styleOff.normal.background = tex;
+            SetTextureColor(tex, new Color(255, 0, 0, 255));
+            
             styleOff.normal.textColor = new Color(0.6f, 0f, 0f, 1f);
         }
 

@@ -26,16 +26,16 @@ namespace RTLTMPro
             }
         }
 
-        /// <summary>
-        ///     Fixes rich text tags in input string and returns the result.
-        /// </summary>
+        
+        
+        
         public static void Fix(FastStringBuilder text)
         {
             for (int i = 0; i < text.Length; i++)
             {
                 FindTag(text, i, out Tag tag);
 
-                // If we couldn't find a tag, end the process
+                
                 if (tag.Type == TagType.None)
                 {
                     break;
@@ -84,12 +84,12 @@ namespace RTLTMPro
                         }
                         else if (tag.HashCode != 0)
                         {
-                            // We have computed the hash code. Now we reached a non letter character. We need to stop
+                            
                             calculateHashCode = false;
                         }
                     }
 
-                    // Rich text tag cannot contain < or start with space
+                    
                     if ((j == i + 1 && jChar == ' ') || jChar == '<')
                     {
                         break;
@@ -97,19 +97,19 @@ namespace RTLTMPro
 
                     if (jChar == '>')
                     {
-                        // Check if the tag is closing, opening or self contained
+                        
 
                         tag.Start = i;
                         tag.End = j;
 
                         if (str.Get(j - 1) == '/')
                         {
-                            // This is self contained.
+                            
                             tag.Type = TagType.SelfContained;
                         }
                         else if (str.Get(i + 1) == '/')
                         {
-                            // This is closing
+                            
                             tag.Type = TagType.Closing;
                         }
                         else

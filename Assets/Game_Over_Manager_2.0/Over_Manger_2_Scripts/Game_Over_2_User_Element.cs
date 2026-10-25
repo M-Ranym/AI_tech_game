@@ -14,8 +14,8 @@ public class Game_Over_2_User_Element : MonoBehaviour
 
     private void Awake()
     {
-        //_myRankTxt.text = "";
-        //_myBestScoreTxt.text = "";
+        
+        
     }
 
     public void Assgin_Player_Stats(string myName, int myBestScore, string myRankTxt, int avatar)

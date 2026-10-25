@@ -39,7 +39,7 @@ public class Game_Over_2_AudioManager : MonoBehaviour
             audioManInstance = this;
             sceneName = SceneManager.GetActiveScene().name;
 
-            //return;
+            
         }
         else
         {
@@ -55,26 +55,26 @@ public class Game_Over_2_AudioManager : MonoBehaviour
         foreach (Game_Over_2_Sound s in _sounds)
         {
             s.source = gameObject.AddComponent<AudioSource>();
-            s.source.clip = s.clip;//use s.clip instead of GetLocalizedAudioClip cuz its a non-text audio
+            s.source.clip = s.clip;
             s.source.volume = s.volume;
             s.source.pitch = s.pitch;
             s.source.loop = s.loop;
         }
 
-        //---This section is useless (remove after re-verifying)
-        //foreach (Game_Over_2_Sound s in _feridSounds)
-        //{
-        //    if (s.source != null)
-        //        Destroy(s.source);
+        
+        
+        
+        
+        
 
-        //    s.source = gameObject.AddComponent<AudioSource>();
-        //    //s.source.clip = s.clip;
-        //    s.source.clip = s.GetLocalizedAudioClip();//use this fn cuz it s a text audio , thus it requires localization
-        //    s.source.volume = s.volume;
-        //    s.source.pitch = s.pitch;
-        //    s.source.loop = s.loop;
-        //}
-        //--------
+        
+        
+        
+        
+        
+        
+        
+        // --------
 
 
 
@@ -93,7 +93,7 @@ public class Game_Over_2_AudioManager : MonoBehaviour
                     musicMoment = s.source.time;
                 }
 
-                return s.clip;//non text audio
+                return s.clip;
             }
         }
         Debug.Log("No Music Found");
@@ -113,7 +113,7 @@ public class Game_Over_2_AudioManager : MonoBehaviour
             }
 
             if (_ferid != null)
-                _ferid.Talk(s.GetLocalizedAudioClip());//use this fn cuz it s a text audio , thus it requires localization
+                _ferid.Talk(s.GetLocalizedAudioClip());
         }
     }
 
@@ -151,7 +151,7 @@ public class Game_Over_2_AudioManager : MonoBehaviour
         }
         if (s.source == null)
         {
-            Debug.LogWarning("Sound " + name + " has no AudioSource — was it added after the AudioManager initialized?");
+            Debug.LogWarning("Sound " + name + " has no AudioSource Â— was it added after the AudioManager initialized?");
             return;
         }
         s.source.Play();
@@ -224,7 +224,7 @@ public class Game_Over_2_AudioManager : MonoBehaviour
             }
         }
     }
-    //make sure this is used for sfx , not text based audioclips
+    
     public void PlayOneShot_Sfx(string name)
     {
         Game_Over_2_Sound s = Array.Find(_sounds, sound => sound.name == name);
@@ -239,17 +239,17 @@ public class Game_Over_2_AudioManager : MonoBehaviour
 [Serializable]
 public class Game_Over_2_Sound
 {
-    //--- localization
-    public bool IsFeridSpeech = false;//to distinguish between sfx and speeches(audio that have text read)
-    //--
+    
+    public bool IsFeridSpeech = false;
+    
     public string name;
 
-    public AudioClip clip; // fallback in case of speech-audio , but it is required in case of sfx audio (non speech)
+    public AudioClip clip; 
 
-    //--- localization
+    
     [Tooltip("Ignore this Field for non-text audio , use the default clip")]
     public List<LocalizedAudioClip> LocalizedAudioClipsList;
-    //---
+    
 
 
     [Range(0f, 1f)]
@@ -263,10 +263,10 @@ public class Game_Over_2_Sound
     [HideInInspector]
     public AudioSource source;
 
-    //---localization
+    
     public AudioClip GetLocalizedAudioClip()
     {
-        //in case of sfx (no speech) just return the default clip
+        
         if (!IsFeridSpeech)
         {
             if (clip == null) 
@@ -274,7 +274,7 @@ public class Game_Over_2_Sound
             return clip;
         }
 
-        //in case of speech
+        
         if (LocalizedAudioClipsList == null || LocalizedAudioClipsList.Count == 0) { 
             Debug.LogError(nameof(LocalizedAudioClipsList) + $" is null or empty  [audioName = {name}], thus the default will be returned"); 
             return clip; 
@@ -308,9 +308,9 @@ public class Game_Over_2_Sound
         Debug.LogError($"Audioclip for language ${appLang} is Not found, thus the default will be returned");
         return clip;
     }
-    //-----
+    
 }
-//---Localization
+
 [Serializable]
 public class LocalizedAudioClip
 {
@@ -327,7 +327,7 @@ public class LocalizedAudioClip
 }
 
 
-//--
+
 
 [Serializable]
 public struct Toggles

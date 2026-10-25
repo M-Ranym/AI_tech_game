@@ -1,9 +1,9 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 public class GameFinishTrigger : MonoBehaviour
 {
     [SerializeField] public int gameIndex = 0;
-    [SerializeField] public int totalLevels = 1;  // CHANGED: Make public so GameManagers can set it
+    [SerializeField] public int totalLevels = 1;  
     [SerializeField] private string mapSceneName = "Map";
     private int _currentLevel = 0;
 
@@ -37,6 +37,6 @@ public class GameFinishTrigger : MonoBehaviour
         }
     }
 
-    // Alias — EvaluationManager calls this
+    
     public void CompleteRound(int roundIndex) => FinishLevel(roundIndex);
 }

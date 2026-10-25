@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,7 +11,7 @@ namespace RTLTMPro {
             return ch < 0xFFFF;
         }
 
-        // Wrappers for TextUtil methods
+        
         public static bool IsRTLCharacter(int ch) {
             if (!IsUnicode16Char(ch)) return false;
             return TextUtils.IsRTLCharacter((char)ch);
@@ -27,7 +27,7 @@ namespace RTLTMPro {
             return TextUtils.IsNumber((char)ch, preserveNumbers, farsi);
         }
 
-        // Wrappers for System.Char (char) methods
+        
         public static bool IsSymbol(int ch) {
             if (!IsUnicode16Char(ch)) return false;
             return char.IsSymbol((char)ch);

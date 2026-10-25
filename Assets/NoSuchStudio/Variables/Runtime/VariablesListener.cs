@@ -1,4 +1,4 @@
-﻿using NoSuchStudio.Common;
+using NoSuchStudio.Common;
 using NoSuchStudio.Common.Service;
 using System;
 using System.Collections.Generic;
@@ -7,13 +7,13 @@ using UnityEngine;
 using UnityEngine.Events;
 
 namespace NoSuchStudio.Variables {
-    /// <summary>
-    /// Components for listening for changes in values of a list of variables. An event is raised
-    /// if ANY of the variables in the list change.
-    /// <remarks>
-    /// Useful for updating UI elements when a value changes (Observable Pattern).
-    /// </remarks>
-    /// </summary>
+    
+    
+    
+    
+    
+    
+    
     [ExecuteInEditMode]
     public class VariablesListener : NoSuchMonoBehaviour, IVariablesServiceComponent {
         [Serializable] public class ChangeEvent : UnityEvent<VariablesListener> { }

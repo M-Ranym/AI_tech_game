@@ -1,18 +1,18 @@
-﻿using horizon.Models;
+using horizon.Models;
 using UnityEngine.UI;
 
 public class Game_Over_2_Constants
 {
-    //Game Bihiavior
+    
     public static string GAME_REFRENCE = "GameIDerence";
 
     public static string GAME_REFRENCE_KEY = "GameIDerence";
 
-    //DataBase Nodes
+    
 
     public static string DB_LEADERBOARD = "Leaderboard";
 
-    //Player Data
+    
 
     public static string DB_USER_ID = "userId";
     public static string DB_USER = "user";
@@ -25,7 +25,7 @@ public class Game_Over_2_Constants
     public static string DB_AVATR_LOWER_ACCESSORIES = "lowerBodyAccessoriesOwned";
     public static string PLAYER_LEVEL = "expirience_Level";
 
-    //Animation
+    
 
     public static string INTRO_MAP_ANIM = "Map_Intro_Anim";
     public static string OUTRO_MAP_ANIM = "Map_Outro_Anim";
@@ -43,13 +43,13 @@ public class Game_Over_2_Constants
     public static string INFINITE_MODE_PANEL_REACHED_ANIM = "Infinite_Mode_Reached_Panel_Anim";
     public static string LEVEL_UP_ANIM = "Level_up_Anim";
 
-    //Player Data and acheviement
+    
 
     public static string GAME_DATA_LEVEL = "game_data_level";
     public static string STARS = "stars";
     public static string PLAYER_NAME = "Player_Name";
 
-    //Scene Name
+    
 
     public static string SCENE_PREFIX = "Dlc";
     public static string INFINITE_MODE = "_3_Infinte_Mode";
@@ -67,15 +67,15 @@ public class Game_Over_2_Constants
         MAIN_MENU = "_0_MainMenu" + langange;
         LEVEL = "_2_Level" + langange;
     }
-    //Separators
+    
 
     public static char COOL_SEPERATOR = '_';
     public static string[] WEC_SEPERATOR = { "@@" };
 
-    //SFX
+    
     public static string CLICK_SFX = "Click_Sfx";
 
-    //Ferid Talks
+    
 
     public static string FERID_TALKS_BEST_SCORE = "FERID_TALKS_HELLO_BEST_SCORE_";
     public static string FERID_TALKS_SCORE = "FERID_TALKS_HELLO_SCORE_";
@@ -104,9 +104,9 @@ public class Game_Over_2_Constants
 
     public static string FERID_TALKS_YOU_UNLOCKINFINITE_INFINITE_MODE = "Unlocked_all_The_Levels";
 
-    //Ferid Animation
+    
 
-    //Keys
+    
 
     public static string GAME_DATA_STARS = "";
     public static string GAME_DATA_EXPIRIENCE = "berry";
@@ -136,20 +136,20 @@ public class Game_Over_2_Constants
 
     }
 
-    // Internet down problem
+    
 
     public static string INTERNET_DOWN_TEXT_EN = "There is no internet Connection";
     public static string INTERNET_DOWN_TEXT_AR = "لا يوجد اتصال بالإنترنت";
     public static string INTERNET_DOWN_TEXT_Fr = "Il n'y a pas de connexion Internet";
 
-    //WEC
+    
     public static string WEC_USERS = "WEC_Users";
 
-    //Sound State
+    
     public static string SFX_STATE = "Sfx_State";
 
     public static string MUSIC_STATE = "Music_State";
 
-    //Gyro
+    
     public static string GYRO_STATE = "Gyro_State";
 }

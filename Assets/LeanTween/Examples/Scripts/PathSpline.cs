@@ -23,8 +23,8 @@ public class ExampleSpline : MonoBehaviour {
 	
 	private float iter;
 	void Update () {
-		// Iterating over path
-		ltLogo.transform.position = spline.point( iter /*(Time.time*1000)%1000 * 1.0 / 1000.0 */);
+		
+		ltLogo.transform.position = spline.point( iter );
 
 		iter += Time.deltaTime*0.1f;
 		if(iter>1.0f)
@@ -33,6 +33,6 @@ public class ExampleSpline : MonoBehaviour {
 
 	void OnDrawGizmos(){
 		if(spline!=null) 
-			spline.gizmoDraw(); // debug aid to be able to see the path in the scene inspector
+			spline.gizmoDraw(); 
 	}
 }

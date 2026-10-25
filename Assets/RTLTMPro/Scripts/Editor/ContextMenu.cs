@@ -1,4 +1,4 @@
-﻿using TMPro;
+using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,23 +21,23 @@ namespace RTLTMPro
 
         private static RTLDefaultControls.Resources s_StandardResources;
 
-        /// <summary>
-        ///     Create a TextMeshPro object that works with the CanvasRenderer
-        /// </summary>
-        /// <param name="command"></param>
+        
+        
+        
+        
         [MenuItem("GameObject/UI/Text - RTLTMP", false, 2001)]
         private static void CreateTextMeshProGuiObjectPerform(MenuCommand command)
         {
-            // Check if there is a Canvas in the scene
+            
             var canvas = FindObjectOfType<Canvas>();
             if (canvas == null)
             {
-                // Create new Canvas since none exists in the scene.
+                
                 var canvasObject = new GameObject("Canvas");
                 canvas = canvasObject.AddComponent<Canvas>();
                 canvas.renderMode = RenderMode.ScreenSpaceOverlay;
 
-                // Add a Graphic Raycaster Component as well
+                
                 canvas.gameObject.AddComponent<GraphicRaycaster>();
 
                 canvas.gameObject.AddComponent<CanvasScaler>();
@@ -46,17 +46,17 @@ namespace RTLTMPro
             }
 
 
-            // Create the RTLTextMeshPro Object
+            
             var go = new GameObject("Text - RTLTMP");
             var goRectTransform = go.AddComponent<RectTransform>();
 
             Undo.RegisterCreatedObjectUndo(go, "Create " + go.name);
 
-            // Check if object is being create with left or right click
+            
             var contextObject = command.context as GameObject;
             if (contextObject == null)
             {
-                //goRectTransform.sizeDelta = new Vector2(200f, 50f);
+                
                 GameObjectUtility.SetParentAndAlign(go, canvas.gameObject);
 
                 var textMeshPro = go.AddComponent<RTLTextMeshPro>();
@@ -80,7 +80,7 @@ namespace RTLTMPro
                 }
                 else
                 {
-                    //goRectTransform.sizeDelta = new Vector2(200f, 50f);
+                    
 
                     GameObjectUtility.SetParentAndAlign(go, contextObject);
 
@@ -91,7 +91,7 @@ namespace RTLTMPro
             }
 
 
-            // Check if an event system already exists in the scene
+            
             if (!FindObjectOfType<EventSystem>())
             {
                 var eventObject = new GameObject("EventSystem", typeof(EventSystem));
@@ -107,7 +107,7 @@ namespace RTLTMPro
         {
             GameObject go = ObjectFactory.CreateGameObject("Text - RTLTMP");
 
-            // Add support for new prefab mode
+            
             StageUtility.PlaceGameObjectInCurrentStage(go);
 
             var textComponent = ObjectFactory.AddComponent<RTLTextMeshPro3D>(go);
@@ -207,29 +207,29 @@ namespace RTLTMPro
 
         private static void SetPositionVisibleinSceneView(RectTransform canvasRTransform, RectTransform itemTransform)
         {
-            // Find the best scene view
+            
             var sceneView = SceneView.lastActiveSceneView;
             if (sceneView == null && SceneView.sceneViews.Count > 0)
                 sceneView = SceneView.sceneViews[0] as SceneView;
 
-            // Couldn't find a SceneView. Don't set position.
+            
             if (sceneView == null || sceneView.camera == null)
                 return;
 
-            // Create world space Plane from canvas position.
+            
             Vector2 localPlanePosition;
             var camera = sceneView.camera;
             var position = Vector3.zero;
             if (RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRTransform, new Vector2(camera.pixelWidth / 2, camera.pixelHeight / 2), camera, out localPlanePosition))
             {
-                // Adjust for canvas pivot
+                
                 localPlanePosition.x = localPlanePosition.x + canvasRTransform.sizeDelta.x * canvasRTransform.pivot.x;
                 localPlanePosition.y = localPlanePosition.y + canvasRTransform.sizeDelta.y * canvasRTransform.pivot.y;
 
                 localPlanePosition.x = Mathf.Clamp(localPlanePosition.x, 0, canvasRTransform.sizeDelta.x);
                 localPlanePosition.y = Mathf.Clamp(localPlanePosition.y, 0, canvasRTransform.sizeDelta.y);
 
-                // Adjust for anchoring
+                
                 position.x = localPlanePosition.x - canvasRTransform.sizeDelta.x * itemTransform.anchorMin.x;
                 position.y = localPlanePosition.y - canvasRTransform.sizeDelta.y * itemTransform.anchorMin.y;
 
@@ -261,7 +261,7 @@ namespace RTLTMPro
             Undo.RegisterCreatedObjectUndo(element, "Create " + element.name);
             Undo.SetTransformParent(element.transform, parent.transform, "Parent " + element.name);
             GameObjectUtility.SetParentAndAlign(element, parent);
-            if (parent != menuCommand.context) // not a context click, so center in sceneview
+            if (parent != menuCommand.context) 
                 SetPositionVisibleinSceneView(parent.GetComponent<RectTransform>(), element.GetComponent<RectTransform>());
 
             Selection.activeGameObject = element;
@@ -270,7 +270,7 @@ namespace RTLTMPro
 
         public static GameObject CreateNewUI()
         {
-            // Root for the UI
+            
             var root = new GameObject("Canvas");
             root.layer = LayerMask.NameToLayer(kUILayerName);
             var canvas = root.AddComponent<Canvas>();
@@ -279,7 +279,7 @@ namespace RTLTMPro
             root.AddComponent<GraphicRaycaster>();
             Undo.RegisterCreatedObjectUndo(root, "Create " + root.name);
 
-            // if there is no event system add one...
+            
             CreateEventSystem(false);
             return root;
         }
@@ -312,17 +312,17 @@ namespace RTLTMPro
         {
             var selectedGo = Selection.activeGameObject;
 
-            // Try to find a gameobject that is the selected GO or one if its parents.
+            
             var canvas = selectedGo != null ? selectedGo.GetComponentInParent<Canvas>() : null;
             if (canvas != null && canvas.gameObject.activeInHierarchy)
                 return canvas.gameObject;
 
-            // No canvas in selection or its parents? Then use just any canvas..
+            
             canvas = FindObjectOfType(typeof(Canvas)) as Canvas;
             if (canvas != null && canvas.gameObject.activeInHierarchy)
                 return canvas.gameObject;
             
-            // No canvas in the scene at all? Then create a new one.
+            
             return CreateNewUI();
         }
 
@@ -330,7 +330,7 @@ namespace RTLTMPro
         {
             var activeGo = Selection.activeGameObject;
             
-            //Combine the result of the Null check and if the component Canvas exists or not in the parent.
+            
             var hasCanvasInParent = activeGo != null && activeGo.GetComponentInParent<Canvas>() != null;
             if (hasCanvasInParent)
                 return activeGo;

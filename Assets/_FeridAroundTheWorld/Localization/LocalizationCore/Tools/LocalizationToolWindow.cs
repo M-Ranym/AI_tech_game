@@ -23,13 +23,13 @@ namespace com.horizon.LocalizationSystem
         private AutomatedLocalizationTool _automatedLocalizationTool;
         private bool _isSent = false;
 
-        private TranslationResult _translationResult;//= new TranslationResult
-        //{
-        //    Arabic = "arabic test",
-        //    French = "french test",
-        //    English = "english test",
-        //    RawAiResponce = "raw test"
-        //};
+        private TranslationResult _translationResult;
+        
+        
+        
+        
+        
+        
 
         private EditorPage _currentPage = EditorPage.SimilarLinesSelection;
         public static void ShowWindow(
@@ -58,7 +58,7 @@ namespace com.horizon.LocalizationSystem
             window.Show();
         }
 
-        // -- in case no similar lines are found
+        
         public static void ShowWindow(
            string textToTranslate,
            Action<string> onSuccess,
@@ -117,7 +117,7 @@ namespace com.horizon.LocalizationSystem
             }
             GUILayout.Space(10);
 
-            // -- Core
+            
             switch (_currentPage)
             {
                 case EditorPage.SimilarLinesSelection:
@@ -126,9 +126,9 @@ namespace com.horizon.LocalizationSystem
                     GUILayout.FlexibleSpace();
                     if (GUILayout.Button("Generate With Ai", GUILayout.Width(120), GUILayout.Height(30)))
                     {
-                        //_onCancel?.Invoke(_textToTranslate);
+                        
                         _currentPage = EditorPage.AiIsGeneratingAnAnswer;
-                        // Close();
+                        
                     }
                     GUILayout.EndHorizontal();
                     break;
@@ -197,7 +197,7 @@ namespace com.horizon.LocalizationSystem
                 EditorGUILayout.HelpBox("No Lines found", MessageType.Warning);
                 return;
             }
-            int arabicColIndex = 1;//used to know which col to reverse its words to be readable in arabic
+            int arabicColIndex = 1;
 
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
@@ -208,7 +208,7 @@ namespace com.horizon.LocalizationSystem
             GUILayout.Space(10);
 
 
-            int firstContentLineIndex = _withHeaders ? 1 : 0;//first line after the header , if no headers then it's 0
+            int firstContentLineIndex = _withHeaders ? 1 : 0;
 
             if (_withHeaders)
             {
@@ -236,7 +236,7 @@ namespace com.horizon.LocalizationSystem
 
 
 
-            // display all the lines
+            
             _scrollPos = EditorGUILayout.BeginScrollView(_scrollPos);
 
             for (int i = firstContentLineIndex; i < _lines.Length; i++)
@@ -262,7 +262,7 @@ namespace com.horizon.LocalizationSystem
                         continue;
                     }
                     if (j == arabicColIndex)
-                        cell = ArabicFixerTool.FixLine(cell);//new string(cell.Reverse().ToArray());
+                        cell = ArabicFixerTool.FixLine(cell);
                     GUILayout.Label(cell, EditorStyles.wordWrappedLabel, GUILayout.MinWidth(100), GUILayout.MaxWidth(300));
 
                 }
@@ -284,7 +284,7 @@ namespace com.horizon.LocalizationSystem
 
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
-            if (_selectedLineIndex >= 0)//assuming the first line is the header qt index 0
+            if (_selectedLineIndex >= 0)
             {
                 if (GUILayout.Button("Replace with Selected Line", GUILayout.Width(200), GUILayout.Height(30)))
                 {
@@ -295,12 +295,12 @@ namespace com.horizon.LocalizationSystem
                 }
             }
             GUILayout.Space(30);
-            //if (GUILayout.Button("Reject All", GUILayout.Width(100), GUILayout.Height(30)))
-            //{
-            //    _onRejectAllSimilarLines?.Invoke(_textToTranslate);
-            //    _currentPage = EditorPage.AiGeneratedLine;
-            //   // Close();
-            //}
+            
+            
+            
+            
+            
+            
 
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
@@ -310,7 +310,7 @@ namespace com.horizon.LocalizationSystem
 
         private void AiIsGeneratingAnAnswerPage()
         {
-            //title : Ai result for : name of the text
+            
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             GUILayout.Label("Ai is Generating a Translation for :", GUILayout.MinWidth(100));
@@ -469,9 +469,9 @@ namespace com.horizon.LocalizationSystem
             try
             {
                 string filePath = Path.Combine(Application.dataPath, path);
-                //This assumes that the csv lines are in this format : phrase,arabic,english,french
+                
 
-                //remove the '\n' in translations to not mess up the csv
+                
                 result.Arabic = result.Arabic.Replace("\r\n", "").Replace("\n", "").Replace("\r", "");
                 result.English = result.English.Replace("\r\n", "").Replace("\n", "").Replace("\r", "");
                 result.French = result.French.Replace("\r\n", "").Replace("\n", "").Replace("\r", "");

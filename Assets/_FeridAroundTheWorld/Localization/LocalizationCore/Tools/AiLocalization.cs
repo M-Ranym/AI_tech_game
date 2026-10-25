@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Text;
 using UnityEditor;
@@ -50,7 +50,7 @@ namespace com.horizon.LocalizationSystem
             Action<TranslationResult> onTranslationComplete,
             Action onTranslationFail)
         {
-            //make the propmt
+            
             string prompt = $@"Translate the following Arabic text to English and French.
             Return ONLY a JSON object in this exact format, with no additional text or explanation:
             {{""english"":""translation here"",""french"":""translation here""}}
@@ -79,7 +79,7 @@ namespace com.horizon.LocalizationSystem
                 yield break;
             }
 
-            //send request to ai
+            
 
             using (UnityWebRequest webRequest = new UnityWebRequest(apiUrl, "POST"))
             {
@@ -92,7 +92,7 @@ namespace com.horizon.LocalizationSystem
 
                 yield return webRequest.SendWebRequest();
 
-                //get response
+                
                 if (webRequest.result == UnityWebRequest.Result.Success)
                 {
                     string responseText = webRequest.downloadHandler.text;
@@ -177,7 +177,7 @@ namespace com.horizon.LocalizationSystem
 
         }
 
-        //the ai (grok) api key stored in a json
+        
         private string GetAiApiKey()
         {
             if (_aiApiKey != null && !string.IsNullOrEmpty(_aiApiKey.Key))
@@ -252,24 +252,24 @@ namespace com.horizon.LocalizationSystem
 
             GUILayout.Space(10);
 
-            // -- Testing Ai
-            //if (GUILayout.Button("phrase 1 "))
-            //{
+            
+            
+            
 
-            //    script.TranslateTextTest("أنا أحب لعب ألعاب الأنمي");
+            
 
-            //    // script.TranslateTextTest("أرسلت لك الملف المطلوب عبر بريد إلكتروني");
-            //}
+            
+            
 
-            //if (GUILayout.Button("phrase 2"))
-            //{
-            //    script.TranslateTextTest("ذهب الطالب الى المكتبة ليبحث عن كتاب جديد");
-            //}
+            
+            
+            
+            
 
-            //if (GUILayout.Button("phrase 3"))
-            //{
-            //    script.TranslateTextTest("الطقس اليوم جميل والشمس تشرق بوضوح");
-            //}
+            
+            
+            
+            
         }
     }
 #endif

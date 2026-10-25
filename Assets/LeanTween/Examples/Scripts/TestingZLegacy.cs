@@ -14,7 +14,7 @@ public class TestingZLegacy : MonoBehaviour {
 	
 	public delegate void NextFunc();
 	private int exampleIter = 0;
-	private string[] exampleFunctions = new string[] { /**/"updateValue3Example", "loopTestClamp", "loopTestPingPong", "moveOnACurveExample", "customTweenExample", "moveExample", "rotateExample", "scaleExample", "updateValueExample", "delayedCallExample", "alphaExample", "moveLocalExample", "rotateAroundExample", "colorExample" };
+	private string[] exampleFunctions = new string[] { "updateValue3Example", "loopTestClamp", "loopTestPingPong", "moveOnACurveExample", "customTweenExample", "moveExample", "rotateExample", "scaleExample", "updateValueExample", "delayedCallExample", "alphaExample", "moveLocalExample", "rotateAroundExample", "colorExample" };
 	public bool useEstimatedTime = true;
 	private GameObject ltLogo;
     private TimingType timingType = TimingType.HalfTimeScale;
@@ -30,7 +30,7 @@ public class TestingZLegacy : MonoBehaviour {
 	}
 
 	void Awake(){
-		LeanTween.init(3200); // This line is optional. Here you can specify the maximum number of tweens you will use (the default is 400).  This must be called before any use of LeanTween is made for it to be effective.
+		LeanTween.init(3200); 
 	}
 
 	void Start () {
@@ -38,7 +38,7 @@ public class TestingZLegacy : MonoBehaviour {
 		LeanTween.delayedCall(1f, cycleThroughExamples);
 		origin = ltLogo.transform.position;
 
-//		alphaExample();
+
 	}
 
 	void pauseNow(){
@@ -62,13 +62,13 @@ public class TestingZLegacy : MonoBehaviour {
 				iter = 0;
 			timingType = (TimingType)iter;
 			useEstimatedTime = timingType==TimingType.IgnoreTimeScale;
-			Time.timeScale = useEstimatedTime ? 0 : 1f; // pause the Time Scale to show the effectiveness of the useEstimatedTime feature (this is very usefull with Pause Screens)
+			Time.timeScale = useEstimatedTime ? 0 : 1f; 
 			if(timingType==TimingType.HalfTimeScale)
 				Time.timeScale = 0.5f;
 
 			if(timingType==TimingType.VariableTimeScale){
 				descrTimeScaleChangeId = LeanTween.value( gameObject, 0.01f, 10.0f, 3f).setOnUpdate( (float val)=>{
-					//Debug.Log("timeScale val:"+val);
+					
 					Time.timeScale = val;
 				}).setEase(LeanTweenType.easeInQuad).setUseEstimatedTime(true).setRepeat(-1).id;
 			}else{
@@ -78,7 +78,7 @@ public class TestingZLegacy : MonoBehaviour {
 		}
 		gameObject.BroadcastMessage( exampleFunctions[ exampleIter ] );
 
-		// Debug.Log("cycleThroughExamples time:"+Time.time + " useEstimatedTime:"+useEstimatedTime);
+		
 		float delayTime = 1.1f;
 		LeanTween.delayedCall( gameObject, delayTime, cycleThroughExamples).setUseEstimatedTime(useEstimatedTime);
 
@@ -91,19 +91,19 @@ public class TestingZLegacy : MonoBehaviour {
 	}
 
 	public void updateValue3ExampleUpdate( Vector3 val){
-		//Debug.Log("val:"+val+" obj:"+obj);
+		
 	}
 
 	public void updateValue3ExampleCallback( Vector3 val ){
 		ltLogo.transform.eulerAngles = val;
-		// Debug.Log("updateValue3ExampleCallback:"+val);
+		
 	}
 
 	public void loopTestClamp(){
 		Debug.Log("loopTestClamp Time:"+Time.time);
 		GameObject cube1 = GameObject.Find("Cube1");
 		cube1.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
-		LeanTween.scaleZ( cube1, 4.0f, 1.0f).setEase(LeanTweenType.easeOutElastic).setRepeat(7).setLoopClamp().setUseEstimatedTime(useEstimatedTime);//
+		LeanTween.scaleZ( cube1, 4.0f, 1.0f).setEase(LeanTweenType.easeOutElastic).setRepeat(7).setLoopClamp().setUseEstimatedTime(useEstimatedTime);
 	}
 
 	public void loopTestPingPong(){
@@ -111,7 +111,7 @@ public class TestingZLegacy : MonoBehaviour {
 		GameObject cube2 = GameObject.Find("Cube2");
 		cube2.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
 		LeanTween.scaleY( cube2, 4.0f, 1.0f ).setEase(LeanTweenType.easeOutQuad).setLoopPingPong(4).setUseEstimatedTime(useEstimatedTime);
-		//LeanTween.scaleY( cube2, 4.0f, 1.0f, LeanTween.options().setEaseOutQuad().setRepeat(8).setLoopPingPong().setUseEstimatedTime(useEstimatedTime) );
+		
 	}
 
 	public void colorExample(){
@@ -150,7 +150,7 @@ public class TestingZLegacy : MonoBehaviour {
 	}
 
 	public void rotateOnUpdate( float val ){
-		//Debug.Log("rotating val:"+val);
+		
 	}
 
 	public void rotateFinished( object hash ){
@@ -173,8 +173,8 @@ public class TestingZLegacy : MonoBehaviour {
 	}
 	
 	public void updateValueExampleCallback( float val, object hash ){
-		// Hashtable h = hash as Hashtable;
-		// Debug.Log("message:"+h["message"]+" val:"+val);
+		
+		
 		Vector3 tmp = ltLogo.transform.eulerAngles;
 		tmp.y = val;
 		ltLogo.transform.eulerAngles = tmp;

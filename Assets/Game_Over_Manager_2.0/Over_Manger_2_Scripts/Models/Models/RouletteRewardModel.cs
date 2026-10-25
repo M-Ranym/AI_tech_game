@@ -13,9 +13,9 @@ namespace horizon.Models
         public bool Is_valuable { get; set; }
         public string Name { get; set; }
 
-        // ----- added for localization
+        
         public Dictionary<string, string> name_translations;
-        // -----
+        
         public int Stock { get; set; }
         public bool IsPremium { get; set; }
 

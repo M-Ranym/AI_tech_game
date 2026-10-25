@@ -21,10 +21,10 @@ public class PathSpline2d : MonoBehaviour {
 		};
 
 		visualizePath = new LTSpline( path );
-		// move
+		
 		LeanTween.moveSpline(dude1, path, 10f).setOrientToPath2d(true).setSpeed(2f);
 
-		// move Local
+		
 		LeanTween.moveSplineLocal(dude2, path, 10f).setOrientToPath2d(true).setSpeed(2f);
 	}
 

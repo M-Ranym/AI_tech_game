@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -54,9 +54,9 @@ public class MapManager : MonoBehaviour
 
     void Start()
     {
-        // A mini-game's pause menu can leave Time.timeScale at 0 -- it's a
-        // global engine setting that survives scene loads on its own. Reset
-        // it here so nothing on the map ends up silently frozen.
+        
+        
+        
         Time.timeScale = 1f;
 
         if (resetProgressOnStart)
@@ -89,7 +89,7 @@ public class MapManager : MonoBehaviour
 
         SetupVisuals(unlockedCount);
 
-        // Auto-open board only if game is not fully done
+        
         if (justFinishedGame >= 0
             && justFinishedGame < levelBoards.Length
             && levelBoards[justFinishedGame] != null
@@ -154,7 +154,7 @@ public class MapManager : MonoBehaviour
         }
     }
 
-    // Wire a UI Toggle's OnValueChanged(bool) to this to flip test mode live.
+    
     public void OnTestModeToggleChanged(bool isOn)
     {
         if (GameProgressManager.Instance != null)

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,8 +6,8 @@ using UnityEngine;
 
 public class Game_Over_2_Ferid : MonoBehaviour
 {
-    // public UnityEngine.U2D.Animation.SpriteResolver upperAccessory;
-    // public UnityEngine.U2D.Animation.SpriteResolver downAccessory;
+    
+    
     public Animator myAnim;
 
     public AudioSource myAudioSource;
@@ -35,10 +35,10 @@ public class Game_Over_2_Ferid : MonoBehaviour
 
     private void ChangeMySkin(bool canPlayAnim)
     {
-        //upperAccessory.SetCategoryAndLabel(Constants.UPPER_SPRITE_RESOLVER_CATEGORY, Game_Over_2_Manager.instance.Get_User().avatarUpperAccessories.ToString());
-        //downAccessory.SetCategoryAndLabel(Constants.DOWN_SPRITE_RESOLVER_CATEGORY, Game_Over_2_Manager.instance.Get_User().avatarLowerAccessories.ToString());
+        
+        
 
-        //if (canPlayAnim) myAnim.Play(Constants.ANIM_FERID_NEW_CLOTHES, -1, 0);
+        
     }
 
     private void Update()
@@ -79,13 +79,13 @@ public class Game_Over_2_Ferid : MonoBehaviour
                 }
                 else
                 {
-                    myAudioSource.clip.GetData(clipSampleData, myAudioSource.timeSamples); //I read 512 samples
+                    myAudioSource.clip.GetData(clipSampleData, myAudioSource.timeSamples); 
                     clipLoudness = 0f;
                     foreach (var sample in clipSampleData)
                     {
                         clipLoudness += Mathf.Abs(sample);
                     }
-                    clipLoudness /= 1024; //clipLoudness is what you are looking for
+                    clipLoudness /= 1024; 
 
                     if (clipLoudness > EPSILON)
                     {

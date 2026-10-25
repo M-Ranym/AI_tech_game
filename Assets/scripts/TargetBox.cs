@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
@@ -17,7 +17,7 @@ public class TargetBox : MonoBehaviour, IDropHandler
     private Image boxImage;
     private Color originalColor;
 
-    // cached reference – found once in Start
+    
     private TutorialManager _tutorial;
 
     void Start()
@@ -50,7 +50,7 @@ public class TargetBox : MonoBehaviour, IDropHandler
 
         bool correct = item.itemType == acceptedType;
 
-        // ── Notify TutorialManager about the drop (regardless of correct/wrong) ──
+        
         if (_tutorial != null && _tutorial.IsTutorialActive())
             _tutorial.OnTutorialDrop(eventData.pointerDrag, correct);
 

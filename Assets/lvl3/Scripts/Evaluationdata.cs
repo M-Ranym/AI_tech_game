@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 public static class EvaluationData
 {
@@ -20,7 +20,7 @@ public static class EvaluationData
 
     public const int TOTAL_LEVELS = 3;
 
-    // same strong progression feeling as old system
+    
     public const float DeltaPerRound =
         (100f - 30f) / 4f;
 
@@ -36,9 +36,9 @@ public static class EvaluationData
 
     public static int currentItemCount = 3;
 
-    // LEVEL 1 : EMOTIONS
-    // LEVEL 2 : DIRECTIONS
-    // LEVEL 3 : ANIMALS
+    
+    
+    
     public static readonly string[][] levelCorrectAnswers =
     {
         new string[] { "يبكي", "سعيد ", "حزين" },

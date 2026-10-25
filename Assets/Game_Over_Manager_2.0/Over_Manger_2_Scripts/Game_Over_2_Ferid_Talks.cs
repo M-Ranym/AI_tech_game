@@ -28,7 +28,7 @@ public class Game_Over_2_Ferid_Talks : MonoBehaviour
 
     private Game_Over_2_Ferid ferid;
 
-    // Start is called before the first frame update
+    
     private void Start()
     {
         _audioManager = Game_Over_2_AudioManager.audioManInstance;
@@ -50,12 +50,12 @@ public class Game_Over_2_Ferid_Talks : MonoBehaviour
 
     private void Update()
     {
-        //_currentTime += Time.deltaTime;
-        //if (_currentTime > _timeOfFeridToTalk)
-        //{
-        //    int ran = Random.Range(0, _feridIdleTalksLists.listOfinformation.Count);
-        //    _audioManager.Ferid_Talking(_feridIdleTalksLists.listOfinformation[ran]);
-        //    _currentTime = 0;
-        //}
+        
+        
+        
+        
+        
+        
+        
     }
 }

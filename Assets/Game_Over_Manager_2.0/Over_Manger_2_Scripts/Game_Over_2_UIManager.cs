@@ -1,6 +1,6 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
-//using horizon.Logging;
+
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -86,7 +86,7 @@ public class Game_Over_2_UIManager : MonoBehaviour
         }
     }
 
-    // User info panel Button
+    
     public void Open_Close_Info_Panel(bool isOpened)
     {
         if (isOpened)
@@ -109,16 +109,16 @@ public class Game_Over_2_UIManager : MonoBehaviour
         {
             _isYouShouldNotPressThatButtonTwicePressed = true;
             Time.timeScale = 1;
-            //if (PlayerPrefs.GetInt(Constants.DLC_IS_OPEN_FROM_MAP, 0) == 0)
-            //{
-            //    AnalyticsTracker.Instance.TrackScreenVisit(Constants.SCENE_GAMES);
-            //    _loadScene.LoadScene(Constants.SCENE_GAMES);
-            //}
-            //else
-            //{
-            //    AnalyticsTracker.Instance.TrackScreenVisit(Constants.SCENE_MAP_SCENE);
-            //    _loadScene.LoadScene(Constants.SCENE_MAP_SCENE);
-            //}
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
 
             Destroy(_audioManager.gameObject);
             Destroy(Game_Over_2_Manager.instance.gameObject);

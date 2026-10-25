@@ -1,15 +1,15 @@
-﻿using NoSuchStudio.Common.Text;
+using NoSuchStudio.Common.Text;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 namespace NoSuchStudio.Localization.Source {
-    /// <summary>
-    /// Parses a CSV file and provides the entries to <see cref="LocalizationService"/>.
-    /// ',' is the default delimiter character.
-    /// <see cref="/manual/localization/sources/csvtranslationsource.html#csv-format"/>
-    /// </summary>
+    
+    
+    
+    
+    
     [ExecuteAlways]
     public class CSVTranslationSource : FileTranslationSource, ITranslationSource {
 

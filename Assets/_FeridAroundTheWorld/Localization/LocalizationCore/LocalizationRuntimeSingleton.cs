@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace com.horizon.LocalizationSystem
 {
-    //this is to ensure a single instance of the LocalizationService cuz this class
-    //is the parent of the LocalizationService 
+    
+    
     public class LocalizationRuntimeSingleton : MonoBehaviour
     {
         private static LocalizationRuntimeSingleton instance;

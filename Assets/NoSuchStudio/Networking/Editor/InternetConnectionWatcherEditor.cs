@@ -43,7 +43,7 @@ namespace NoSuchStudio.Networking.Editor {
 
         public override void OnInspectorGUI() {
 
-            // connection status
+            
             bool isConnected = targetICW.isConnected;
             int secondsSinceLastCheck = (int)(Time.realtimeSinceStartup - targetICW.lastCheckTime);
             EditorGUILayout.LabelField("Internet Connection?", isConnected ? "YES" : "NO", isConnected ? styleOn : styleOff);
@@ -55,7 +55,7 @@ namespace NoSuchStudio.Networking.Editor {
             }
             EditorGUILayout.Separator();
 
-            // default editor
+            
             DrawDefaultInspector();
         }
     }

@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-// ReSharper disable IdentifierTypo
+
 
 namespace RTLTMPro
 {
@@ -72,13 +72,13 @@ namespace RTLTMPro
             [(char)TashkeelCharacters.SuperscriptAlef] = (char)TashkeelCharacters.ShaddaWithSuperscriptAlefIsolatedForm,
         };
 
-        /// <summary>
-        ///     Removes tashkeel from text.
-        /// </summary>
+        
+        
+        
         public static void RemoveTashkeel(FastStringBuilder input)
         {
             TashkeelLocations.Clear();
-            int j = 0; // write index
+            int j = 0; 
             for (int i = 0; i < input.Length; i++)
             {
                 int curChar = input.Get(i);
@@ -95,9 +95,9 @@ namespace RTLTMPro
             input.Length = j;
         }
 
-        /// <summary>
-        ///     Restores removed tashkeel.
-        /// </summary>
+        
+        
+        
         public static void RestoreTashkeel(FastStringBuilder letters)
         {
             foreach (TashkeelLocation location in TashkeelLocations)
@@ -106,16 +106,14 @@ namespace RTLTMPro
             }
         }
 
-        /// <summary>
-        /// Replace Shadda + Another Tashkeel with combined form 
-        /// </summary>
+        
+        
+        
         public static void FixShaddaCombinations(FastStringBuilder input)
         {
-            /*
-             * Fix of https://github.com/mnarimani/RTLTMPro/issues/13
-             */
-            int j = 0; // write index
-            int i = 0; // read index
+            
+            int j = 0; 
+            int i = 0; 
             while (i < input.Length)
             {
                 int curChar = input.Get(i);

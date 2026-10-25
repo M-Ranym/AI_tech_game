@@ -16,23 +16,18 @@ namespace NoSuchStudio.Localization.Source.Editor {
             gstcTarget = (GoogleSheetsTranslationConnector)target;
         }
 
-        /*public override bool RequiresConstantRepaint() {
-            bool isLoading = gstcTarget.loadState.Result == GoogleSheetsTranslationConnector.LoadResult.Pending;
-            bool repaint = isLoading || cachedIsLoading != isLoading;
-            cachedIsLoading = isLoading;
-            return repaint;
-        }*/
+        
 
         public override void OnInspectorGUI() {
             bool isLoading = gstcTarget.loadState.Result == GoogleSheetsTranslationConnector.LoadResult.Pending;
             if (isLoading) {
-                // cancel button
+                
                 if (GUILayout.Button("cancel")) {
                     gstcTarget.CancelLoad();
                     EditorApplication.QueuePlayerLoopUpdate();
                 }
             } else {
-                // reload button
+                
                 if (GUILayout.Button("reload")) {
                     gstcTarget.LoadSheet();
                     EditorApplication.QueuePlayerLoopUpdate();
@@ -55,7 +50,7 @@ namespace NoSuchStudio.Localization.Source.Editor {
             
             EditorGUILayout.Separator();
 
-            // default inspector 
+            
             DrawDefaultInspector();
             serializedObject.ApplyModifiedProperties();
             

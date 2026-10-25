@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,10 +6,10 @@ using UnityEngine;
 
 namespace NoSuchStudio.Common.Text {
 
-    /// <summary>
-    /// A simple CSV parser that does not support double quotes.
-    /// Field values cannot contain field delimiters (',') or line delimiters (new lines).
-    /// </summary>
+    
+    
+    
+    
     public static class SimpleCSVParser {
         public const char DefaultFieldDelimiter = ',';
         private static readonly string[] lineDelimiters = new string[] {"\r\n", "\r", "\n"};

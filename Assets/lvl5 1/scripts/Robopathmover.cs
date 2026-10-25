@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 
 public class RoboPathMover : MonoBehaviour
@@ -20,15 +20,15 @@ public class RoboPathMover : MonoBehaviour
     public float jumpDownPrepDuration = 0.12f;
 
     [Header("Rock (duck and hold)")]
-    public float rockDuckY = -0.4f;  // how far down to duck
-    public float rockDuckDuration = 0.15f;  // time to duck
-    public float rockHoldDuration = 0.5f;   // time held low
-    public float rockRiseDuration = 0.15f;  // time to rise back
+    public float rockDuckY = -0.4f;  
+    public float rockDuckDuration = 0.15f;  
+    public float rockHoldDuration = 0.5f;   
+    public float rockRiseDuration = 0.15f;  
 
     [Header("Zip (fast slide forward)")]
-    public float zipSlideX = 1.5f;   // how far forward
-    public float zipSlideY = 0.3f;   // slight upward arc
-    public float zipDuration = 0.35f;  // total zip time
+    public float zipSlideX = 1.5f;   
+    public float zipSlideY = 0.3f;   
+    public float zipDuration = 0.35f;  
 
     [Header("Action Duration")]
     public float actionDuration = 0.5f;
@@ -54,7 +54,7 @@ public class RoboPathMover : MonoBehaviour
 
     public IEnumerator PlayAction(RoboPathCore.RobotAction action)
     {
-        // Play action sound for any real action
+        
         if (action != RoboPathCore.RobotAction.None &&
             Game_Over_2_AudioManager.audioManInstance != null)
             Game_Over_2_AudioManager.audioManInstance.Play_Sfx("RoboAction");
@@ -80,23 +80,23 @@ public class RoboPathMover : MonoBehaviour
         }
     }
 
-    // Duck down, hold, rise back up
+    
     private IEnumerator DoRock()
     {
         Vector3 origin = transform.position;
         Vector3 ducked = origin + new Vector3(0f, rockDuckY, 0f);
 
-        // Duck down
+        
         yield return LerpTo(origin, ducked, rockDuckDuration);
 
-        // Hold low
+        
         yield return new WaitForSeconds(rockHoldDuration);
 
-        // Rise back
+        
         yield return LerpTo(ducked, origin, rockRiseDuration);
     }
 
-    // Fast forward slide with slight arc
+    
     private IEnumerator DoZip()
     {
         Vector3 origin = transform.position;

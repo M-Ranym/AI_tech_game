@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +11,7 @@ namespace NoSuchStudio.Common {
     public static class ToStringExts {
 
         public static string ToStringExt<K, V>(this KeyValuePair<K, V> kvp) {
-            //Debug.Log("here " + kvp.Key + " / " + kvp.Value);
+            
             return string.Format("[{0}] => {1}", kvp.Key, kvp.Value);
         }
 

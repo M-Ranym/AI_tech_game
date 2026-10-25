@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-//using horizon.Controllers;
+
 using horizon.Models;
 using UnityEngine;
 
@@ -121,16 +121,16 @@ public class Game_Over_2_Manager : MonoBehaviour
 
     public void Update_LeaderBoard_Stars(string stars)
     {
-       // Connect.Instance.UpdatePlayerScore("", gameId: userData.GameID, userData.ParentId, userData.KidIndex, bestScore: userData.BestScore, stars: stars, xp: userData.Xp);
+       
     }
 
     public void Update_LeaderBoard_XP(long XP)
     {
-      //  Connect.Instance.UpdatePlayerScore("", gameId: userData.GameID, userData.ParentId, userData.KidIndex, bestScore: userData.BestScore, stars: userData.Stars, xp: XP);
+      
     }
 
     public void Update_LeaderBoard_BestScore(long bestScore)
     {
-      //  Connect.Instance.UpdatePlayerScore("", gameId: userData.GameID, userData.ParentId, userData.KidIndex, bestScore: bestScore, stars: userData.Stars, xp: userData.Xp);
+      
     }
 }

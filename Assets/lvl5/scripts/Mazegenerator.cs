@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,10 +9,10 @@ using Unity.Sentis;
 
 public class MazeGenerator : MonoBehaviour
 {
-    // Index 0 is the tutorial round — it deliberately duplicates index 1's
-    // size/goal (and, via GenerateMaze's seed below, its exact maze layout)
-    // so "the tutorial maze" and "real level 1" are the same maze. Real
-    // levels are now at indices 1-4 (was 0-3).
+    
+    
+    
+    
     private static readonly int[] LEVEL_SIZES = { 2, 2, 3, 4, 5 };
     private static readonly float[] LEVEL_ROBOT_SIZES = { 200f, 200f, 150f, 100f, 90f };
     private static readonly Vector2Int[] LEVEL_GOALS = {
@@ -64,7 +64,7 @@ public class MazeGenerator : MonoBehaviour
     [Header("Microphone")]
     public string microphoneDevice = "";
     public float maxRecordSeconds = 3f;
-    // Minimum seconds the user must hold the button before release is accepted
+    
     private const float MIN_RECORD_SECONDS = 0.5f;
 
     [Header("Voice Block Prefabs")]
@@ -73,20 +73,20 @@ public class MazeGenerator : MonoBehaviour
     public GameObject moveLeftPrefab;
     public GameObject moveRightPrefab;
 
-    // voice state
+    
     private string[] labels;
     private Worker worker;
     private Model runtimeModel;
     private AudioClip recordingClip;
     private bool micStarted = false;
     private bool isRecording = false;
-    private bool micReady = false;       // true once WaitForMicReady finishes
-    private bool releaseQueued = false;  // true if user released before mic was ready
-    private string activeDevice = null;  // stored once on press, reused everywhere
-    private float recordingStartTime = 0f; // Time.realtimeSinceStartup when mic went live
+    private bool micReady = false;       
+    private bool releaseQueued = false;  
+    private string activeDevice = null;  
+    private float recordingStartTime = 0f; 
     private Color micButtonOriginalColor;
 
-    // volume meter
+    
     private float micVolume = 0f;
 
     private readonly string msgWall = "اصطدم الروبوت بجدار";
@@ -123,7 +123,7 @@ public class MazeGenerator : MonoBehaviour
 
         LoadLevel(currentLevel, currentRound);
 
-        // Voice AI setup
+        
         if (modelAsset != null && labelsFile != null)
         {
             labels = labelsFile.text.Replace("\r", "").Split('\n');
@@ -139,12 +139,12 @@ public class MazeGenerator : MonoBehaviour
             Debug.LogWarning("[VoiceAI] Voice disabled — assign modelAsset and labelsFile.");
         }
 
-        // Mic button setup
+        
         if (micButton != null)
         {
             micButtonOriginalColor = micButton.image.color;
 
-            // Use GetComponent first to avoid duplicate EventTriggers on reload
+            
             EventTrigger trigger = micButton.gameObject.GetComponent<EventTrigger>();
             if (trigger == null)
                 trigger = micButton.gameObject.AddComponent<EventTrigger>();
@@ -169,12 +169,12 @@ public class MazeGenerator : MonoBehaviour
             Microphone.End(activeDevice);
     }
 
-    // ─── Volume meter while recording ────────────────────────────────────────
+    
 
     void Update()
     {
-        // Click/tap anywhere to dismiss the fail result panel (wall hit / missed
-        // goal) and retry — mirrors the manual Play/Reset button's dismiss branch.
+        
+        
         if (resultPanel != null && resultPanel.activeSelf && _resultPanelArmed && lastRunFailed)
         {
             if (Input.GetMouseButtonDown(0) ||
@@ -201,7 +201,7 @@ public class MazeGenerator : MonoBehaviour
         foreach (var s in samples) sum += s * s;
         micVolume = Mathf.Sqrt(sum / sampleWindow);
 
-        // Pulse the button color based on volume: green base, brighter when loud
+        
         if (micButton != null)
         {
             float intensity = Mathf.Clamp01(micVolume * 10f);
@@ -209,7 +209,7 @@ public class MazeGenerator : MonoBehaviour
         }
     }
 
-    // ─── Voice recording ─────────────────────────────────────────────────────
+    
 
     public void OnMicButtonDown()
     {
@@ -233,7 +233,7 @@ public class MazeGenerator : MonoBehaviour
         releaseQueued = false;
         micVolume = 0f;
 
-        // Pick and STORE the device name once — must be identical string in every call
+        
         if (Microphone.devices.Length > 0)
             activeDevice = string.IsNullOrEmpty(microphoneDevice) ? Microphone.devices[0] : microphoneDevice;
         else
@@ -247,7 +247,7 @@ public class MazeGenerator : MonoBehaviour
 
     IEnumerator WaitForMicReady(string device)
     {
-        // Wait until the microphone actually starts capturing
+        
         float timeout = 2f;
         float elapsed = 0f;
         while (Microphone.GetPosition(device) <= 0)
@@ -271,10 +271,10 @@ public class MazeGenerator : MonoBehaviour
 
         Debug.Log("[VoiceAI] Mic is live — speak now.");
 
-        // Enforce minimum hold time so a quick tap still records something useful
+        
         yield return new WaitForSeconds(MIN_RECORD_SECONDS);
 
-        // If user already released the button while we were waiting, process now
+        
         if (releaseQueued)
         {
             Debug.Log("[MicDebug] Processing queued release after minimum hold time.");
@@ -292,7 +292,7 @@ public class MazeGenerator : MonoBehaviour
 
         if (!micReady)
         {
-            // Mic hasn't started yet — queue the release for after min hold time
+            
             releaseQueued = true;
             Debug.Log("[MicDebug] Release queued — mic not ready yet.");
             return;
@@ -310,7 +310,7 @@ public class MazeGenerator : MonoBehaviour
         if (micButton != null)
             micButton.image.color = micButtonOriginalColor;
 
-        // Calculate samples from elapsed time — avoids GetPosition returning 0 bug
+        
         float elapsed = Time.realtimeSinceStartup - recordingStartTime;
         int recordedSamples = Mathf.Min(
             Mathf.FloorToInt(elapsed * MelSpectrogram.SampleRate),
@@ -332,7 +332,7 @@ public class MazeGenerator : MonoBehaviour
         ClassifyAndDispatch(raw);
     }
 
-    // ─── Classification ───────────────────────────────────────────────────────
+    
 
     private void ClassifyAndDispatch(float[] rawSamples)
     {
@@ -414,7 +414,7 @@ public class MazeGenerator : MonoBehaviour
             OnPlayResetPressed();
     }
 
-    // ─── Voice helpers ────────────────────────────────────────────────────────
+    
 
     private static float[] PadOrCenterTrim(float[] samples, int length)
     {
@@ -466,7 +466,7 @@ public class MazeGenerator : MonoBehaviour
         return best;
     }
 
-    // ─── Maze ─────────────────────────────────────────────────────────────────
+    
 
     void LoadLevel(int index, int round)
     {
@@ -488,9 +488,9 @@ public class MazeGenerator : MonoBehaviour
     void UpdateLevelLabel()
     {
         if (levelLabel == null) return;
-        // currentLevel 0 is the tutorial round; real levels (1..4) keep the
-        // same kid-facing numbering (1-4) they had before the tutorial was
-        // inserted, so the label uses currentLevel directly, not +1.
+        
+        
+        
         levelLabel.text = currentLevel == 0 ? "تجربة" : ("المستوى " + currentLevel);
         var tmp = levelLabel.GetComponent<TMPro.TextMeshProUGUI>();
         if (tmp != null) tmp.alignment = TMPro.TextAlignmentOptions.Center;
@@ -506,10 +506,10 @@ public class MazeGenerator : MonoBehaviour
 
     void GenerateMaze()
     {
-        // Seed by the *real* difficulty index, not the raw level slot — this
-        // makes the tutorial (index 0) generate the exact same maze as real
-        // level 1 (index 1), and keeps every real level's maze identical to
-        // what it was before the tutorial slot was inserted at index 0.
+        
+        
+        
+        
         UnityEngine.Random.InitState(Mathf.Max(currentLevel - 1, 0));
 
         int w = width * 2 + 1;
@@ -774,8 +774,8 @@ public class MazeGenerator : MonoBehaviour
             Game_Over_2_AudioManager.audioManInstance.Play_Sfx(failed ? "MazeFail" : "MazeSuccess");
     }
 
-    // Guards against the same click that triggered the failure (e.g. a stray
-    // tap) being immediately re-read here on the same frame.
+    
+    
     private IEnumerator ArmResultPanelNextFrame()
     {
         yield return null;

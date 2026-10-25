@@ -1,13 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 namespace NoSuchStudio.Common.Text {
-    /// <summary>
-    /// Static class with helper methods for parsing CSV text.
-    /// Used in <see cref="CSVTranslationSource"/> and <see cref="GoogleSheetsTranslationConnector"/>.
-    /// </summary>
+    
+    
+    
+    
     public static class FullCSVParser {
         public const char DefaultFieldDelimiter = ',';
         public static readonly char[] lineDelimitersArr = new char[] { '\r', '\n' };
@@ -22,12 +22,12 @@ namespace NoSuchStudio.Common.Text {
             InQuote,
         }
 
-        /// <summary>
-        /// skips over new line characters until it hits end of text or a different character.
-        /// </summary>
-        /// <param name="text"></param>
-        /// <param name="start"></param>
-        /// <returns>index of the next non-new-line char or text.length if all remaining characters are new lines.</returns>
+        
+        
+        
+        
+        
+        
         public static int SkipNewLines(string text, int start, HashSet<char> lineDelimiters = null) {
             lineDelimiters = lineDelimiters ?? new HashSet<char>(new char[] {'\r', '\n'});
             int i = start;
@@ -37,12 +37,12 @@ namespace NoSuchStudio.Common.Text {
             return i;
         }
 
-        /// <summary>
-        /// Parses a single line of csv text. 
-        /// </summary>
-        /// <param name="line">the input string to be parsed. Should not contains line breaks outside token double quotes.</param>
-        /// <param name="dels">string containing all characters that should be used as delimiters. comma is the default.</param>
-        /// <returns>(success, a list of string tokens, error message if there were any)</returns>
+        
+        
+        
+        
+        
+        
         private static (int newStart, List<string> tokens) ParseNextLine(string text, int start, char fieldDelimiter = (char)0) {
             if (fieldDelimiter == (char)0) fieldDelimiter = DefaultFieldDelimiter;
 
@@ -146,7 +146,7 @@ namespace NoSuchStudio.Common.Text {
                 if (endOfLine) break;
             }
 
-            // skip new lines
+            
             while (i < text.Length && lineDelimiters.Contains(text[i])) {
                 i++;
             }
@@ -154,13 +154,13 @@ namespace NoSuchStudio.Common.Text {
             return (i, tokens);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="csvText"></param>
-        /// <param name="fieldCount"></param>
-        /// <param name="fcep"></param>
-        /// <returns></returns>
+        
+        
+        
+        
+        
+        
+        
         public static List<List<string>> ParseCSVText(string csvText, int fieldCount = 0, char fieldDelimiter = (char)0) {
             if (fieldDelimiter == (char)0) fieldDelimiter = DefaultFieldDelimiter;
 
@@ -181,13 +181,13 @@ namespace NoSuchStudio.Common.Text {
             return ret;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="tokens"></param>
-        /// <param name="fieldDelimiter"></param>
-        /// <param name="nlwf"></param>
-        /// <returns></returns>
+        
+        
+        
+        
+        
+        
+        
         public static string ToCSVString(List<List<string>> tokens, char fieldDelimiter = (char)0) {
             if (fieldDelimiter == (char)0) fieldDelimiter = DefaultFieldDelimiter;
             string lineDelimiter = Environment.NewLine;

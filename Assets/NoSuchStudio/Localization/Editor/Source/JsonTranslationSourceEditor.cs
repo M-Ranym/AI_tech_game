@@ -28,11 +28,11 @@ namespace NoSuchStudio.Localization.Source.Editor {
             serializedObject.ApplyModifiedProperties();
             EditorGUILayout.Separator();
 
-            // connection status
+            
             DrawServiceConnectionStatus(tsTarget);
             EditorGUILayout.Separator();
 
-            // reload button
+            
             if (GUILayout.Button("reload")) {
                 tsTarget.Reload();
                 EditorApplication.QueuePlayerLoopUpdate();
@@ -46,13 +46,13 @@ namespace NoSuchStudio.Localization.Source.Editor {
             }
             EditorGUILayout.Separator();
 
-            // translation stats
+            
             int phrases = tsTarget.translations.Keys.Count();
             int translations = tsTarget.translations.Select(kvp => kvp.Value.Count).Sum();
             DrawTranslationStats(phrases, translations);
             EditorGUILayout.Separator();
 
-            // read only translation data
+            
             tsTarget.translations.Keys.ToList().ForEach(phrase => {
                 var curPhraseDic = tsTarget.translations[phrase];
                 bool curFoldState = false;

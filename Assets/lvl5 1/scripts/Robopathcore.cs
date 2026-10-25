@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 
 public class RoboPathCore : MonoBehaviour
@@ -30,8 +30,8 @@ public class RoboPathCore : MonoBehaviour
         public DecisionPoint[] decisionPoints;
     }
 
-    // Level 0 is the tutorial round (see AiDecisionTutorialManager); levels
-    // 1-6 are the 6 real rounds — bumped from 6 to 7 to make room for it.
+    
+    
     private const int TOTAL_LEVELS = 7;
 
     [Header("References")]
@@ -57,7 +57,7 @@ public class RoboPathCore : MonoBehaviour
     {
         _trigger = FindObjectOfType<GameFinishTrigger>();
 
-        // Resume from the level the player clicked on the board
+        
         int requestedLevel = _trigger != null ? _trigger.GetStartLevel() : 0;
         currentLevelIndex = Mathf.Clamp(requestedLevel, 0, TOTAL_LEVELS - 1);
 
@@ -74,12 +74,12 @@ public class RoboPathCore : MonoBehaviour
         StartCoroutine(RunLevel(levels[currentLevelIndex]));
     }
 
-    // Called by UI button after level complete message
+    
     public void GoToNextLevel()
     {
         Debug.Log($"[RoboPathCore] GoToNextLevel currentLevelIndex={currentLevelIndex}");
 
-        // Always go back to map — GameProgressManager unlocks next level
+        
         if (_trigger != null)
             _trigger.FinishLevel(currentLevelIndex);
         else
@@ -126,7 +126,7 @@ public class RoboPathCore : MonoBehaviour
 
                 if (isLastLevel)
                 {
-                    // Last level — show all complete then go to map
+                    
                     ui.ShowAllLevelsComplete();
                     if (_trigger != null)
                         _trigger.FinishLevel(currentLevelIndex);
@@ -135,8 +135,8 @@ public class RoboPathCore : MonoBehaviour
                 }
                 else
                 {
-                    // Not last level — show complete message
-                    // UI button calls GoToNextLevel() which goes to map
+                    
+                    
                     ui.ShowLevelComplete(currentLevelIndex);
                 }
 

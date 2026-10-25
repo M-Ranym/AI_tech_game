@@ -8,9 +8,9 @@ using NoSuchStudio.Variables;
 using NoSuchStudio.DataStorage;
 
 namespace NoSuchStudio.DataStorage.Editor {
-    /// <summary>
-    /// Editor for <see cref="NoSuchStudio.DataStorage"/>.
-    /// </summary>
+    
+    
+    
     [CustomEditor(typeof(DataStore))]
     public sealed class DataStoreEditor : NoSuchEditor {
         DataStore _target;

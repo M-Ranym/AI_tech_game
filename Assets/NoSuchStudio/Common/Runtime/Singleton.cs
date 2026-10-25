@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
@@ -15,7 +15,7 @@ namespace NoSuchStudio.Common {
             }
         }
 
-        //Awake is always called before any Start functions
+        
         private void OnEnable() {
             if (string.IsNullOrEmpty(tagName)) throw new ApplicationException(string.Format("Singleton tagName empty for object {0}", gameObject.name));
 
@@ -25,7 +25,7 @@ namespace NoSuchStudio.Common {
             } else {
                 gameObject.tag = tagName;
                 _instances[tagName] = this;
-                //Sets this to not be destroyed when reloading scene
+                
                 DontDestroyOnLoad(gameObject);
             }
         }

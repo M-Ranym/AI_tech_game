@@ -54,7 +54,7 @@ namespace LayerLab
 
         void Update()
         {
-            // if (panels.Count <= 0 || !isReady) return;
+            
             if (!isReady) return;
 
             if (Input.GetKeyDown(KeyCode.LeftArrow))
@@ -64,7 +64,7 @@ namespace LayerLab
         }
 
         private bool isDarakMode = false;
-        //Click_Prev
+        
         public void Click_Prev()
         {
             if (page <= 0 || !isReady) return;
@@ -88,7 +88,7 @@ namespace LayerLab
             CheckControl();
         }
 
-        //Click_Next
+        
         public void Click_Next()
         {
             if (page >= panelLight.Count - 1) return;
@@ -109,7 +109,7 @@ namespace LayerLab
             buttonNext.gameObject.SetActive(page < panelLight.Count - 1);
         }
 
-        //SetTitle, SetArrow Active
+        
         private void CheckControl()
         {
             if (!isDarakMode)

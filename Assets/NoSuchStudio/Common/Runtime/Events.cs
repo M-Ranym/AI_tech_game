@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,11 +15,11 @@ namespace NoSuchStudio.Common {
         private bool _alreadyRaised = false;
         private Queue<Tuple<string, object[]>> _eventQueue = new Queue<Tuple<string, object[]>>();
 
-        // Awake is always called before any Start functions
+        
         void Awake() {
-            // Check if instance already exists
+            
             if (gInstance == null) gInstance = this;
-            // If instance already exists and it's not this:
+            
             if (gInstance != this)
                 throw new ApplicationException("Only one events object.");
         }
@@ -37,7 +37,7 @@ namespace NoSuchStudio.Common {
 
         private IEnumerator RaiseEventInternal() {
             _alreadyRaised = true;
-            yield return null; // defer to next frame
+            yield return null; 
             _alreadyRaised = false;
             Queue<Tuple<string, object[]>> curEventBatch = _eventQueue;
             _eventQueue = new Queue<Tuple<string, object[]>>();

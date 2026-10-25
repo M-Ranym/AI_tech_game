@@ -1,4 +1,4 @@
-﻿// Compile only if TextMeshPro is present in the project.
+
 #if TMPRO_PRESENT
 using System;
 using System.Collections.Generic;
@@ -6,14 +6,14 @@ using TMPro;
 using UnityEngine;
 
 namespace NoSuchStudio.Localization.Localizers {
-    /// <summary>
-    /// Localizes <see cref="TMP_Dropdown"/> by setting its <see cref="TMP_Dropdown.options"/> property based
-    /// on its own <see cref="_options"/>. Each <see cref="Option"/> has a phrase which get's translated
-    /// based on <see cref="LocalizationService.CurrentLanguage"/>.
-    /// <para>
-    /// This component does not support variable substitution.
-    /// </para>
-    /// </summary>
+    
+    
+    
+    
+    
+    
+    
+    
     [RequireComponent(typeof(TMP_Dropdown))]
     [AddComponentMenu(LocalizationService.ComponentMenuPath + "/Dropdown - TextMeshPro Localizer")]
     public class TMProDropdownLocalizer : ComponentLocalizer<TMProDropdownLocalizer, TMP_Dropdown> {

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UPersian.Components;
 
 public class UIManager : MonoBehaviour
@@ -26,7 +26,7 @@ public class UIManager : MonoBehaviour
         label.text = text;
     }
 
-    // ── Public label setters ─────────────────────────────
+    
 
     public void SetPlayLabel() => SetRTL(playResetButtonLabel, "العب الان");
 
@@ -34,7 +34,7 @@ public class UIManager : MonoBehaviour
 
     public void SetRepeatLabel() => SetRTL(playResetButtonLabel, "اعادة");
 
-    // ── Button pressed ───────────────────────────────────
+    
 
     public void OnPlayResetPressed()
     {

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 
 public class RoboPathSlotManager : MonoBehaviour
@@ -22,7 +22,7 @@ public class RoboPathSlotManager : MonoBehaviour
         else Destroy(gameObject);
     }
 
-    // ✅ NEW: Set slots per level
+    
     public void SetSlots(RoboPathDropSlot[] levelSlots)
     {
         slots = levelSlots;
@@ -31,7 +31,7 @@ public class RoboPathSlotManager : MonoBehaviour
             slots[i].gameObject.SetActive(true);
     }
 
-    // ── Drop / Lift ──────────────────────────────
+    
     public void HandleDrop(RoboPathDragImage card, Vector2 dropScreenPos)
     {
         int nearest = GetNearestSlotIndex(dropScreenPos);
@@ -51,7 +51,7 @@ public class RoboPathSlotManager : MonoBehaviour
         }
     }
 
-    // ── Scan ─────────────────────────────────────
+    
     public IEnumerator ScanForAction(
      RoboPathCore.RobotAction needed,
      System.Action<int> onDone)
@@ -64,7 +64,7 @@ public class RoboPathSlotManager : MonoBehaviour
 
             slots[i].SetCardColor(scanColor);
 
-            // Sound for scanning each card
+            
             if (Game_Over_2_AudioManager.audioManInstance != null)
                 Game_Over_2_AudioManager.audioManInstance.Play_Sfx("RoboScanCard");
 
@@ -75,7 +75,7 @@ public class RoboPathSlotManager : MonoBehaviour
                 foundIndex = i;
                 slots[i].SetCardColor(foundColor);
 
-                // Correct card found sound
+                
                 if (Game_Over_2_AudioManager.audioManInstance != null)
                     Game_Over_2_AudioManager.audioManInstance.Play_Sfx("RoboCardFound");
 
@@ -103,7 +103,7 @@ public class RoboPathSlotManager : MonoBehaviour
 
         onDone?.Invoke(foundIndex);
     }
-    // ── Helpers ──────────────────────────────────
+    
     public void ResetFoundSlot(int slotIndex)
     {
         if (slotIndex >= 0 && slotIndex < slots.Length)

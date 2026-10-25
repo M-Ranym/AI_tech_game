@@ -28,21 +28,21 @@ namespace NoSuchStudio.Variables.Editor {
         }
 
         public override void OnInspectorGUI() {
-            // serializedObject.Update();
-            // EditorGUILayout.PropertyField(textAssetField);
-            // serializedObject.ApplyModifiedProperties();
-            // EditorGUILayout.Separator();
+            
+            
+            
+            
 
-            // connection status
+            
             DrawServiceConnectionStatus(variablesMapper);
             EditorGUILayout.Separator();
 
-            // variable stats
+            
             int variableCount = variablesMapper.mappedVariables.Keys.Count();
             EditorGUILayout.LabelField($"Variables: {variableCount}");
             EditorGUILayout.Separator();
 
-            // default editor
+            
             DrawDefaultInspector();
         }
     }

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,9 +44,9 @@ namespace NoSuchStudio.Common.Editor {
             
         }
 
-        /// <summary>
-        /// Called once
-        /// </summary>
+        
+        
+        
         private void PrepareContent() {
             styleVersion = new GUIStyle(EditorStyles.label) {
                 alignment = TextAnchor.MiddleCenter,
@@ -76,11 +76,11 @@ namespace NoSuchStudio.Common.Editor {
         }
 
         void RenderModuleInfo(IEditorModule module) {
-            // Version
+            
             EditorGUILayout.Space(10);
             EditorGUILayout.LabelField(guiModuleVersion, styleVersion);
             EditorGUILayout.Space(20);
-            // Upgrade
+            
             if (module.Edition == ModuleEdition.Lite) {
                 EditorGUILayout.LabelField("Consider upgrading to the <color=green>Pro</color> version.", styleLabel, GUILayout.Height(30));
                 if (GUILayout.Button("Get Pro", styleLink)) {
@@ -88,7 +88,7 @@ namespace NoSuchStudio.Common.Editor {
                 }
                 EditorGUILayout.Space(20);
             }
-            // Documentation
+            
             if (!string.IsNullOrEmpty(module.DocumentationURL)) {
                 EditorGUILayout.LabelField("<b>Learn how to use the asset.</b>\nManual, tutorial videos and API documentation.", styleLabel, GUILayout.Height(30));
                 if (GUILayout.Button("Learn", styleLink)) {
@@ -97,7 +97,7 @@ namespace NoSuchStudio.Common.Editor {
                 EditorGUILayout.Space(20);
             }
 
-            // Support Forum
+            
             if (!string.IsNullOrEmpty(module.SupportForumURL)) {
                 EditorGUILayout.LabelField("<b>Need help? We got your back!</b>\nSometimes the documentation doesn't have the answer.", styleLabel, GUILayout.Height(30));
                 if (GUILayout.Button("Support Forum", styleLink)) {
@@ -106,7 +106,7 @@ namespace NoSuchStudio.Common.Editor {
                 EditorGUILayout.Space(20);
             }
 
-            // Review
+            
             if (!string.IsNullOrEmpty(module.StoreLinkURL)) {
                 if (GUILayout.Button(guiReview, styleLink, GUILayout.Height(30))) {
                     Application.OpenURL(module.StoreLinkURL);
@@ -116,18 +116,18 @@ namespace NoSuchStudio.Common.Editor {
 
         void OnGUI() {
             minSize = maxSize = new Vector2(500, 400);
-            // Thankyou Note
-            // Version note
+            
+            
             EditorGUILayout.Space(10);
             EditorGUILayout.LabelField(guiThankyou, styleThankyou);
             EditorGUILayout.Space(10);
-            // Discord
+            
             EditorGUILayout.LabelField("<b>Join the community.</b>\nTalk to the developers and other members of the community.", styleLabel, GUILayout.Height(30));
             if (GUILayout.Button("Discord", styleLink)) {
                 Application.OpenURL(DiscordURL);
             }
             EditorGUILayout.Space(10);
-            // Modules
+            
             if (modules.Count > 0) {
                 if (string.IsNullOrEmpty(curModuleName)) {
                     var module = modules.FirstOrDefault();

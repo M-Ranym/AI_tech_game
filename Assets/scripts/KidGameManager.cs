@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UPersian.Components;
@@ -94,15 +94,15 @@ public class KidGameManager : MonoBehaviour
             fruits.Add(allFruits[i]);
         }
 
-        // Guarantee at least 1 wrong placement per zone so it's never 100% correct at start
-        // Animals go to animalZone, fruits go to fruitZone — then swap some across
+        
+        
         int wrongCount = Mathf.Max(1, Mathf.RoundToInt(itemCount * 0.5f));
         wrongCount = Mathf.Min(wrongCount, animals.Count, fruits.Count);
 
         var shuffledAnimals = ShuffledCopy(animals);
         var shuffledFruits = ShuffledCopy(fruits);
 
-        // Place most animals correctly, but put wrongCount of them in fruitZone
+        
         for (int i = 0; i < shuffledAnimals.Count; i++)
         {
             KidDropZone target = (i < wrongCount) ? fruitZone : animalZone;
@@ -110,7 +110,7 @@ public class KidGameManager : MonoBehaviour
                 target.AddItem(drag);
         }
 
-        // Place most fruits correctly, but put wrongCount of them in animalZone
+        
         for (int i = 0; i < shuffledFruits.Count; i++)
         {
             KidDropZone target = (i < wrongCount) ? animalZone : fruitZone;
@@ -124,9 +124,9 @@ public class KidGameManager : MonoBehaviour
         if (Game_Over_2_AudioManager.audioManInstance != null)
             Game_Over_2_AudioManager.audioManInstance.Play_Sfx("KidButtonClick");
 
-        // During tutorial Step 7 the tutorial manager is waiting for this signal.
-        // Forward the press to it and do nothing else — the game round starts
-        // only after OnTutorialFinished() is called.
+        
+        
+        
         KidTutorialManager tm = FindObjectOfType<KidTutorialManager>();
         if (tm != null && tm.IsTutorialActive())
         {

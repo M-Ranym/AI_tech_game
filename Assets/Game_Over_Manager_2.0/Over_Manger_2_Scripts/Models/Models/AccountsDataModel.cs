@@ -60,13 +60,13 @@ namespace horizon.Models
         public string upperBodyAccessoriesOwned { get; set; } = "0-1-2-3-6-7";
         public int upperBodyAccessoriesWeared { get; set; } = 0;
 
-        //--------- Streak Related
+        
         public DateTime? streakStartDate { get; set; } = null;
         public string streakString { get; set; } = "";
         public string unlockedFlowers { get; set; } = "";
         public DateTime? lastTimeStreakMarked { get; set; } = null;
 
-        //---------
+        // ---------
         public Dictionary<string, List<string>> surveys { get; set; } = new Dictionary<string, List<string>>();
 
         public string ToJson()

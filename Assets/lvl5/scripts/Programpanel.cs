@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -22,7 +22,7 @@ public class ProgramPanel : MonoBehaviour
 
     private GameObject draggingBlock = null;
 
-    // 🔥 NEW (for Excel-like behavior)
+    
     private int insertIndex = -1;
 
     void Awake()
@@ -58,7 +58,7 @@ public class ProgramPanel : MonoBehaviour
         insertIndex = -1;
     }
 
-    // 🔥 NEW
+    
     public void SetInsertIndex(int idx)
     {
         insertIndex = idx;
@@ -95,8 +95,8 @@ public class ProgramPanel : MonoBehaviour
 
             float targetY = targetPositions[blocks[i]].y;
 
-            // 🔥 BIG FIX: use a "zone" instead of exact line
-            float threshold = 80f; // you can tweak this (20–60)
+            
+            float threshold = 80f; 
 
             if (worldY > targetY - threshold)
                 return visualIndex;
@@ -107,7 +107,7 @@ public class ProgramPanel : MonoBehaviour
         return visualIndex;
     }
 
-    // 🔥 FINAL reorder ONLY on drop
+    
     public void FinalizeReorder(GameObject block)
     {
         blocks.Remove(block);
@@ -184,7 +184,7 @@ public class ProgramPanel : MonoBehaviour
 
             float y = firstBlockTop - blockH * 0.5f - visualIndex * (blockH + wSpacing);
 
-            // 🔥 THIS is the Excel gap
+            
             if (draggingBlock != null && insertIndex >= 0 && visualIndex >= insertIndex)
             {
                 y -= (blockH + wSpacing) * 1.2f;
@@ -213,7 +213,7 @@ public class ProgramPanel : MonoBehaviour
 
     public void RefreshLayout() => ComputeTargets();
 
-    // ✅ RESTORED (your MazeGenerator needs this)
+    
     public List<BlockType> GetProgram()
     {
         blocks.RemoveAll(b => b == null);
@@ -230,7 +230,7 @@ public class ProgramPanel : MonoBehaviour
         return program;
     }
 
-    // ✅ RESTORED
+    
     public void ClearProgram()
     {
         foreach (var block in blocks)

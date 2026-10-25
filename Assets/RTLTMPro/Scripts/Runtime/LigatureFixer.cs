@@ -24,13 +24,13 @@ namespace RTLTMPro
             buffer.Clear();
         }
 
-        /// <summary>
-        ///     Fixes the flow of the text.
-        /// </summary>
+        
+        
+        
         public static void Fix(FastStringBuilder input, FastStringBuilder output, bool farsi, bool fixTextTags, bool preserveNumbers)
         {
-            // Some texts like tags, English words and numbers need to be displayed in their original order.
-            // This list keeps the characters that their order should be reserved and streams reserved texts into final letters.
+            
+            
             LtrTextHolder.Clear();
             TagTextHolder.Clear();
             for (int i = input.Length - 1; i >= 0; i--)
@@ -53,7 +53,7 @@ namespace RTLTMPro
                 {
                     if (characterAtThisIndex == '>')
                     {
-                        // We need to check if it is actually the beginning of a tag.
+                        
                         bool isValidTag = false;
                         int nextI = i;
                         TagTextHolder.Add(characterAtThisIndex);
@@ -67,7 +67,7 @@ namespace RTLTMPro
                             if (jChar == '<')
                             {
                                 var jPlus1Char = input.Get(j + 1);
-                                // Tags do not start with space
+                                
                                 if (jPlus1Char == ' ')
                                 {
                                     break;
@@ -95,7 +95,7 @@ namespace RTLTMPro
                 {
                     if (MirroredCharsSet.Contains((char)characterAtThisIndex))
                     {
-                        // IsRTLCharacter returns false for null
+                        
                         bool isAfterRTLCharacter = Char32Utils.IsRTLCharacter(previousCharacter);
                         bool isBeforeRTLCharacter = Char32Utils.IsRTLCharacter(nextCharacter);
 
@@ -148,8 +148,8 @@ namespace RTLTMPro
                     bool isAfterSymbol = Char32Utils.IsSymbol(previousCharacter);
                     bool isBeforeSymbol = Char32Utils.IsSymbol(nextCharacter);
 
-                    // For cases where english words and farsi/arabic are mixed. This allows for using farsi/arabic, english and numbers in one sentence.
-                    // If the space is between numbers,symbols or English words, keep the order
+                    
+                    
                     if (characterAtThisIndex == ' ' &&
                         (isBeforeEnglishChar || isBeforeNumber || isBeforeSymbol) &&
                         (isAfterEnglishChar || isAfterNumber || isAfterSymbol))
@@ -166,7 +166,7 @@ namespace RTLTMPro
                     continue;
                 }
 
-                // handle surrogates
+                
                 if (characterAtThisIndex >= (char)0xD800 &&
                     characterAtThisIndex <= (char)0xDBFF ||
                     characterAtThisIndex >= (char)0xDC00 && characterAtThisIndex <= (char)0xDFFF)

@@ -4,14 +4,14 @@ using UnityEngine;
 using UnityEngine.UI;
 using UPersian.Components;
 
-// Runs only on level 0 of the Robot Path Planning game. Unlike the Face
-// Detection / Agent Debugging tutorials, MazeGenerator is NOT disabled here —
-// it still draws the maze/robot and runs the program exactly like a real
-// level (level 0's maze is seeded to be identical to real level 1's, see
-// MazeGenerator.GenerateMaze). This script only narrates and gates which
-// toolbox pieces the child can touch at each step; once the child presses
-// Play, control is handed fully back to MazeGenerator's normal win/fail flow
-// (including the FinishLevel(0) call on success, which unlocks level 1).
+
+
+
+
+
+
+
+
 public class RobotPathTutorialManager : MonoBehaviour
 {
     [Header("Ferid & Speech Bubble")]
@@ -44,11 +44,11 @@ public class RobotPathTutorialManager : MonoBehaviour
     [Header("Controls")]
     public Button playButton;
 
-    private const string V1 = "RobotPathTutorial_Step1"; // greeting
-    private const string V2 = "RobotPathTutorial_Step2"; // explain the goal
-    private const string V3 = "RobotPathTutorial_Step3"; // drag "right"
-    private const string V4 = "RobotPathTutorial_Step4"; // drag "up"
-    private const string V5 = "RobotPathTutorial_Step5"; // press play
+    private const string V1 = "RobotPathTutorial_Step1"; 
+    private const string V2 = "RobotPathTutorial_Step2"; 
+    private const string V3 = "RobotPathTutorial_Step3"; 
+    private const string V4 = "RobotPathTutorial_Step4"; 
+    private const string V5 = "RobotPathTutorial_Step5"; 
 
     private GameFinishTrigger _trigger;
     private bool _tutorialFinished = false;
@@ -61,8 +61,8 @@ public class RobotPathTutorialManager : MonoBehaviour
     {
         _trigger = FindObjectOfType<GameFinishTrigger>();
 
-        // Level 0 is this tutorial; levels 1-4 are the real maze
-        // difficulties, still handled entirely by MazeGenerator.
+        
+        
         if (_trigger != null && _trigger.GetStartLevel() != 0)
         {
             enabled = false;
@@ -81,11 +81,11 @@ public class RobotPathTutorialManager : MonoBehaviour
 
         LockAllControls();
 
-        // The toolbox, play button, and program panel stay visually in front
-        // of the dark overlay for the whole tutorial (same convention as the
-        // other tutorials) — only Ferid/speech/hand are toggled per step.
-        // MazeGenerator keeps drawing/running the maze underneath exactly as
-        // in a real level, so only these interactive pieces need lifting.
+        
+        
+        
+        
+        
         BringInFrontOfOverlay(new List<GameObject>
         {
             rightBlockToolbox, upBlockToolbox, downBlockToolbox, leftBlockToolbox,
@@ -117,16 +117,16 @@ public class RobotPathTutorialManager : MonoBehaviour
 
     private IEnumerator RunTutorial()
     {
-        // ── Step 1 ── Greeting
+        
         ShowFerid();
         ShowSpeech("مرحباً بك في لعبة المتاهة!", V1);
         yield return WaitForTap();
 
-        // ── Step 2 ── Explain the goal
+        
         ShowSpeech("ساعد الروبوت على الوصول الى الهدف باستخدام قطع الأوامر", V2);
         yield return WaitForTap();
 
-        // ── Step 3 ── Drag the "right" block
+        
         ShowSpeech("اسحب قطعة 'يمين' وضعها هنا", V3);
         SetOneInteractable(rightBlockToolbox, true);
         ShowHandAt(rightBlockToolbox.GetComponent<RectTransform>());
@@ -134,7 +134,7 @@ public class RobotPathTutorialManager : MonoBehaviour
         HideHand();
         SetOneInteractable(rightBlockToolbox, false);
 
-        // ── Step 4 ── Drag the "up" block
+        
         ShowSpeech("والان اسحب قطعة 'فوق' وضعها بعدها", V4);
         SetOneInteractable(upBlockToolbox, true);
         ShowHandAt(upBlockToolbox.GetComponent<RectTransform>());
@@ -142,7 +142,7 @@ public class RobotPathTutorialManager : MonoBehaviour
         HideHand();
         SetOneInteractable(upBlockToolbox, false);
 
-        // ── Step 5 ── Press play
+        
         ShowSpeech("ممتاز! اضغط الزر ليتحرك الروبوت", V5);
         SetOneInteractable(playButton.gameObject, true);
         ShowHandAt(playButton.GetComponent<RectTransform>());
@@ -160,9 +160,9 @@ public class RobotPathTutorialManager : MonoBehaviour
         return prog.Count > index && prog[index] == type;
     }
 
-    // ══════════════════════════════════════════════════════════════════
-    //  FERID / SPEECH — one fixed position, no per-step repositioning.
-    // ══════════════════════════════════════════════════════════════════
+    
+    
+    
 
     private void ShowFerid()
     {
@@ -206,12 +206,12 @@ public class RobotPathTutorialManager : MonoBehaviour
         }
     }
 
-    // ══════════════════════════════════════════════════════════════════
-    //  OVERLAY Z-ORDER — reparents targets under darkOverlay's own parent
-    //  and places them right after it in sibling order, so they render in
-    //  front of the dimming layer instead of behind it. Called once at
-    //  Start() with whole containers (same pattern as AgentTutorialManager).
-    // ══════════════════════════════════════════════════════════════════
+    
+    
+    
+    
+    
+    
 
     private void BringInFrontOfOverlay(List<GameObject> targets)
     {
@@ -227,13 +227,13 @@ public class RobotPathTutorialManager : MonoBehaviour
         }
     }
 
-    // ══════════════════════════════════════════════════════════════════
-    //  CONTROL GATING — every toolbox block and Play start locked; each
-    //  step unlocks exactly the one piece it's teaching. Gated via
-    //  CanvasGroup (blocksRaycasts/interactable), same as the submit-button
-    //  gating in AgentTutorialManager — it stops a drag/click from starting
-    //  without touching visibility or sibling order.
-    // ══════════════════════════════════════════════════════════════════
+    
+    
+    
+    
+    
+    
+    
 
     private void LockAllControls()
     {
@@ -262,9 +262,9 @@ public class RobotPathTutorialManager : MonoBehaviour
         cg.interactable = state;
     }
 
-    // ══════════════════════════════════════════════════════════════════
-    //  HAND
-    // ══════════════════════════════════════════════════════════════════
+    
+    
+    
 
     private void EnsureHandNonBlocking()
     {
@@ -274,7 +274,7 @@ public class RobotPathTutorialManager : MonoBehaviour
         cg.blocksRaycasts = false;
         cg.interactable = false;
 
-        // Always render above Ferid/speech bubble.
+        
         tutorialHand.transform.SetAsLastSibling();
     }
 
@@ -291,12 +291,12 @@ public class RobotPathTutorialManager : MonoBehaviour
 
     private void HideHand() { if (tutorialHand != null) tutorialHand.SetActive(false); }
 
-    // ══════════════════════════════════════════════════════════════════
-    //  END — hand control fully back to MazeGenerator. Its own win/fail
-    //  flow (resultPanel + FinishLevel(0) on success) takes it from here;
-    //  everything is unlocked so a failed attempt can be retried freely,
-    //  same as a real level.
-    // ══════════════════════════════════════════════════════════════════
+    
+    
+    
+    
+    
+    
 
     private void EndTutorial()
     {

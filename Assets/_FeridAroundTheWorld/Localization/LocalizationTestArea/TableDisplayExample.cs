@@ -1,5 +1,5 @@
-﻿
-// Example usage script
+
+
 using UnityEditor;
 using UnityEngine;
 
@@ -36,22 +36,22 @@ namespace com.horizon.LocalizationSystem.Testing
             var tableDisplayExample = (TableDisplayExample)target;
             if (target == null)
                 return;
-            //if (GUILayout.Button("show window"))
-            //{
-            //    LocalizationToolWindow.ShowWindow(
-            //        "test",
-            //        tableDisplayExample.exampleData,
-            //        (phrase) =>
-            //        {
-            //            Debug.Log($"yay phrase is = {phrase}");
-            //        },
-            //        true,
-            //        tableDisplayExample.AiLocalization,
-            //        "",
-            //        null,
-            //        null
-            //        );
-            //}
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
         }
     }
 #endif

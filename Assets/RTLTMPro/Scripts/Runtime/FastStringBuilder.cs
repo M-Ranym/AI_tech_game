@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 namespace RTLTMPro {
     public class FastStringBuilder {
-        // Using fields to be as efficient as possible
+        
         private int length;
         public int Length {
             get { return length; }
@@ -117,8 +117,8 @@ namespace RTLTMPro {
         }
 
         public void RemoveAll(int character) {
-            int j = 0; // write index
-            int i = 0; // read index
+            int j = 0; 
+            int i = 0; 
             for (; i < length; i++) {
                 if (array[i] == character) continue;
 
@@ -211,18 +211,18 @@ namespace RTLTMPro {
                 }
                 else if (oldStr.Length < newStr.Length)
                 {
-                    // We need to expand capacity
+                    
                     int diff = newStr.Length - oldStr.Length;
                     length += diff;
                     EnsureCapacity(length, true);
 
-                    // Move everything forward by difference of length
+                    
                     for (int k = length - diff - 1; k >= i + oldStr.Length; k--)
                     {
                         array[k + diff] = array[k];
                     }
 
-                    // Start writing new string
+                    
                     for (int k = 0; k < newStr.Length; k++)
                     {
                         array[i + k] = newStr.Get(k);
@@ -230,10 +230,10 @@ namespace RTLTMPro {
                 }
                 else
                 {
-                    // We need to shrink
+                    
                     int diff = oldStr.Length - newStr.Length;
 
-                    // Move everything backwards by diff
+                    
                     for (int k = i + diff; k < length - diff; k++)
                     {
                         array[k] = array[k + diff];

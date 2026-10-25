@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -50,16 +50,16 @@ public class FollowingTests : MonoBehaviour {
         pos.x = LeanSmooth.bounceOut(cube3.position.x, followTrans.position.x, ref cube3VelocityX, 1.1f);
         cube3.position = pos;
 
-        //pos = cube4.position;
-        //pos.x = LeanTween.smoothQuint(cube4.position.x, followTrans.position.x, ref cube4VelocityX, 1.1f);
-        //cube4.position = pos;
+        
+        
+        
 
         pos = cube5.position;
         pos.x = LeanSmooth.linear(cube5.position.x, followTrans.position.x, 10f);
         cube5.position = pos;
 
 
-        // cube6.position = LeanTween.smoothGravity(cube6.position, followTrans.position, ref cube6Velocity, 1.1f);
+        
 
         if(LeanTween.isTweening(0)){
             Debug.Log("Tweening");

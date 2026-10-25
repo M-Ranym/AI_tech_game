@@ -5,7 +5,7 @@ namespace RTLTMPro
 {
     public static class TextUtils
     {
-        // Every English character is between these two
+        
         private const char LowerCaseA = (char) 0x61;
         private const char UpperCaseA = (char) 0x41;
         private const char LowerCaseZ = (char) 0x7A;
@@ -14,7 +14,7 @@ namespace RTLTMPro
         private const char HebrewLow  = (char) 0x591;
         private const char HebrewHigh = (char) 0x5F4;
 
-        // base, extended and supplement blocks are the isolated forms which will convert to presentation forms by the textbox.
+        
         private const char ArabicBaseBlockLow  = (char) 0x600;
         private const char ArabicBaseBlockHigh = (char) 0x6FF;
 
@@ -24,7 +24,7 @@ namespace RTLTMPro
         private const char ArabicExtendedBBlockLow  = (char)0x870;
         private const char ArabicExtendedBBlockHigh = (char)0x89F;
 
-        // presentation forms are final and will be preserved by the textbox
+        
         private const char ArabicPresentationFormsABlockLow  = (char)0xFB50;
         private const char ArabicPresentationFormsABlockHigh = (char)0xFDFF;
 
@@ -79,28 +79,25 @@ namespace RTLTMPro
                 || ch >= ArabicPresentationFormsBBlockLow && ch <= ArabicPresentationFormsBBlockHigh;
         }
 
-        /// <summary>
-        ///     Checks if the character is supported RTL character.
-        /// </summary>
-        /// <param name="ch">Character to check</param>
-        /// <returns><see langword="true" /> if character is supported. otherwise <see langword="false" /></returns>
+        
+        
+        
+        
+        
         public static bool IsRTLCharacter(char ch) {
             if (IsHebrewCharacter(ch)) return true;
             if (IsArabicCharacter(ch)) return true;
             return false;
         }
 
-        /// <summary>
-        ///     Checks if the character is a known arabic letter which will get transformed by the <see cref="GlyphFixer"/>
-        /// </summary>
-        /// <param name="ch">Character to check</param>
-        /// <returns><see langword="true" /> if character is known and will get glyph fixed. otherwise <see langword="false" /></returns>
+        
+        
+        
+        
+        
         public static bool IsGlyphFixedArabicCharacter(char ch)
         {
-            /*
-             * Other shapes of each letter comes right after the isolated form.
-             * That's why we add 3 to the isolated letter to cover every shape the letter
-             */
+            
 
             if (ch >= (char)ArabicIsolatedLetters.Hamza && ch <= (char)ArabicIsolatedLetters.Hamza + 3)
             {
@@ -323,7 +320,7 @@ namespace RTLTMPro
                 return true;
             }
 
-            // Special Lam Alef
+            
             if (ch == 0xFEF3)
             {
                 return true;
@@ -396,10 +393,10 @@ namespace RTLTMPro
             return false;
         }
         
-        /// <summary>
-        ///     Checks if the input string starts with supported RTL character or not.
-        /// </summary>
-        /// <returns><see langword="true" /> if input is RTL. otherwise <see langword="false" /></returns>
+        
+        
+        
+        
         public static bool IsRTLInput(string input)
         {
             bool insideTag = false;

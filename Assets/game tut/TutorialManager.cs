@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UPersian.Components;
 using System.Collections;
 using System.Collections.Generic;
@@ -99,13 +99,13 @@ public class TutorialManager : MonoBehaviour
 
     IEnumerator RunTutorial()
     {
-        // ── Step 1 ── Greeting
+        
         _step = 1;
         ShowSpeech("مرحباً بك في لعبة جمع البيانات!", VOICE_STEP1);
         PinUIToTop();
         yield return WaitForTap();
 
-        // ── Step 2 ── Show only 3 bubbles (dog, cat, bird)
+        
         _step = 2;
         ShowSpeech("انظر! هذه حيوانات تطفو في الهواء", VOICE_STEP2);
         SendBehindOverlay(allContainers);
@@ -117,7 +117,7 @@ public class TutorialManager : MonoBehaviour
         yield return WaitForTap();
         HideHand();
 
-        // ── Step 3 ── Show containers
+        
         _step = 3;
         ShowSpeech("كل حيوان يحتاج أن يذهب إلى مكانه الصحيح!", VOICE_STEP3);
         SendBehindOverlay(allBubbles);
@@ -127,7 +127,7 @@ public class TutorialManager : MonoBehaviour
         yield return WaitForTap();
         HideHand();
 
-        // ── Step 4 ── Dog bubble + cat container only (wrong drop demo)
+        
         _step = 4;
         ShowSpeech("اضغط مطولاً على الفقاعة واسحبها إلى الصندوق المناسب", VOICE_STEP4);
         SendBehindOverlay(allBubbles);
@@ -139,7 +139,7 @@ public class TutorialManager : MonoBehaviour
         SetInteractable(allBubbles, false);
         SetInteractable(allContainers, false);
 
-        // Re-pin UI to top BEFORE enabling interactable so overlay can't cover targets
+        
         PinUIToTop();
         SetOneInteractable(catBoxTarget.gameObject, true);
         SetOneInteractable(tutorialDogBubble, true);
@@ -152,7 +152,7 @@ public class TutorialManager : MonoBehaviour
         StopAndHideHand();
         yield return new WaitForSeconds(afterDropPause);
 
-        // ── Step 5 ── Wrong drop explanation (auto)
+        
         _step = 5;
         SetOneInteractable(tutorialDogBubble, false);
         SetInteractable(allContainers, false);
@@ -160,7 +160,7 @@ public class TutorialManager : MonoBehaviour
         PinUIToTop();
         yield return WaitForTap();
 
-        // ── Step 6 ── Cat bubble + cat container only (correct drop)
+        
         _step = 6;
         ShowSpeech("اضغط مطولاً على الفقاعة واسحبها إلى الصندوق المناسب", VOICE_STEP6);
         SendBehindOverlay(allBubbles);
@@ -181,7 +181,7 @@ public class TutorialManager : MonoBehaviour
         StopAndHideHand();
         yield return new WaitForSeconds(afterDropPause);
 
-        // ── Ferid says "put the rest" then disappears
+        
         _step = 6;
         ShowSpeech("رائع! الآن ضع باقي الحيوانات في أماكنها الصحيحة", VOICE_STEP6B);
         PinUIToTop();
@@ -207,7 +207,7 @@ public class TutorialManager : MonoBehaviour
         StopAndHideHand();
         yield return new WaitForSeconds(afterDropPause);
 
-        // ── Bird drop
+        
         SendBehindOverlay(allBubbles);
         SendBehindOverlay(allContainers);
         BringInFrontOfOverlay(new List<GameObject> { tutorialBirdBubble });
@@ -227,13 +227,13 @@ public class TutorialManager : MonoBehaviour
         StopAndHideHand();
         yield return new WaitForSeconds(afterDropPause);
 
-        // ── Step 7 ── Ferid reappears, congratulate
+        
         _step = 7;
         ShowFerid();
         ShowSpeech("أحسنت! الآن أنت جاهز للعب", VOICE_STEP7);
         PinUIToTop();
-        yield return new WaitForSeconds(0.5f); // wait for voice to finish
-        yield return WaitForTap();             // then wait for tap before ending
+        yield return new WaitForSeconds(0.5f); 
+        yield return WaitForTap();             
 
         EndTutorial();
     }
@@ -455,9 +455,9 @@ public class TutorialManager : MonoBehaviour
         if (feridRect != null) feridRect.gameObject.SetActive(false);
         if (darkOverlay != null) darkOverlay.SetActive(false);
 
-        // Only the 3 demo items were ever switched on (ShowOnlyTutorialObjects),
-        // and Start() also blocked raycasts/interaction on the full real set --
-        // turn everything back on now so the actual game is visible and playable.
+        
+        
+        
         foreach (var go in allBubbles)
             if (go != null) go.SetActive(true);
         foreach (var go in allContainers)
@@ -466,9 +466,9 @@ public class TutorialManager : MonoBehaviour
         SetInteractable(allBubbles, true);
         SetInteractable(allContainers, true);
 
-        // Hand off to the real game in this same scene/level — don't finish
-        // the level here, MyGameManager does that once the player actually
-        // finishes gathering the animals.
+        
+        
+        
         if (MyGameManager.instance != null)
             MyGameManager.instance.OnTutorialFinished();
         else

@@ -9,7 +9,7 @@ public class LeanTweenDocumentationEditor : Editor {
 	static void openDocumentation()
 	{
 		#if !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_0_1 && !UNITY_4_1 && !UNITY_4_2 && !UNITY_4_3
-		// Loops through all items in case the user has moved the default installation directory
+		
 		string[] guids = AssetDatabase.FindAssets ("LeanTween", null);
 		string documentationPath = "";
 		foreach (string guid in guids){
@@ -24,7 +24,7 @@ public class LeanTweenDocumentationEditor : Editor {
 		Application.OpenURL(browserPath);
 
 		#else
-		// assumes the default installation directory
+		
 		string documentationPath = "file://"+Application.dataPath + "/LeanTween/Documentation/classes/LeanTween.html#index";
 		Application.OpenURL(documentationPath);
 

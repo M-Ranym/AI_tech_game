@@ -1,4 +1,4 @@
-﻿// Compile only if TextMeshPro is present in the project.
+
 #if TMPRO_PRESENT
 using TMPro;
 using UnityEngine;
@@ -14,10 +14,10 @@ namespace NoSuchStudio.Common {
 
         public void OnPointerClick(PointerEventData eventData) {
             int linkIndex = TMP_TextUtilities.FindIntersectingLink(tmpro, Input.mousePosition, Camera.main);
-            if (linkIndex != -1) { // was a link clicked?
+            if (linkIndex != -1) { 
                 TMP_LinkInfo linkInfo = tmpro.textInfo.linkInfo[linkIndex];
 
-                // open the link id as a url, which is the metadata we added in the text field
+                
                 Application.OpenURL(linkInfo.GetLinkID());
             } else {
                 LogLog("tmpro no links");

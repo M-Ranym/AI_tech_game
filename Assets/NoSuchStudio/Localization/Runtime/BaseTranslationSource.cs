@@ -1,4 +1,4 @@
-﻿using NoSuchStudio.Common;
+using NoSuchStudio.Common;
 using NoSuchStudio.Common.Service;
 using System;
 using System.Collections.Generic;
@@ -37,10 +37,10 @@ namespace NoSuchStudio.Localization {
             };
         }
 
-        /// <summary>
-        /// /// Looks up the locale in current LocalizationService's locale DB. If it is found uses the canonical name for the locale instead of the current one.
-        /// </summary>
-        /// <returns>true if locale was found, false otherwise</returns>
+        
+        
+        
+        
         public bool NormalizeLocaleName() {
             if (!LocalizationService.IsReady) return false;
             var localeDB = LocalizationService.Instance.localeDatabase;
@@ -53,16 +53,16 @@ namespace NoSuchStudio.Localization {
         }
     }
 
-    /// <summary>
-    /// Base class for classes that provide translations for phrases. The translations
-    /// could be serialized in the scene or 
-    /// come from a File (<see cref="FileTranslationSource"/>) or from other places.
-    /// </summary>
+    
+    
+    
+    
+    
     [ExecuteInEditMode]
     public abstract class BaseTranslationSource : NoSuchMonoBehaviour, ITranslationSource {
-        /// <summary>
-        /// Populated list of translations this source provides.
-        /// </summary>
+        
+        
+        
         [NonSerialized] protected Dictionary<string, Dictionary<string, string>> _translations;
         public Dictionary<string, Dictionary<string, string>> translations {
             get { return _translations; }
@@ -91,15 +91,15 @@ namespace NoSuchStudio.Localization {
             });
         }
 
-        /// <summary>
-        /// Whether the source is ready to be connected to the <see cref="LocalizationService"/>.
-        /// Unless overriden, it happens in <see cref="OnEnable"/>.
-        /// </summary>
+        
+        
+        
+        
         [NonSerialized] protected bool _readyToConnect;
 
-        /// <summary>
-        /// Keeps the connection status to different services.
-        /// </summary>
+        
+        
+        
         [NonSerialized] protected Dictionary<Type, bool> _connected;
 
         protected virtual void Init() {
@@ -111,20 +111,20 @@ namespace NoSuchStudio.Localization {
             get { return this; }
         }
 
-        /// <summary>
-        /// Check connection to service.
-        /// </summary>
-        /// <returns>
-        /// Returns true if connected to the service.
-        /// </returns>
+        
+        
+        
+        
+        
+        
         public virtual bool IsConnected<ST>() where ST : Service<ST> {
             return _connected.ContainsKey(typeof(ST)) ? _connected[typeof(ST)] : false;
         }
 
-        /// <summary>
-        /// Try to connect to the given service. Check <see cref="IsConnected{ST}"/>
-        /// to check if the connection attempt was succssful.
-        /// </summary>
+        
+        
+        
+        
         public void Connect<ST>() where ST : Service<ST> {
             if (!EditorUtilities.IsInMainStage(gameObject)) return;
             if (!_readyToConnect) return;
@@ -142,22 +142,16 @@ namespace NoSuchStudio.Localization {
             _connected[typeof(ST)] = true;
         }
 
-        /// <summary>
-        /// Try to disconnect from the given service. Check <see cref="IsConnected{ST}"/>
-        /// to check if the connection attempt was succssful.
-        /// </summary>
+        
+        
+        
+        
         public void Disconnect<ST>() where ST : Service<ST> {
             if (!EditorUtilities.IsInMainStage(gameObject)) return;
             if (!_readyToConnect) return;
             if (!Service<ST>.IsReady) return;
             if (typeof(ST) != typeof(LocalizationService)) return;
-            /*_translations.ToList().ForEach(kvp => {
-                string phrase = kvp.Key;
-                var phraseTranslations = kvp.Value;
-                phraseTranslations.ToList().ForEach(translation => {
-                    LocalizationService.RemoveLocalizationSource(phrase, translation.Key, this);
-                });
-            });*/
+            
             LocalizationService.RemoveLocalizationSource(this);
             _connected[typeof(ST)] = false;
         }
@@ -188,20 +182,20 @@ namespace NoSuchStudio.Localization {
             _readyToConnect = false;
         }
 
-        /// <summary>
-        /// Removes all translations from this translation source.
-        /// </summary>
+        
+        
+        
         protected virtual void Reset() {
             Init();
             Connect<LocalizationService>();
         }
 
-        /// <summary>
-        /// Get translation for "phrase" in "locale" from this translation source.
-        /// </summary>
-        /// <param name="phrase">phrase to get translation for.</param>
-        /// <param name="locale">locale of the translation.</param>
-        /// <returns>Translated string if one exists, null otherwise.</returns>
+        
+        
+        
+        
+        
+        
         public virtual string GetTranslation(string phrase, string locale) {
             if (_translations.ContainsKey(phrase) && _translations[phrase].ContainsKey(locale)) {
                 return _translations[phrase][locale];
@@ -210,9 +204,9 @@ namespace NoSuchStudio.Localization {
             }
         }
 
-        /// <summary>
-        /// Removes all translations from this translation source.
-        /// </summary>
+        
+        
+        
         public virtual void Clear() {
             Init();
             Disconnect<LocalizationService>();

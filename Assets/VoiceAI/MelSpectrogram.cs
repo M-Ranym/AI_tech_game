@@ -1,23 +1,23 @@
 using System;
 
-// Computes a log-mel spectrogram from a 1-second, 16kHz mono audio clip.
-//
-// IMPORTANT: every constant and formula here must exactly match
-// train_voice_commands.py. If you change one side, change the other.
+
+
+
+
 public static class MelSpectrogram
 {
     public const int SampleRate = 16000;
-    public const int ClipSamples = 16000;   // 1.0 second
-    public const int FrameLength = 400;     // 25ms
-    public const int FrameStep = 160;       // 10ms
+    public const int ClipSamples = 16000;   
+    public const int FrameLength = 400;     
+    public const int FrameStep = 160;       
     public const int NFFT = 512;
     public const int NMels = 40;
     public const float FMin = 20f;
     public const float FMax = 8000f;
-    public const int NumFrames = 1 + (ClipSamples - FrameLength) / FrameStep; // 98
+    public const int NumFrames = 1 + (ClipSamples - FrameLength) / FrameStep; 
 
     private static float[] hannWindow;
-    private static float[,] melFilterbank; // [NMels, NFFT/2+1]
+    private static float[,] melFilterbank; 
 
     static MelSpectrogram()
     {
@@ -25,9 +25,9 @@ public static class MelSpectrogram
         BuildMelFilterbank();
     }
 
-    // Returns a flat array of length NumFrames * NMels, row-major
-    // (time-major then mel-major) — ready to drop into a Tensor shaped
-    // (1, 1, NumFrames, NMels).
+    
+    
+    
     public static float[] ComputeLogMel(float[] samples)
     {
         if (samples.Length != ClipSamples)
@@ -120,9 +120,9 @@ public static class MelSpectrogram
         }
     }
 
-    // In-place iterative radix-2 Cooley-Tukey FFT. `re`/`im` length must be
-    // a power of two (NFFT = 512 here). Same mathematical result as
-    // numpy.fft.rfft on the Python side — just computed without numpy.
+    
+    
+    
     private static void FFT(float[] re, float[] im)
     {
         int n = re.Length;

@@ -21,21 +21,21 @@ namespace NoSuchStudio.Variables.Editor {
         }
 
         public override void OnInspectorGUI() {
-            // status
+            
             DrawServiceStatus();
             EditorGUILayout.Separator();
 
-            // restart button
+            
             if (GUILayout.Button("Restart")) {
                 serviceInstance.ReRegisterService();
             }
 
-            // default editor
+            
             DrawDefaultInspector();
 
             EditorGUILayout.Separator();
 
-            // read only variables data
+            
             filter = EditorGUILayout.TextField("Filter", filter);
             EditorPrefs.SetString(PrefKeyPrefix + "_filter", filter);
             var filterActive = !string.IsNullOrEmpty(filter);

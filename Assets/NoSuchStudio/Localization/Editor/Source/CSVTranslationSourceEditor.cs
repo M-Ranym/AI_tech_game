@@ -14,22 +14,19 @@ namespace NoSuchStudio.Localization.Source.Editor {
         }
 
         public override void OnInspectorGUI() {
-            /*var monoscript = MonoScript.FromMonoBehaviour((MonoBehaviour)target);
-            EditorGUI.BeginDisabledGroup(true);
-            EditorGUILayout.ObjectField("Script", monoscript, typeof(Object), false);
-            EditorGUI.EndDisabledGroup();*/
+            
 
-            // connection status
+            
             serializedObject.Update();
             DrawServiceConnectionStatus(tsTarget);
             EditorGUILayout.Separator();
 
-            // default inspector 
+            
             DrawDefaultInspector();
             serializedObject.ApplyModifiedProperties();
             EditorGUILayout.Separator();
 
-            // reload button
+            
             if (GUILayout.Button("reload")) {
                 tsTarget.Reload();
                 EditorApplication.QueuePlayerLoopUpdate();
@@ -49,13 +46,13 @@ namespace NoSuchStudio.Localization.Source.Editor {
 #endif
             EditorGUILayout.Separator();
 
-            // stats
+            
             int phrases = tsTarget.translations.Keys.Count();
             int translations = tsTarget.translations.Select(kvp => kvp.Value.Count).Sum();
             DrawTranslationStats(phrases, translations);
             EditorGUILayout.Separator();
 
-            // read only translation data
+            
             tsTarget.translations.Keys.ToList().ForEach(phrase => {
                 var curPhraseDic = tsTarget.translations[phrase];
                 bool curFoldState = false;

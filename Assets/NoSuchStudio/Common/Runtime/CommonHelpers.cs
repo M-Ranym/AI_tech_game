@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,11 +13,11 @@ namespace NoSuchStudio.Common {
         }
 
         public static bool IsTablet() {
-            // Compute screen size
+            
             float screenWidth = Screen.width / Screen.dpi;
             float screenHeight = Screen.height / Screen.dpi;
             double size = Mathf.Sqrt(screenWidth * screenWidth + screenHeight * screenHeight);
-            // Tablet devices should have a screen size greater than 6 inches
+            
             return size >= 6;
         }
 
@@ -40,9 +40,7 @@ namespace NoSuchStudio.Common {
             return qs.ToString();
         }
         
-        /**
-         * return c unique random integers in range [0, max)
-         * */
+        
         public static List<int> UniqueRandom(int c, int min, int max) {
             if (c >= (max - min - 1) / 2) {
                 throw new IllegalStateException(string.Format("UniqueRandom inefficient for c: {0}, max: {1}", c, max));
@@ -68,7 +66,7 @@ namespace NoSuchStudio.Common {
                 curText.Length = 0;
                 curVariable.Length = 0;
 
-                // bool backslash = false; TODO support skip chars
+                
                 bool buffering = false;
                 for (var i = 0; i < text.Length; i++) {
                     var curChar = text[i];

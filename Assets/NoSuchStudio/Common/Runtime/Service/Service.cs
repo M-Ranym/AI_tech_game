@@ -4,33 +4,33 @@ using System.Linq;
 using UnityEngine;
 
 namespace NoSuchStudio.Common.Service {
-    /// <summary>
-    /// A Service is a singleton MonoBehaviour with certain capibilities in Unity.
-    /// </summary>
-    /// <remarks>
-    /// This class serves as a singleton for Unity.
-    /// A Service:
-    /// - Ensures there is at most one Instance of the MonoBehaviour Active at any given point in
-    ///   time. If another Intance becomes Active, the old one will go offline.
-    /// - Provides a static API surface through the currently Active Instance. Individual services
-    ///   can provide fallback methods in cases there is no Instance for the service.
-    /// - Will find all Components that use it in the Scene initially and connects them. 
-    ///   <see cref="IServiceComponent{T}"/> 
-    /// </remarks>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     public abstract class Service<T> : NoSuchMonoBehaviour
         where T : Service<T> {
 
         private static bool alreadyLogged;
-        /// <summary>
-        /// The global instance of this <see cref="Common.Service"/>. For normal usage,
-        /// use <see cref="RegisterInstance(T)"/> and <see cref="UnregisterInstance(T)"/>.
-        /// </summary>
+        
+        
+        
+        
         protected static T gInstance;
-        /// <summary>
-        /// The property for accessing the global instance of this <see cref="Common.Service"/>. 
-        /// For normal usage, use <see cref="RegisterInstance(T)"/>
-        /// and <see cref="UnregisterInstance(T)"/>.
-        /// </summary>
+        
+        
+        
+        
+        
         public static T Instance {
             get {
                 if (gInstance == null) {
@@ -80,9 +80,9 @@ namespace NoSuchStudio.Common.Service {
             }
         }
 
-        [NonSerialized] public bool needsEditorRepaint; // variable for editor to know when to repaint.
+        [NonSerialized] public bool needsEditorRepaint; 
 
-        protected bool _instanceReady; // is this instance of service ready to be registered?
+        protected bool _instanceReady; 
         public bool InstanceReady {
             get { return _instanceReady; }
         }
@@ -97,42 +97,42 @@ namespace NoSuchStudio.Common.Service {
             _instanceReady = false;
         }
 
-        /// <summary>
-        /// <returns>
-        /// Returns true if this Service has an Active Instance and can be used.
-        /// </returns>
-        /// </summary>
+        
+        
+        
+        
+        
         public static bool IsReady {
             get { return Instance != null; }
         }
 
-        /// <summary>
-        /// Callback for when an instance becomes the global instance.
-        /// </summary>
+        
+        
+        
         public virtual void OnServiceRegister() { }
 
-        /// <summary>
-        /// Callback for when an instance is no longer the global instance.
-        /// </summary>
+        
+        
+        
         public virtual void OnServiceUnregister() { }
 
-        /// <summary>
-        /// Checks if the current instance is the global instance.
-        /// </summary>
+        
+        
+        
         public bool IsInstance {
             get { return Instance == this; }
         }
 
-        /// <summary>
-        /// Service instances call this OnEnable to become the global instance.
-        /// </summary>
+        
+        
+        
         protected static void RegisterInstance(T instance) {
             Instance = instance;
         }
 
-        /// <summary>
-        /// Service instances call this OnDisable to release the global instance.
-        /// </summary>
+        
+        
+        
         protected static void UnregisterInstance(T instance) {
             if (gInstance == instance) {
                 Instance = null;
@@ -141,9 +141,9 @@ namespace NoSuchStudio.Common.Service {
             }
         }
 
-        /// <summary>
-        /// Same effect as disabling and enabling the service instance.
-        /// </summary>
+        
+        
+        
         public void ReRegisterService() {
             if (_instanceReady) {
                 UnregisterInstance((T)this);

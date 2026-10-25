@@ -1,4 +1,4 @@
-﻿using TMPro;
+using TMPro;
 using UnityEngine;
 
 namespace RTLTMPro
@@ -6,7 +6,7 @@ namespace RTLTMPro
     [ExecuteInEditMode]
     public class RTLTextMeshPro3D : TextMeshPro
     {
-        // ReSharper disable once InconsistentNaming
+        
 #if TMP_VERSION_2_1_0_OR_NEWER
         public override string text
 #else

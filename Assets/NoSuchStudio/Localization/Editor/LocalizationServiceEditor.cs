@@ -8,9 +8,9 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace NoSuchStudio.Localization.Editor {
-    /// <summary>
-    /// Editor for <see cref="LocalizationService"/>.
-    /// </summary>
+    
+    
+    
     [CustomEditor(typeof(LocalizationService))]
     [CanEditMultipleObjects]
     public sealed class LocalizationServiceEditor : ServiceEditor<LocalizationServiceEditor, LocalizationService> {
@@ -25,16 +25,16 @@ namespace NoSuchStudio.Localization.Editor {
         }
         public override void OnInspectorGUI() {
             serializedObject.Update();
-            // status
+            
             DrawServiceStatus();
 
-            // restart button
+            
             if (GUILayout.Button("Restart")) {
                 serviceInstance.ReRegisterService();
             }
             EditorGUILayout.Separator();
 
-            // database section
+            
             EditorGUILayout.PropertyField(serializedObject.FindProperty("_databasePreset"));
             var dbPreset = serviceInstance.databasePreset;
             if (dbPreset == LocalizationService.DatabasePreset.Custom) {
@@ -46,10 +46,10 @@ namespace NoSuchStudio.Localization.Editor {
 #endif
             }
             serializedObject.ApplyModifiedProperties();
-            // default editor
+            
             DrawDefaultInspector();
 
-            // read only variables data
+            
             EditorGUILayout.Separator();
             var objFieldWidth = (EditorGUIUtility.currentViewWidth - EditorGUIUtility.labelWidth) / 3;
             var translationSources = serviceInstance.translationSources;

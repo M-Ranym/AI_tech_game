@@ -33,14 +33,14 @@ namespace RTLTMPro
         };
 
 
-        /// <summary>
-        ///     Fixes the shape of letters based on their position.
-        /// </summary>
-        /// <param name="input"></param>
-        /// <param name="output"></param>
-        /// <param name="preserveNumbers"></param>
-        /// <param name="farsi"></param>
-        /// <returns></returns>
+        
+        
+        
+        
+        
+        
+        
+        
         public static void Fix(FastStringBuilder input, FastStringBuilder output, bool preserveNumbers, bool farsi, bool fixTextTags)
         {
             FixYah(input, farsi);
@@ -52,7 +52,7 @@ namespace RTLTMPro
                 bool skipNext = false;
                 int iChar = input.Get(i);
 
-                // For special Lam Letter connections.
+                
                 if (iChar == (int)ArabicGeneralLetters.Lam)
                 {
                     if (i < input.Length - 1)
@@ -63,7 +63,7 @@ namespace RTLTMPro
                     }
                 }
 
-                // We don't want to fix tatweel or zwnj character
+                
                 if (iChar == (int)ArabicGeneralLetters.Tatweel ||
                     iChar == (int)SpecialCharacters.ZeroWidthNoJoiner)
                 {
@@ -89,8 +89,8 @@ namespace RTLTMPro
                     }
                 }
 
-                // If this letter as Lam and special Lam-Alef connection was made, We want to skip the Alef
-                // (Lam-Alef occupies 1 space)
+                
+                
                 if (skipNext)
                 {
                     i++;
@@ -109,12 +109,12 @@ namespace RTLTMPro
             }
         }
 
-        /// <summary>
-        ///     Removes tashkeel. Converts general RTL letters to isolated form. Also fixes Farsi and Arabic ی letter.
-        /// </summary>
-        /// <param name="text">Input to prepare</param>
-        /// <param name="farsi"></param>
-        /// <returns>Prepared input in char array</returns>
+        
+        
+        
+        
+        
+        
         public static void FixYah(FastStringBuilder text, bool farsi)
         {
             for (int i = 0; i < text.Length; i++)
@@ -129,13 +129,13 @@ namespace RTLTMPro
             }
         }
 
-        /// <summary>
-        ///     Handles the special Lam-Alef connection in the text.
-        /// </summary>
-        /// <param name="input"></param>
-        /// <param name="output"></param>
-        /// <param name="i">Index of Lam letter</param>
-        /// <returns><see langword="true" /> if special connection has been made.</returns>
+        
+        
+        
+        
+        
+        
+        
         private static bool HandleSpecialLam(FastStringBuilder input, FastStringBuilder output, int i)
         {
             bool isFixed;
@@ -170,12 +170,12 @@ namespace RTLTMPro
             return isFixed;
         }
 
-        /// <summary>
-        ///     Converts English numbers to Persian or Arabic numbers.
-        /// </summary>
-        /// <param name="text"></param>
-        /// <param name="farsi"></param>
-        /// <returns>Converted number</returns>
+        
+        
+        
+        
+        
+        
         public static void FixNumbers(FastStringBuilder text, bool farsi)
         {
             text.Replace((char)EnglishNumbers.Zero, farsi ? (char)FarsiNumbers.Zero : (char)HinduNumbers.Zero);
@@ -190,19 +190,19 @@ namespace RTLTMPro
             text.Replace((char)EnglishNumbers.Nine, farsi ? (char)FarsiNumbers.Nine : (char)HinduNumbers.Nine);
         }
 
-        /// <summary>
-        ///     Converts English numbers that are outside tags to Persian or Arabic numbers.
-        /// </summary>
-        /// <param name="text"></param>
-        /// <param name="farsi"></param>
-        /// <returns>Text with converted numbers</returns>
+        
+        
+        
+        
+        
+        
         public static void FixNumbersOutsideOfTags(FastStringBuilder text, bool farsi)
         {
             var englishDigits = new HashSet<char>(EnglishToFarsiNumberMap.Keys);
             for (int i = 0; i < text.Length; i++)
             {
                 var iChar = text.Get(i);
-                // skip valid tags
+                
                 if (iChar == '<')
                 {
                     bool sawValidTag = false;
@@ -230,10 +230,10 @@ namespace RTLTMPro
             }
         }
 
-        /// <summary>
-        ///     Is the letter at provided index a leading letter?
-        /// </summary>
-        /// <returns><see langword="true" /> if the letter is a leading letter</returns>
+        
+        
+        
+        
         private static bool IsLeadingLetter(FastStringBuilder letters, int index)
         {
             var currentIndexLetter = letters.Get(index);
@@ -301,10 +301,10 @@ namespace RTLTMPro
                    isNextLetterConnectable;
         }
 
-        /// <summary>
-        ///     Is the letter at provided index a finishing letter?
-        /// </summary>
-        /// <returns><see langword="true" /> if the letter is a finishing letter</returns>
+        
+        
+        
+        
         private static bool IsFinishingLetter(FastStringBuilder letters, int index)
         {
             int currentIndexLetter = letters.Get(index);
@@ -350,10 +350,10 @@ namespace RTLTMPro
             return isPreviousLetterConnectable && canThisLetterBeFinishing;
         }
 
-        /// <summary>
-        ///     Is the letter at provided index a middle letter?
-        /// </summary>
-        /// <returns><see langword="true" /> if the letter is a middle letter</returns>
+        
+        
+        
+        
         private static bool IsMiddleLetter(FastStringBuilder letters, int index)
         {
             var currentIndexLetter = letters.Get(index);

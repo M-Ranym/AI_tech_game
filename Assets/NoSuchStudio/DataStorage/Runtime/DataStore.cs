@@ -1,4 +1,4 @@
-﻿using NoSuchStudio.Common;
+using NoSuchStudio.Common;
 using NoSuchStudio.Common.Service;
 using NoSuchStudio.Variables;
 using System;
@@ -18,7 +18,7 @@ namespace NoSuchStudio.DataStorage {
             String = 3
         }
 
-        // For compatibility with Unity Inspector
+        
         [Serializable]
         public struct IntDataEntry {
             public IntDataEntry(string n, int v, bool syncPrefs, bool syncVariables) {
@@ -336,7 +336,7 @@ namespace NoSuchStudio.DataStorage {
             _initialized = true;
 
             if (shouldSyncPrefs && !_disableSyncWithPrefs) {
-                if (!CommonHelpers.IsEditMode) { // prevent runtime saved pref values to leak back in edit mode
+                if (!CommonHelpers.IsEditMode) { 
                     SyncFromPrefs();
                 }
             }
@@ -353,7 +353,7 @@ namespace NoSuchStudio.DataStorage {
                 }
                 VariablesService.AddVariableSource(prefKey, this);
                 LogLog($"synced {dn} to variables as {prefKey} -> {e.value}");
-            } else { // all values
+            } else { 
                 foreach (string k in _data.Keys) {
                     SyncToVariables(k);
                 }
@@ -386,7 +386,7 @@ namespace NoSuchStudio.DataStorage {
                 }
                 VariablesService.RemoveVariableSource(prefKey, this);
                 LogLog($"unsynced {lk} to variables as {prefKey} -> {e.value}");
-            } else { // all values
+            } else { 
                 foreach (string localKey in _data.Keys) {
                     UnsyncToVariables(localKey);
                 }
@@ -417,7 +417,7 @@ namespace NoSuchStudio.DataStorage {
                 }
                 PlayerPrefs.Save();
                 LogLog($"synced {lk} to prefs {e.value}");
-            } else { // all values
+            } else { 
                 foreach (string localKey in _data.Keys) {
                     SyncToPrefs(localKey);
                 }
@@ -425,7 +425,7 @@ namespace NoSuchStudio.DataStorage {
         }
 
         public bool SyncFromPrefs(string lk = null) {
-            if (lk != null) { // single value
+            if (lk != null) { 
                 DataEntry de = _data[lk];
                 LogLog($"sync {lk} from pref... {de}");
                 string prefKey = _scope.Apply(lk);
@@ -448,10 +448,10 @@ namespace NoSuchStudio.DataStorage {
                 SetLocal(lk, prefValue);
                 LogLog($"set var from pref '{lk}': {_data[lk].value}");
                 return true;
-            } else { // all values
+            } else { 
                 foreach (string localKey in _data.Keys.ToList()) {
                     if (!SyncFromPrefs(localKey)) {
-                        // missing value, write
+                        
                         SyncToPrefs(localKey);
                     }
                 }
@@ -459,14 +459,7 @@ namespace NoSuchStudio.DataStorage {
             }
         }
 
-        /*public float SetDataIfAbsent(string dn, float v) {
-            if (!_floatData.Contains(dn)) { 
-            }
-            if (!PlayerPrefs.HasKey(varName)) {
-                Set(varName, val);
-            }
-            return Get(varName);
-        }*/
+        
 
         public void Set(string k, object v) {
             string localKey = GlobalToLocalKey(k);
@@ -582,7 +575,7 @@ namespace NoSuchStudio.DataStorage {
         }
 
         #region ISerializationCallbackReceiver
-        // ISerializationCallbackReceiver
+        
         public void OnBeforeSerialize() {
             _unityIntData.Clear();
             _unityFloatData.Clear();
@@ -605,7 +598,7 @@ namespace NoSuchStudio.DataStorage {
         public void OnAfterDeserialize() {
             _data.Clear();
             foreach (var e in _unityIntData) {
-                // if (string.IsNullOrEmpty(e.name)) continue;
+                
                 string tryName = e.name;
                 int li = 0;
                 while (_data.ContainsKey(tryName)) {
@@ -614,7 +607,7 @@ namespace NoSuchStudio.DataStorage {
                 _data[tryName] = new DataEntry(KnownType.Int, e.value, e.syncPrefs, e.syncVariables);
             }
             foreach (var e in _unityFloatData) {
-                // if (string.IsNullOrEmpty(e.name)) continue;
+                
                 string tryName = e.name;
                 int li = 0;
                 while (_data.ContainsKey(tryName)) {
@@ -623,7 +616,7 @@ namespace NoSuchStudio.DataStorage {
                 _data[tryName] = new DataEntry(KnownType.Float, e.value, e.syncPrefs, e.syncVariables);
             }
             foreach (var e in _unityStringData) {
-                // if (string.IsNullOrEmpty(e.name)) continue;
+                
                 string tryName = e.name;
                 int li = 0;
                 while (_data.ContainsKey(tryName)) {
@@ -652,8 +645,8 @@ namespace NoSuchStudio.DataStorage {
 
         public void Disconnect<ST>() where ST : Service<ST> {
             Init();
-            // if (!_initialized) return;
-            // if (_disableSyncWithVariables) return;
+            
+            
             if (!Service<ST>.IsReady) return;
             if (typeof(ST) != typeof(VariablesService)) return;
             UnsyncToVariables();

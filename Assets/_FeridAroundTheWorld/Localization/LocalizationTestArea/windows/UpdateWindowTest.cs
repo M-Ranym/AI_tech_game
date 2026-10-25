@@ -11,7 +11,7 @@ namespace com.horizon.LocalizationSystem
     {
         private bool _similarsPage = true;
 
-      //  [MenuItem("Window/show window test")]
+      
         public static void ShowWindow()
         {
             GetWindow<UpdateWindowTest>("Monomo the teacher");

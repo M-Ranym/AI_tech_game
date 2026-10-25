@@ -1,13 +1,13 @@
-﻿
+
 using TMPro;
 
 using UnityEngine;
 
 namespace NoSuchStudio.Localization.Localizers {
-    /// <summary>
-    /// Localizes <see cref="TextMeshProUGUI"/> by setting its <see cref="TextAlignmentOptions"/> property
-    /// based on the RTL-ness of <see cref="LocalizationService.CurrentLanguage"/>.
-    /// </summary>
+    
+    
+    
+    
     [RequireComponent(typeof(TextMeshProUGUI))]
     [AddComponentMenu(LocalizationService.ComponentMenuPath + "/TextMeshPro Align Localizer")]
     public class TMProAlignLocalizer : ComponentLocalizer<TMProAlignLocalizer, TextMeshProUGUI> {

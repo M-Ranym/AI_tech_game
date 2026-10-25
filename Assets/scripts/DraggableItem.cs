@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -77,7 +77,7 @@ public class ItemMover : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         transform.SetAsLastSibling();
         transform.localScale = originalScale;
 
-        // Plop sound
+        
         if (Game_Over_2_AudioManager.audioManInstance != null)
             Game_Over_2_AudioManager.audioManInstance.Play_Sfx("BubblePop");
     }

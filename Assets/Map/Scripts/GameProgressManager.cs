@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 public class GameProgressManager : MonoBehaviour
 {
@@ -8,9 +8,9 @@ public class GameProgressManager : MonoBehaviour
     public const int UNLOCKED = 1;
     public const int FINISHED = 2;
 
-    // Test mode — when on, every game/level reports as unlocked so everything
-    // can be clicked and tested directly from the map, without touching how
-    // progress is normally tracked/saved.
+    
+    
+    
     public static bool TestMode
     {
         get => PlayerPrefs.GetInt("TestMode", 0) == 1;

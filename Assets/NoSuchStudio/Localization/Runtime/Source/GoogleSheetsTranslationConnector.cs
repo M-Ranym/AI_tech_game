@@ -1,4 +1,4 @@
-﻿using NoSuchStudio.Common;
+using NoSuchStudio.Common;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -6,17 +6,17 @@ using UnityEngine.Events;
 using UnityEngine.Networking;
 
 namespace NoSuchStudio.Localization.Source {
-    /// <summary>
-    /// Parses a CSV file and provides the entries to <see cref="LocalizationService"/>.
-    /// Each line should contains 3 values: phrase, language, translation.
-    /// '|' is the delimiter character.
-    /// </summary>
+    
+    
+    
+    
+    
     [RequireComponent(typeof(StandaloneTranslationSource))]
     public class GoogleSheetsTranslationConnector : NoSuchMonoBehaviour {
 
-        /// <summary>
-        /// The result of a load from internet operation.
-        /// </summary>
+        
+        
+        
         public enum LoadResult {
             None,
             Pending,
@@ -75,9 +75,9 @@ namespace NoSuchStudio.Localization.Source {
         private Coroutine loadCoroutine;
 
         [SerializeField, HideInInspector] private LoadState _loadState;
-        /// <summary>
-        /// The result of last load request. You can reload the sheet data by calling <see cref="LoadSheet"/>.
-        /// </summary>
+        
+        
+        
         public LoadState loadState {
             get {
                 return _loadState;
@@ -104,10 +104,10 @@ namespace NoSuchStudio.Localization.Source {
             GetComponent<StandaloneTranslationSource>().LoadTranslationEntries(entries);
         }
 
-        /// <summary>
-        /// Cancel the current load operation.
-        /// </summary>
-        /// <returns>true if there was a pending operation, false if nothing happened.</returns>
+        
+        
+        
+        
         public bool CancelLoad() {
             if (loadCoroutine != null) {
                 StopCoroutine(loadCoroutine);
@@ -120,10 +120,10 @@ namespace NoSuchStudio.Localization.Source {
             return false;
         }
 
-        /// <summary>
-        /// Starts loading the sheet data from the internet. <see cref="sheetURL"/>.
-        /// <seealso cref="dataLoadEvent"/>
-        /// </summary>
+        
+        
+        
+        
         public void LoadSheet() {
             CancelLoad();
             _loadState.SetPending();
@@ -155,7 +155,7 @@ namespace NoSuchStudio.Localization.Source {
                 loadCoroutine = null;
                 dataLoadEvent.Invoke(this, _loadState);
             } else {
-                // LogWarn("load failed with: web request returned but component inactive now.");
+                
             }
         }
 

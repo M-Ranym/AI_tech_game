@@ -1,11 +1,11 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace NoSuchStudio.Localization.Localizers {
-    /// <summary>
-    /// Localizes <see cref="Image"/> by mirroring it (using its <see cref="Transform.localScale"/> property)
-    /// based on the RTL-ness of <see cref="LocalizationService.CurrentLanguage"/>.
-    /// </summary>
+    
+    
+    
+    
     [RequireComponent(typeof(Image))]
     [AddComponentMenu(LocalizationService.ComponentMenuPath + "/Image Transform Localizer (Mirror)")]
     public class ImageTransformLocalizer : ComponentLocalizer<ImageTransformLocalizer, Image> {

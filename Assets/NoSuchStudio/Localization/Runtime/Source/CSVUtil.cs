@@ -1,4 +1,4 @@
-﻿using NoSuchStudio.Common.Text;
+using NoSuchStudio.Common.Text;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,10 +10,10 @@ namespace NoSuchStudio.Localization.Source {
         MultipleTranslations,
     }
 
-    /// <summary>
-    /// Static class with helper methods for parsing CSV text.
-    /// Used in <see cref="CSVTranslationSource"/> and <see cref="GoogleSheetsTranslationConnector"/>
-    /// </summary>
+    
+    
+    
+    
     public static class CSVUtil {
 
         public static List<TranslationEntry> ParseCSVString(string rawText, TranslationsCSVLineFormat CSVLineFormat, char fieldDelimiter, bool hasHeaderLine = true) {

@@ -16,7 +16,7 @@ public struct Ranking_Sprites
 
 public class Game_Over_2_ScoreboardElement : MonoBehaviour
 {
-    //Player data
+    
     private string _userName;
 
     private string _bestScore;
@@ -24,7 +24,7 @@ public class Game_Over_2_ScoreboardElement : MonoBehaviour
     private int _avatarIndex;
     private int _rank;
 
-    //User Data UI
+    
     [SerializeField] private Ranking_Sprites[] _elementsContainerSprite;
 
     [SerializeField] private Image _myImage;
@@ -42,7 +42,7 @@ public class Game_Over_2_ScoreboardElement : MonoBehaviour
         Set_Avatar_Index();
     }
 
-    //Get User Data
+    
     public void Set_User_Data(string userName, int bestScore, int xp, int avatarIndex, int rank, bool isLocalPlayer = false)
     {
         _userName = userName;
@@ -60,11 +60,11 @@ public class Game_Over_2_ScoreboardElement : MonoBehaviour
         Color color;
         if (ColorUtility.TryParseHtmlString("#BAFFA8", out color))
         {
-            _myImage.color = color; // Set the color of the SpriteRenderer
+            _myImage.color = color; 
         }
         else
         {
-            // Conversion failed
+            
             Debug.LogError("Failed to convert hex code: " + "#BAFFA8");
         }
     }
@@ -91,7 +91,7 @@ public class Game_Over_2_ScoreboardElement : MonoBehaviour
         }
     }
 
-    //Set User Data in UI Elements
+    
     private void Assign_User_Data(Ranking_Sprites sprite)
     {
         _myImage.sprite = sprite.container;

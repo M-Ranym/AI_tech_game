@@ -14,11 +14,11 @@ namespace NoSuchStudio.Localization.Source.Editor {
         }
 
         public override void OnInspectorGUI() {
-            // connection status
+            
             DrawServiceConnectionStatus(tsTarget);
             EditorGUILayout.Separator();
 
-            // persistent file buttons
+            
             if (GUILayout.Button("Save To Persistent File")) {
                 tsTarget.SaveTranslationsToFile();
             }
@@ -40,13 +40,13 @@ namespace NoSuchStudio.Localization.Source.Editor {
 #endif
             EditorGUILayout.Separator();
 
-            // translation stats
+            
             int phrases = tsTarget.translations.Keys.Count();
             int translations = tsTarget.translations.Select(kvp => kvp.Value.Count).Sum();
             DrawTranslationStats(phrases, translations);
             EditorGUILayout.Separator();
 
-            // editor 
+            
             DrawDefaultInspector();
         }
     }

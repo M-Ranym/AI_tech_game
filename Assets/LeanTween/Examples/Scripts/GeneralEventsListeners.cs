@@ -10,7 +10,7 @@ public class GeneralEventsListeners : MonoBehaviour {
 	float turnForIter = 0f;
 	Color fromColor;
 
-	// It's best to make this a public enum that you use throughout your project, so every class can have access to it
+	
 	public enum MyEvents{ 
 		CHANGE_COLOR,
 		JUMP,
@@ -18,19 +18,19 @@ public class GeneralEventsListeners : MonoBehaviour {
 	}
 
 	void Awake(){
-		LeanTween.LISTENERS_MAX = 100; // This is the maximum of event listeners you will have added as listeners
-		LeanTween.EVENTS_MAX = (int)MyEvents.LENGTH; // The maximum amount of events you will be dispatching
+		LeanTween.LISTENERS_MAX = 100; 
+		LeanTween.EVENTS_MAX = (int)MyEvents.LENGTH; 
 
 		fromColor = GetComponent<Renderer>().material.color;
 	}
 
 	void Start () {
-		// Adding Listeners, it's best to use an enum so your listeners are more descriptive but you could use an int like 0,1,2,...
+		
 		LeanTween.addListener(gameObject, (int)MyEvents.CHANGE_COLOR, changeColor);
 		LeanTween.addListener(gameObject, (int)MyEvents.JUMP, jumpUp);
 	}
 
-	// ****** Event Listening Methods
+	
 
 	void jumpUp( LTEvent e ){
 		GetComponent<Rigidbody>().AddRelativeForce(Vector3.forward * 300f);
@@ -47,7 +47,7 @@ public class GeneralEventsListeners : MonoBehaviour {
 		);
 	}
 
-	// ****** Physics / AI Stuff
+	
 
 	void OnCollisionEnter(Collision collision) {
 		if(collision.gameObject.layer!=2)
@@ -70,13 +70,13 @@ public class GeneralEventsListeners : MonoBehaviour {
 		GetComponent<Rigidbody>().AddRelativeForce(Vector3.forward * 4.5f);
 	}
 
-	// ****** Key and clicking detection
+	
 
 	void OnMouseDown(){
-		if(Input.GetKey( KeyCode.J )){ // Are you also pressing the "j" key while clicking
+		if(Input.GetKey( KeyCode.J )){ 
 			LeanTween.dispatchEvent((int)MyEvents.JUMP);
 		}else{
-			LeanTween.dispatchEvent((int)MyEvents.CHANGE_COLOR, transform); // with every dispatched event, you can include an object (retrieve this object with the *.data var in LTEvent)
+			LeanTween.dispatchEvent((int)MyEvents.CHANGE_COLOR, transform); 
 		}
 	}
 }

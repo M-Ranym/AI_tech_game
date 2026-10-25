@@ -55,7 +55,7 @@ public class KidDraggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         canvasGroup.alpha = 1f;
         canvasGroup.blocksRaycasts = true;
 
-        // If not caught by any drop zone, return to original parent and float there
+        
         if (transform.parent == canvas.transform)
         {
             transform.SetParent(originalParent, false);

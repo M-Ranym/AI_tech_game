@@ -1,11 +1,11 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace NoSuchStudio.Localization.Localizers {
-    /// <summary>
-    /// Localizes <see cref="Slider"/> by adjusting its <see cref="Slider.direction"/> property
-    /// based on the RTL-ness of <see cref="LocalizationService.CurrentLanguage"/> and its <see cref="SliderDirectionLocalizer.reverse"/> property.
-    /// </summary>
+    
+    
+    
+    
     [RequireComponent(typeof(Slider))]
     [AddComponentMenu(LocalizationService.ComponentMenuPath + "/Slider Direction Localizer")]
     public class SliderDirectionLocalizer : ComponentLocalizer<SliderDirectionLocalizer, Slider> {

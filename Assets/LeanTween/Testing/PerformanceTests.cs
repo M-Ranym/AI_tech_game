@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DentedPixel;
@@ -16,7 +16,7 @@ public class PerformanceTests : MonoBehaviour {
     public float shipSpeed = 1f;
     private float shipDirectionX = 1f;
 
-	// Use this for initialization
+	
 	void Start () {
 
         GameObject[] pool = bulletPool.init(bulletPrefab, 400, null, true);
@@ -25,10 +25,10 @@ public class PerformanceTests : MonoBehaviour {
         }
 	}
 	
-	// Update is called once per frame
+	
 	void Update () {
 
-        // Spray bullets
+        
         for (int i = 0; i < 10; i++)
         {
             GameObject go = bulletPool.retrieve();
@@ -49,7 +49,7 @@ public class PerformanceTests : MonoBehaviour {
             }).id;
         }
 
-        // Move Ship
+        
         if(transform.position.x<-20f){
             shipDirectionX = 1f;
         }else if (transform.position.x > 20f){

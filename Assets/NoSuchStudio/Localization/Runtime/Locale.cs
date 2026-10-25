@@ -1,16 +1,16 @@
-﻿#if NEWTONSOFTJSON_PRESENT
+#if NEWTONSOFTJSON_PRESENT
 using Newtonsoft.Json;
 #endif
 using System;
 using UnityEngine;
 
 namespace NoSuchStudio.Localization {
-    /// <summary>
-    /// A Locale is a language or a language plus a region. To learn more read the related documentation page from
-    /// For example:
-    ///  - en-US is the locale for the version of English language that is spoken in the United States (US).
-    ///  - en-GB is the locale for the version of English language that is spoken in the United Kingdom (UK).
-    /// </summary>
+    
+    
+    
+    
+    
+    
     [Serializable]
 #if NEWTONSOFTJSON_PRESENT
     [JsonObject(MemberSerialization.OptIn)]
@@ -35,28 +35,28 @@ namespace NoSuchStudio.Localization {
         private bool isRTL;
         private bool isNeutral;
 #endif
-        /// <summary>
-        /// Maps locale name to a canonical version to be used as keys for dictionaries.
-        /// </summary>
+        
+        
+        
         public static string NormalizeLocaleName(string localeName) {
             return string.IsNullOrEmpty(localeName) ? "" : localeName.ToLower();
         }
 
-        /// <summary>
-        /// For United States English locale (en-US), returns US.
-        /// </summary>
-        /// <param name="name">name of locale e.g. en-US</param>
-        /// <returns>the region section of a locale name.</returns>
+        
+        
+        
+        
+        
         public static string RegionInLocaleName(string name) {
             int dashIndex = name.LastIndexOf('-');
             return dashIndex >= 0 ? name.Substring(dashIndex + 1) : "";
         }
 
-        /// <summary>
-        /// For United States English locale (en-US), returns en.
-        /// </summary>
-        /// <param name="name">name of locale e.g. en-US</param>
-        /// <returns>the language section of a locale name.</returns>
+        
+        
+        
+        
+        
         public static string LanguageInLocaleName(string name) {
             int dashIndex = name.LastIndexOf('-');
             if (dashIndex < 0) {
@@ -65,44 +65,44 @@ namespace NoSuchStudio.Localization {
             return name.Substring(0, dashIndex);
         }
 
-        /// <summary>
-        /// Get the normalized name of the locale. It is the suggested form to get a unique name for a locale (e.g. for use as keys in a dictionary)
-        /// </summary>
+        
+        
+        
         public string NormalizedName {
             get { return NormalizeLocaleName(name); }
         }
 
-        /// <summary>
-        /// Code name of the locale.
-        /// </summary>
+        
+        
+        
         public string Name {
             get { return name; }
         }
 
-        /// <summary>
-        /// Unique normalized english name of the locale. Suitable for keys of a dictionary.
-        /// </summary>
+        
+        
+        
         public string NormalizedEnglishName {
             get { return NormalizeLocaleName(englishName); }
         }
 
-        /// <summary>
-        /// English name of the locale.
-        /// </summary>
+        
+        
+        
         public string EnglishName {
             get { return englishName; }
         }
 
-        /// <summary>
-        /// Native name of the locale.
-        /// </summary>
+        
+        
+        
         public string NativeName {
             get { return nativeName; }
         }
 
-        /// <summary>
-        /// ISO language code for the locale (is not unique).
-        /// </summary>
+        
+        
+        
         public string ISO {
             get { return iso; }
         }
@@ -114,9 +114,9 @@ namespace NoSuchStudio.Localization {
         public bool IsNeutral {
             get { return isNeutral; }
         }
-        /// <summary>
-        /// Whether the locale is right-to-left.
-        /// </summary>
+        
+        
+        
         public bool IsRTL {
             get { return isRTL; }
         }
@@ -131,10 +131,10 @@ namespace NoSuchStudio.Localization {
             this.isRTL = isRTL;
         }
 
-        /// <summary>
-        /// Get the language portion of the code name. 
-        /// For United States English (en-US), English (en) will be returned.
-        /// </summary>
+        
+        
+        
+        
         public string LanguageInName {
             get {
                 if (isNeutral) return name;
@@ -142,38 +142,28 @@ namespace NoSuchStudio.Localization {
                 int dashIndex = name.LastIndexOf('-');
                 if (dashIndex < 0) {
                     Debug.LogWarningFormat("specific locale with no dash! {0}", ToString());
-                    return name;//ADDED by yassine to solve the problem of when the language is "ar" without dash "ar-sth" etc
+                    return name;
                 }
                 return name.Substring(0, dashIndex);
             }
         }
 
-        /// <summary>
-        /// Get the language portion of the code name. 
-        /// For United States English (en-US), United States (US) will be returned.
-        /// </summary>
+        
+        
+        
+        
         public string RegionInName {
             get {
                 return RegionInLocaleName(name);
             }
         }
 
-        /*public string LanguageInEnglishName {
-            get {
-                if (isNeutral) return englishName;
-                if (!string.IsNullOrEmpty(parentName)) {
+        
 
-                }
-                int parantheseOpenIndex = englishName.IndexOf('(');
-                Assert.IsTrue(parantheseOpenIndex > 0);
-                return englishName.Substring(0, parantheseOpenIndex);
-            }
-        }*/
-
-        /// <summary>
-        /// Get the language portion of the english name. 
-        /// For "English (United States)", "United States" will be returned.
-        /// </summary>
+        
+        
+        
+        
         public string RegionInEnglishName {
             get {
                 if (isNeutral) return "";

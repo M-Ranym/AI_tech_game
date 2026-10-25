@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 namespace NoSuchStudio.Common {
     public class CanvasTouchVisualizer : MonoBehaviour {
@@ -7,7 +7,7 @@ namespace NoSuchStudio.Common {
         public GameObject prefab;
         GameObject[] touchVisuals;
         int maxTouchCount = 5;
-        // Start is called before the first frame update
+        
         void Start() {
             mainCanvas = GameObject.FindWithTag("MainCanvas").GetComponent<Canvas>();
             mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
@@ -21,7 +21,7 @@ namespace NoSuchStudio.Common {
             }
         }
 
-        // Update is called once per frame
+        
         void Update() {
             for (int i = 0; i < Math.Min(Input.touchCount, maxTouchCount); i++) {
                 Vector3 globalPos = new Vector3();

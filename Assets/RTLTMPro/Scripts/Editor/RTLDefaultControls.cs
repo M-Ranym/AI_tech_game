@@ -1,4 +1,4 @@
-﻿using TMPro;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,10 +24,10 @@ namespace RTLTMPro
 
         private static Vector2 s_ThinElementSize = new Vector2(kWidth, kThinHeight);
 
-        //private static Vector2 s_ImageElementSize = new Vector2(100f, 100f);
+        
         private static Color s_DefaultSelectableColor = new Color(1f, 1f, 1f, 1f);
 
-        //private static Color s_PanelColor = new Color(1f, 1f, 1f, 0.392f);
+        
         private static Color s_TextColor = new Color(50f / 255f, 50f / 255f, 50f / 255f, 1f);
 
 
@@ -49,9 +49,9 @@ namespace RTLTMPro
 
         private static void SetDefaultTextValues(TMP_Text lbl)
         {
-            // Set text values we want across UI elements in default controls.
-            // Don't set values which are the same as the default values for the Text component,
-            // since there's no point in that, and it's good to keep them as consistent as possible.
+            
+            
+            
             lbl.color = s_TextColor;
             lbl.fontSize = 14;
         }
@@ -81,11 +81,11 @@ namespace RTLTMPro
                 SetLayerRecursively(t.GetChild(i).gameObject, layer);
         }
 
-        // Actual controls
+        
 
         public static GameObject CreateScrollbar(Resources resources)
         {
-            // Create GOs Hierarchy
+            
             GameObject scrollbarRoot = CreateUIElementRoot("Scrollbar", s_ThinElementSize);
 
             GameObject sliderArea = CreateUIObject("Sliding Area", scrollbarRoot);
@@ -134,7 +134,7 @@ namespace RTLTMPro
             TMP_InputField inputField = root.AddComponent<TMP_InputField>();
             SetDefaultColorTransitionValues(inputField);
 
-            // Use UI.Mask for Unity 5.0 - 5.1 and 2D RectMask for Unity 5.2 and up
+            
             textArea.AddComponent<RectMask2D>();
 
             RectTransform textAreaRectTransform = textArea.GetComponent<RectTransform>();
@@ -170,7 +170,7 @@ namespace RTLTMPro
             placeholder.extraPadding = true;
             placeholder.alignment = TextAlignmentOptions.Right;
 
-            // Make placeholder color half as opaque as normal text color.
+            
             Color placeholderColor = text.color;
             placeholderColor.a *= 0.5f;
             placeholder.color = placeholderColor;
@@ -211,7 +211,7 @@ namespace RTLTMPro
             GameObject itemCheckmark = CreateUIObject("Item Checkmark", item);
             GameObject itemLabel = CreateUIObject("Item Label", item);
 
-            // Sub controls.
+            
 
             GameObject scrollbar = CreateScrollbar(resources);
             scrollbar.name = "Scrollbar";
@@ -226,7 +226,7 @@ namespace RTLTMPro
             vScrollbarRT.pivot = Vector2.one;
             vScrollbarRT.sizeDelta = new Vector2(vScrollbarRT.sizeDelta.x, 0);
 
-            // Setup item UI components.
+            
 
             RTLTextMeshPro itemLabelText = itemLabel.AddComponent<RTLTextMeshPro>();
             SetDefaultTextValues(itemLabelText);
@@ -243,7 +243,7 @@ namespace RTLTMPro
             itemToggle.graphic = itemCheckmarkImage;
             itemToggle.isOn = true;
 
-            // Setup template UI components.
+            
 
             Image templateImage = template.AddComponent<Image>();
             templateImage.sprite = resources.standard;
@@ -265,7 +265,7 @@ namespace RTLTMPro
             viewportImage.sprite = resources.mask;
             viewportImage.type = Image.Type.Sliced;
 
-            // Setup dropdown UI components.
+            
 
             RTLTextMeshPro labelText = label.AddComponent<RTLTextMeshPro>();
             SetDefaultTextValues(labelText);
@@ -286,14 +286,14 @@ namespace RTLTMPro
             dropdown.captionText = labelText;
             dropdown.itemText = itemLabelText;
 
-            // Setting default Item list.
+            
             itemLabelText.text = "Option A";
             dropdown.options.Add(new TMP_Dropdown.OptionData { text = "Option A" });
             dropdown.options.Add(new TMP_Dropdown.OptionData { text = "Option B" });
             dropdown.options.Add(new TMP_Dropdown.OptionData { text = "Option C" });
             dropdown.RefreshShownValue();
 
-            // Set up RectTransforms.
+            
 
             RectTransform labelRT = label.GetComponent<RectTransform>();
             labelRT.anchorMin = Vector2.zero;

@@ -1,10 +1,8 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/**
- * A Pooling System for GameObjects
-*/
+
 
 namespace DentedPixel
 {
@@ -72,7 +70,7 @@ namespace DentedPixel
             if (oldestItems != null)
             {
                 GameObject go = oldestItems.Dequeue();
-                oldestItems.Enqueue(go);// put at the end of the queue again
+                oldestItems.Enqueue(go);
 
                 return go;
             }

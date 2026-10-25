@@ -79,8 +79,8 @@ public class RobotController : MonoBehaviour
         }
     }
 
-    /// <summary>Returns the board photos for the current level — same images EvaluationManager
-    /// shows again on Canvas 2, matched by index to EvaluationData.labelTexts.</summary>
+    
+    
     public GameObject[] GetCurrentLevelImages()
     {
         return levelSetups[EvaluationData.currentLevel].levelImages;
@@ -148,7 +148,7 @@ public class RobotController : MonoBehaviour
         if (evaluateButtonObject != null)
             evaluateButtonObject.SetActive(true);
 
-        // Notify EvaluationManager so it can tell the tutorial the robot is done
+        
         EvaluationManager em = FindObjectOfType<EvaluationManager>();
         if (em != null) em.OnRobotFinished();
     }
@@ -247,7 +247,7 @@ public class RobotController : MonoBehaviour
 
         labelObj.SetActive(true);
 
-        // Robot places label sound
+        
         if (Game_Over_2_AudioManager.audioManInstance != null)
             Game_Over_2_AudioManager.audioManInstance.Play_Sfx("RobotPlaceLabel");
 

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -25,7 +25,7 @@ public class AgentManager : MonoBehaviour
     [SerializeField] private Image handImage;
     [SerializeField] private float teachingMomentDuration = 3f;
     [SerializeField] private Image darkOverlay;
-    [SerializeField] private float handRightOffset = 60f; // tweak in Inspector
+    [SerializeField] private float handRightOffset = 60f; 
 
     [Header("Shadow Color")]
     [SerializeField] private Color shadowColor = new Color(1, 1, 1, 0.5f);
@@ -81,8 +81,8 @@ public class AgentManager : MonoBehaviour
     {
         _trigger = FindObjectOfType<GameFinishTrigger>();
 
-        // Level 0 is the tutorial (handled by AgentTutorialManager) — this is
-        // the real round-based game, level 1.
+        
+        
         if (_trigger != null && _trigger.GetStartLevel() != 1)
         {
             enabled = false;
@@ -111,9 +111,9 @@ public class AgentManager : MonoBehaviour
             HideFeedback();
     }
 
-    // Guards against the same click that opened the panel (via the submit
-    // button's onClick) being immediately re-read here on the same frame,
-    // which used to close the panel instantly and skip straight ahead.
+    
+    
+    
     IEnumerator ArmFeedbackNextFrame()
     {
         yield return null;
@@ -210,11 +210,11 @@ public class AgentManager : MonoBehaviour
 
     public void OnSubmitButtonClicked()
     {
-        // submitButton's onClick is wired in the Inspector, which still fires
-        // even while this component is disabled (enabled=false only stops
-        // automatic Unity callbacks, not manually-wired UnityEvents) — guard
-        // explicitly so a tutorial-level click can't run real-game logic
-        // against the never-populated allAgentImages/agentTypes lists.
+        
+        
+        
+        
+        
         if (_trigger != null && _trigger.GetStartLevel() != 1) return;
 
         if (Game_Over_2_AudioManager.audioManInstance != null)
@@ -303,14 +303,14 @@ public class AgentManager : MonoBehaviour
 
     IEnumerator ShowTeachingMoment(List<Image> missedAgents)
     {
-        // Get root canvas and detect render mode for correct camera handling
+        
         Canvas rootCanvas = darkOverlay.GetComponentInParent<Canvas>().rootCanvas;
         Transform canvasRoot = rootCanvas.transform;
         Camera uiCamera = rootCanvas.renderMode == RenderMode.ScreenSpaceOverlay
             ? null
             : rootCanvas.worldCamera;
 
-        // Save original parents and sibling indices for all agents
+        
         Dictionary<Image, Transform> originalParents = new Dictionary<Image, Transform>();
         Dictionary<Image, int> originalSiblingIndices = new Dictionary<Image, int>();
 
@@ -320,14 +320,14 @@ public class AgentManager : MonoBehaviour
             originalSiblingIndices[agent] = agent.transform.GetSiblingIndex();
         }
 
-        // Save hand original state
+        
         Transform handOriginalParent = handImage != null ? handImage.transform.parent : null;
         int handOriginalSibling = handImage != null ? handImage.transform.GetSiblingIndex() : 0;
         Vector2 handOriginalAnchoredPos = handImage != null
             ? handImage.GetComponent<RectTransform>().anchoredPosition
             : Vector2.zero;
 
-        // Move overlay to canvas root and show it
+        
         if (darkOverlay != null)
         {
             darkOverlay.transform.SetParent(canvasRoot, true);
@@ -340,7 +340,7 @@ public class AgentManager : MonoBehaviour
             Image missedAgent = missedAgents[i];
             RectTransform agentRect = missedAgent.GetComponent<RectTransform>();
 
-            // Move agent to canvas root AFTER overlay so it renders on top
+            
             missedAgent.transform.SetParent(canvasRoot, true);
             missedAgent.transform.SetAsLastSibling();
 
@@ -348,12 +348,12 @@ public class AgentManager : MonoBehaviour
             {
                 RectTransform handRect = handImage.GetComponent<RectTransform>();
 
-                // Move hand to canvas root above agent
+                
                 handImage.transform.SetParent(canvasRoot, true);
                 handImage.transform.SetAsLastSibling();
 
-                // Convert agent world position to canvas local position correctly
-                // handles both ScreenSpaceOverlay (uiCamera=null) and Camera modes
+                
+                
                 Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(
                     uiCamera,
                     agentRect.position
@@ -366,19 +366,19 @@ public class AgentManager : MonoBehaviour
                     out Vector2 localPoint
                 );
 
-                // Center on agent, offset right so finger tip points to middle
+                
                 handRect.anchoredPosition = localPoint + new Vector2(handRightOffset, 0f);
                 handImage.gameObject.SetActive(true);
             }
 
             yield return new WaitForSeconds(teachingMomentDuration);
 
-            // Restore agent to original parent and sibling index
+            
             missedAgent.transform.SetParent(originalParents[missedAgent], true);
             missedAgent.transform.SetSiblingIndex(originalSiblingIndices[missedAgent]);
         }
 
-        // Restore hand
+        
         if (handImage != null)
         {
             handImage.transform.SetParent(handOriginalParent, true);
@@ -387,7 +387,7 @@ public class AgentManager : MonoBehaviour
             handImage.gameObject.SetActive(false);
         }
 
-        // Hide overlay
+        
         if (darkOverlay != null)
             darkOverlay.gameObject.SetActive(false);
 
@@ -400,7 +400,7 @@ public class AgentManager : MonoBehaviour
         {
             Debug.Log($"[AgentManager] All rounds done. Calling FinishLevel(1)");
             if (_trigger != null)
-                _trigger.FinishLevel(1); // level 1 of 2 (level 0 is the tutorial)
+                _trigger.FinishLevel(1); 
             else
                 Debug.LogError("[AgentManager] No GameFinishTrigger in scene!");
         }

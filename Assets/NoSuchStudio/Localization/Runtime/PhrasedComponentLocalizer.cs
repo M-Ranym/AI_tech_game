@@ -1,27 +1,27 @@
-﻿using System;
+using System;
 
 using UnityEngine;
 
 namespace NoSuchStudio.Localization {
-    /// <summary>
-    /// Base class for component localizers that depend on a phrase. UI texts are a good example.
-    /// Override <see cref="UpdatePhrasedComponent"/> instead of <see cref="UpdateComponent"/> when
-    /// inheriting this class.
-    /// <see cref="phrase"/> property indicates the phrase to translate.
-    /// <see cref="_translation"/> field is the translated phrase in current language. Use it when 
-    /// updating the component.
-    /// </summary>
-    /// <remarks>
-    /// For example, a LT component that localizes a text would have LT = LT and CT = Text.
-    /// </remarks>
-    /// <typeparam name="LT">The component that inherits ComponentLocalizer.</typeparam>
-    /// <typeparam name="CT">The component that is localized by LT.</typeparam>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     public abstract class PhrasedComponentLocalizer<LT, CT> : ComponentLocalizer<LT, CT> 
         where CT : Component
         where LT : PhrasedComponentLocalizer<LT, CT> {
-        /// <summary>
-        /// The phrase for this localized component.
-        /// </summary>
+        
+        
+        
         [SerializeField] protected string _phrase;
         public string phrase {
             get {

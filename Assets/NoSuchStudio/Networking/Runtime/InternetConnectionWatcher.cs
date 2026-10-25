@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using NoSuchStudio.Common.Service;
 using NoSuchStudio.Common;
 using System;
@@ -26,7 +26,7 @@ namespace NoSuchStudio.Networking {
             }
         }
 
-        [SerializeField] string _checkURL; // "https://www.google.com"
+        [SerializeField] string _checkURL; 
 
         [Header("Periodic Checks")]
         [SerializeField] bool _checkPeriodically;
@@ -58,8 +58,8 @@ namespace NoSuchStudio.Networking {
         }
 
         [Header("Events")]
-        public InternetConnectivityEvent connectivityChangeEvent; // raised when connectivity state changes
-        public InternetConnectivityEvent connectivityCheckEvent; // raised for every completed check
+        public InternetConnectivityEvent connectivityChangeEvent; 
+        public InternetConnectivityEvent connectivityCheckEvent; 
 
         private UnityWebRequestAsyncOperation _checkOperation;
 

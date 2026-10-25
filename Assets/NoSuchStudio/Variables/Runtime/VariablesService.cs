@@ -6,12 +6,12 @@ using System.Linq;
 using UnityEngine;
 
 namespace NoSuchStudio.Variables {
-    /// <summary>
-    /// The variable service can be used to provide variables to other components. It is essentially
-    /// a producer-consumer service. Variable Sources provide variables names along with their values.
-    /// Any component can register as a listener of variables and receive callbacks when any of those
-    /// variables change value.
-    /// </summary>
+    
+    
+    
+    
+    
+    
     [ExecuteInEditMode]
     public partial class VariablesService : Service<VariablesService> {
         public delegate void VariableChangeDelegate(string variable, string value);
@@ -33,7 +33,7 @@ namespace NoSuchStudio.Variables {
 
         private HashSet<string> _changedVariables;
 
-        [NonSerialized] private Dictionary<string, IVariableSource> _variableSources; // populated from registered sources
+        [NonSerialized] private Dictionary<string, IVariableSource> _variableSources; 
         public Dictionary<string, IVariableSource> variableSources {
             get { return _variableSources; }
         }

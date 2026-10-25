@@ -1,4 +1,4 @@
-﻿using NoSuchStudio.Common;
+using NoSuchStudio.Common;
 using NoSuchStudio.Common.Service;
 using NoSuchStudio.Variables;
 using System;
@@ -8,15 +8,15 @@ using UnityEngine;
 using Newtonsoft.Json;
 
 namespace NoSuchStudio.Variables {
-    /// <summary>
-    /// Use this class to map existing variables to multiple variables under a common path prefix.
-    /// Intended for expanding list / dictionary variables.
-    /// For example a VariablesMapper could expand a json variable to multiple varialbes:
-    /// source variable => items-list: ["item1", "item2", "item3"]
-    /// mapped variables => items-list-1: "item1"
-    ///                     items-list-2: "item2"
-    ///                     items-list-3: "item3"
-    /// </summary>
+    
+    
+    
+    
+    
+    
+    
+    
+    
     [ExecuteAlways]
     public abstract class VariablesMapper : NoSuchMonoBehaviour, IVariableSource {
         
@@ -40,7 +40,7 @@ namespace NoSuchStudio.Variables {
 
         [NonSerialized] protected bool _readyToConnect;
         
-        private bool _inSourceUpdate; // true when syncing source value
+        private bool _inSourceUpdate; 
 
         private void Init() {
             _connected = _connected ?? new Dictionary<Type, bool>();
@@ -131,7 +131,7 @@ namespace NoSuchStudio.Variables {
             HashSet<string> createdVars = new HashSet<string>(newVars.Except(oldVars));
             HashSet<string> deletedVars = new HashSet<string>(oldVars.Except(newVars));
             HashSet<string> carriedVars = new HashSet<string>(newVars.Intersect(oldVars));
-            // LogWarn($"map update carried {carriedVars.ToList().ToStringExt()} created {createdVars.ToList().ToStringExt()} deleted {deletedVars.ToList().ToStringExt()}");
+            
             foreach (var v in carriedVars) {
                 if (oldMap[v] != _mappedVariables[v]) {
                     VariablesService.SetVariableValueChanged(v, this);

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,9 +14,9 @@ public class HealthBar : MonoBehaviour
 
     void Awake()
     {
-        // In the Hierarchy panel these sit UNDER (below) the fill bar --
-        // which in Unity means a later sibling index, which is what makes
-        // them render ON TOP of the fill bar in the actual game view.
+        
+        
+        
         if (sadFace != null) sadFace.transform.SetAsLastSibling();
         if (normalFace != null) normalFace.transform.SetAsLastSibling();
         if (happyFace != null) happyFace.transform.SetAsLastSibling();
@@ -24,11 +24,11 @@ public class HealthBar : MonoBehaviour
 
     void Start()
     {
-        // Set to starting accuracy (30%) instantly on game start
+        
         SnapTo(EvaluationData.accuracy / 100f);
     }
 
-    // Snap instantly — no animation
+    
     public void SnapTo(float normalized)
     {
         StopAllCoroutines();
@@ -39,7 +39,7 @@ public class HealthBar : MonoBehaviour
         UpdateFace();
     }
 
-    // Animate from old value to new value — call this from EvaluationManager
+    
     public void AnimateFromTo(float from, float to)
     {
         StopAllCoroutines();
@@ -83,8 +83,8 @@ public class HealthBar : MonoBehaviour
     {
         if (fillImage != null)
             fillImage.color = Color.Lerp(
-                new Color(0.4f, 0.8f, 1f, 1f),  // light blue (low)
-                new Color(0.1f, 0.3f, 0.8f, 1f), // dark blue (high)
+                new Color(0.4f, 0.8f, 1f, 1f),  
+                new Color(0.1f, 0.3f, 0.8f, 1f), 
                 _currentFill
             );
     }

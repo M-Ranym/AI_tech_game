@@ -1,15 +1,15 @@
-﻿using NoSuchStudio.Common;
+using NoSuchStudio.Common;
 using NoSuchStudio.Common.Service;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace NoSuchStudio.Localization {
-    /// <summary>
-    /// Base class for components that localize other components.
-    /// </summary>
-    /// <typeparam name="LT">Type of the component that localizes CT.</typeparam>
-    /// <typeparam name="CT">Type of the component that is being localized.</typeparam>
+    
+    
+    
+    
+    
     [ExecuteInEditMode]
     public abstract class ComponentLocalizer<LT, CT> : NoSuchMonoBehaviour, ILocalizationServiceComponent
         where CT : Component
@@ -33,10 +33,10 @@ namespace NoSuchStudio.Localization {
             Init();
         }
 
-        /// <summary>
-        /// Called when the component need to update due to a change in the translation service
-        /// i.e. a language change or service coming online.
-        /// </summary>
+        
+        
+        
+        
         public abstract void UpdateComponent();
 
         public virtual MonoBehaviour mono {
@@ -53,8 +53,8 @@ namespace NoSuchStudio.Localization {
         }
 
         void IServiceComponent<LocalizationService>.Connect<ST>() {
-            if (!_readyToConnect) return; // will connect later when ready
-            if (!LocalizationService.IsReady) return; // will connect when service is ready
+            if (!_readyToConnect) return; 
+            if (!LocalizationService.IsReady) return; 
             if (IsConnected<LocalizationService>()) ((ILocalizationServiceComponent)this).Disconnect<LocalizationService>();
             RegisterToLocalization();
             _connected[typeof(LocalizationService)] = true;

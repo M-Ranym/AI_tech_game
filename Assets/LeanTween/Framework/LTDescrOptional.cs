@@ -1,4 +1,4 @@
-//namespace DentedPixel{
+
 using UnityEngine;
 using System;
 using System.Collections;
@@ -17,7 +17,7 @@ public class LTDescrOptional  {
 	public int initFrameCount;
     public Color color;
 
-	public LTRect ltRect { get; set; } // maybe get rid of this eventually
+	public LTRect ltRect { get; set; } 
 
 	public Action<float> onUpdateFloat { get; set; }
 	public Action<float,float> onUpdateFloatRatio { get; set; }
@@ -34,19 +34,19 @@ public class LTDescrOptional  {
 	public Action onStart { get; set; }
 
 
-//	#if !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_0_1 && !UNITY_4_1 && !UNITY_4_2
-//	public SpriteRenderer spriteRen { get; set; }
-//	#endif
-//
-//	#if LEANTWEEN_1
-//	public Hashtable optional;
-//	#endif
-//	#if !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_0_1 && !UNITY_4_1 && !UNITY_4_2 && !UNITY_4_3 && !UNITY_4_5
-//	public RectTransform rectTransform;
-//	public UnityEngine.UI.Text uiText;
-//	public UnityEngine.UI.Image uiImage;
-//	public UnityEngine.Sprite[] sprites;
-//	#endif
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 	public void reset(){
@@ -86,4 +86,4 @@ public class LTDescrOptional  {
 	}
 }
 
-//}
+

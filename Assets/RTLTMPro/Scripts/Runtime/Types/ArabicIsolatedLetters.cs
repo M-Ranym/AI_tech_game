@@ -1,8 +1,8 @@
 namespace RTLTMPro
 {
-    /// <summary>
-    /// Arabic Contextual forms General - Unicode
-    /// </summary>
+    
+    
+    
     internal enum ArabicIsolatedLetters
     {
         Hamza = 0xFE80,
@@ -46,7 +46,7 @@ namespace RTLTMPro
         Peh = 0xFB56,
         TCheh = 0xFB7A,
         Jeh = 0xFB8A,
-        Keheh = 0xFB8E, // persian kaf
+        Keheh = 0xFB8E, 
         Gaf = 0xFB92,
 	
     }

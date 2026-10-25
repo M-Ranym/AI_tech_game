@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -40,10 +40,10 @@ public class ScratchBlock : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         if (next != null) img.sprite = next;
     }
 
-    // 🎤 NEW — lets an external input method (voice commands) place a
-    // block directly into the program panel, bypassing drag-and-drop.
-    // The block behaves identically to a dragged one afterwards (it can
-    // still be reordered or removed by dragging it).
+    
+    
+    
+    
     public void InitializeAsPlacedBlock(BlockType type, ProgramPanel panel)
     {
         blockType = type;
@@ -70,7 +70,7 @@ public class ScratchBlock : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
             dragClone.GetComponent<CanvasGroup>().blocksRaycasts = false;
 
-            // Drag sound
+            
             if (Game_Over_2_AudioManager.audioManInstance != null)
                 Game_Over_2_AudioManager.audioManInstance.Play_Sfx("BlockDrag");
         }
@@ -86,7 +86,7 @@ public class ScratchBlock : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             canvasGroup.blocksRaycasts = false;
             canvasGroup.alpha = 0.9f;
 
-            // Drag sound
+            
             if (Game_Over_2_AudioManager.audioManInstance != null)
                 Game_Over_2_AudioManager.audioManInstance.Play_Sfx("BlockDrag");
         }
@@ -139,13 +139,13 @@ public class ScratchBlock : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
                     dragClone.transform.SetParent(panel.transform, true);
                     panel.AddBlock(dragClone);
 
-                    // Dropped on panel sound
+                    
                     if (Game_Over_2_AudioManager.audioManInstance != null)
                         Game_Over_2_AudioManager.audioManInstance.Play_Sfx("BlockDropPanel");
                 }
                 else
                 {
-                    // Dropped outside sound
+                    
                     if (Game_Over_2_AudioManager.audioManInstance != null)
                         Game_Over_2_AudioManager.audioManInstance.Play_Sfx("BlockDropOut");
                     Destroy(dragClone);
@@ -166,7 +166,7 @@ public class ScratchBlock : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
                 inPanel = true;
                 panel.SnapToTargets();
 
-                // Reordered in panel sound
+                
                 if (Game_Over_2_AudioManager.audioManInstance != null)
                     Game_Over_2_AudioManager.audioManInstance.Play_Sfx("BlockDropPanel");
             }
@@ -174,7 +174,7 @@ public class ScratchBlock : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             {
                 panel?.RemoveBlock(gameObject);
 
-                // Removed from panel sound
+                
                 if (Game_Over_2_AudioManager.audioManInstance != null)
                     Game_Over_2_AudioManager.audioManInstance.Play_Sfx("BlockDropOut");
 

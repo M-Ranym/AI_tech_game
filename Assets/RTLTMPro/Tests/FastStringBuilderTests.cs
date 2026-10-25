@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using NUnit.Framework;
 
-// ReSharper disable StringLiteralTypo
+
 
 namespace RTLTMPro.Tests
 {
@@ -66,39 +66,39 @@ namespace RTLTMPro.Tests
         [Test]
         public void Remove_RemovesAllOccurrencesOfCharacter()
         {
-            // Arrange
+            
             var builder = new FastStringBuilder("cabccdececgc");
 
-            // Act
+            
             builder.RemoveAll('c');
 
-            // Assert
+            
             Assert.AreEqual("abdeeg", builder.ToString());
         }
 
         [Test]
         public void Reverse_CanReverseTheWholeString_WhenLengthIsEven()
         {
-            // Arrange
+            
             var builder = new FastStringBuilder("abcdef");
 
-            // Act
+            
             builder.Reverse(0, builder.Length);
 
-            // Assert
+            
             Assert.AreEqual("fedcba", builder.ToString());
         }
 
         [Test]
         public void Reverse_CanReverseTheWholeString_WhenLengthIsOdd()
         {
-            // Arrange
+            
             var builder = new FastStringBuilder("abcdefg");
 
-            // Act
+            
             builder.Reverse(0, builder.Length);
 
-            // Assert
+            
             Assert.AreEqual("gfedcba", builder.ToString());
         }
 
@@ -106,15 +106,15 @@ namespace RTLTMPro.Tests
         [TestCase("abcdefg", "a", "b", "bbcdefg")]
         [TestCase("abcdefg", "cde", "fcdef", "abfcdeffg")]
         [TestCase("abcdefg", "ce", "nn", "abcdefg")]
-        // Middle
+        
         [TestCase("abcdefg", "cde", "klm", "abklmfg")]
         [TestCase("abcdefg", "cde", "kl", "abklfg")]
         [TestCase("abcdefg", "cde", "klmn", "abklmnfg")]
-        // Beginning
+        
         [TestCase("abcdefg", "abc", "klm", "klmdefg")]
         [TestCase("abcdefg", "abc", "kl", "kldefg")]
         [TestCase("abcdefg", "abc", "klmn", "klmndefg")]
-        // End
+        
         [TestCase("abcdefg", "efg", "klm", "abcdklm")]
         [TestCase("abcdefg", "efg", "kl", "abcdkl")]
         [TestCase("abcdefg", "efg", "klmn", "abcdklmn")]
@@ -136,13 +136,13 @@ namespace RTLTMPro.Tests
         [TestCase(2, 4, "abfedc")]
         public void Reverse_CanReversePartOfString_WhenLengthIsEven(int start, int length, string expected)
         {
-            // Arrange
+            
             var builder = new FastStringBuilder("abcdef");
 
-            // Act
+            
             builder.Reverse(start, length);
 
-            // Assert
+            
             Assert.AreEqual(expected, builder.ToString());
         }
 
@@ -156,13 +156,13 @@ namespace RTLTMPro.Tests
         [TestCase(2, 5, "abgfedc")]
         public void Reverse_CanReversePartOfString_WhenLengthIsOdd(int start, int length, string expected)
         {
-            // Arrange
+            
             var builder = new FastStringBuilder("abcdefg");
 
-            // Act
+            
             builder.Reverse(start, length);
 
-            // Assert
+            
             Assert.AreEqual(expected, builder.ToString());
         }
 
@@ -171,14 +171,14 @@ namespace RTLTMPro.Tests
         [TestCase(2, "fisecondrst")]
         public void Insert_CanInsertAnotherFastStringBuilder(int position, string expected)
         {
-            // Arrange
+            
             var a = new FastStringBuilder("first");
             var b = new FastStringBuilder("second");
 
-            // Act
+            
             a.Insert(position, b);
 
-            // Assert
+            
             Assert.AreEqual(expected, a.ToString());
         }
 
@@ -187,14 +187,14 @@ namespace RTLTMPro.Tests
         [TestCase(2, 1, 4, "fieconrst")]
         public void Insert_CanInsertPartOfAnotherFastStringBuilder(int position, int start, int length, string expected)
         {
-            // Arrange
+            
             var a = new FastStringBuilder("first");
             var b = new FastStringBuilder("second");
 
-            // Act
+            
             a.Insert(position, b, start, length);
 
-            // Assert
+            
             Assert.AreEqual(expected, a.ToString());
         }
 

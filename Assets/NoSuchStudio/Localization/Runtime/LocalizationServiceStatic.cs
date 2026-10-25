@@ -7,9 +7,9 @@ namespace NoSuchStudio.Localization {
         public const string ComponentMenuPath = "Localization";
         public const string PlayerPrefKeyLocale = "nosuchstudio.localization.currentlocale";
 
-        /// <returns>
-        /// Return the default locale of the service, null if the service is not ready.
-        /// </returns>
+        
+        
+        
         public static string DefaultLocale {
             get {
                 return IsReady ? Instance.defaultLocale : null;
@@ -20,9 +20,9 @@ namespace NoSuchStudio.Localization {
             }
         }
 
-        /// <summary>
-        /// Return the default locale of the service, null if the service is not ready.
-        /// </summary>
+        
+        
+        
         [Obsolete("use DefaultLocale instead")]
         public static string DefaultLanguage {
             get {
@@ -33,9 +33,9 @@ namespace NoSuchStudio.Localization {
             }
         }
 
-        /// <returns>
-        /// Return the current locale of the service, null if the service is not ready.
-        /// </returns>
+        
+        
+        
         [Obsolete("use CurrentLocale instead")]
         public static Locale CurrentLanguage {
             get { return CurrentLocale; }
@@ -44,9 +44,9 @@ namespace NoSuchStudio.Localization {
             }
         }
 
-        /// <returns>
-        /// Return the current locale of the service, null if the service is not ready.
-        /// </returns>
+        
+        
+        
         public static Locale CurrentLocale {
             get { return IsReady ? Instance.currentLocale : null; }
             set {
@@ -56,34 +56,34 @@ namespace NoSuchStudio.Localization {
         }
 
 
-        /// <summary>
-        /// Add an event listener for when the current locale changes.
-        /// </summary>
-        /// <param name="action">Delegate to run when current Locale changes.</param>
+        
+        
+        
+        
         [Obsolete("use AddLocaleChangeListener instead")]
         public static void AddLanguageChangeListener(LocaleChangeDelegate action) {
             if (IsReady) Instance.DoAddLocaleChangeListener(action);
         }
 
-        /// <summary>
-        /// Remove an event listener for when the current locale changes.
-        /// </summary>
-        /// <param name="action">Delegate to run when current Locale changes.</param>
+        
+        
+        
+        
         [Obsolete("use RemoveLocaleChangeListener instead")]
         public static void RemoveLanguageChangeListener2(LocaleChangeDelegate action) {
             if (IsReady) Instance.DoRemoveLocaleChangeListener(action);
         }
 
-        /// <summary>
-        /// Add an event listener for when the current locale changes.
-        /// </summary>
+        
+        
+        
         public static void AddLocaleChangeListener(LocaleChangeDelegate action) {
             if (IsReady) Instance.DoAddLocaleChangeListener(action);
         }
 
-        /// <summary>
-        /// Remove an event listener for when the current locale changes.
-        /// </summary>
+        
+        
+        
         public static void RemoveLocaleChangeListener(LocaleChangeDelegate action) {
             if (IsReady) Instance.DoRemoveLocaleChangeListener(action);
         }
@@ -96,58 +96,58 @@ namespace NoSuchStudio.Localization {
             if (IsReady) Instance.DoRemoveTranslationChangeListener(phrase, action);
         }
 
-        // public static bool AddPhrase(string phrase)
-        // {
-        //     return Instance.DoAddPhrase(phrase);
-        // }
+        
+        
+        
+        
 
-        /// <summary>
-        /// Called by translation sources to make their data available to the localization system.
-        /// <see cref="ITranslationSource"/>
-        /// </summary>
-        /// <param name="phrase">The phrase for which there is a translation.</param>
-        /// <param name="locale">The locale for which there is a translation.</param>
-        /// <param name="source">The translation source providing the translation of phrase in the given locale</param>
+        
+        
+        
+        
+        
+        
+        
         public static void AddLocalizationSource(string phrase, string locale, ITranslationSource source) {
             if (IsReady) Instance.DoAddLocalizationSource(phrase, locale, source);
         }
 
-        /// <summary>
-        /// Called by translation sources to remove their data from the localization service when they go offline (get disabled or destroyed or reset or translations removed).
-        /// <see cref="ITranslationSource"/>
-        /// </summary>
-        /// <param name="phrase">The phrase for which there is a translation.</param>
-        /// <param name="locale">The locale for which there is a translation.</param>
-        /// <param name="source">The translation source providing the translation of phrase in the given locale</param>
+        
+        
+        
+        
+        
+        
+        
         public static void RemoveLocalizationSource(string phrase, string locale, ITranslationSource source) {
             if (IsReady) Instance.DoRemoveLocalizationSource(phrase, locale, source);
         }
 
-        /// <summary>
-        /// Called by translation sources to remove their data from the localization service when they don't have their data anymore (reset or translations removed).
-        /// <see cref="ITranslationSource"/>
-        /// </summary>
-        /// <param name="source">The translation source to be removed</param>
+        
+        
+        
+        
+        
         public static void RemoveLocalizationSource(ITranslationSource source) {
             if (IsReady) Instance.DoRemoveLocalizationSource(source);
         }
 
-        /// <summary>
-        /// Get the translation string for a given phrase.
-        /// </summary>
-        /// <param name="phrase">phrase to look up.</param>
-        /// <returns>The translation if phrase if found. An error string otherwise.</returns>
+        
+        
+        
+        
+        
         public static string GetPhraseTranslation(string phrase) {
             if (!IsReady) return "Error: no active and enabled Localization instances in scene.";
             return Instance.DoGetPhraseTranslation(phrase);
         }
 
-        /// <summary>
-        /// Get the translation string for a given phrase in a given locale.
-        /// </summary>
-        /// <param name="phrase">phrase to look up.</param>
-        /// <param name="locale">locale for the look up.</param>
-        /// <returns>The translation if phrase if found. An error string otherwise.</returns>
+        
+        
+        
+        
+        
+        
         public static string GetPhraseTranslation(string phrase, Locale locale) {
             if (!IsReady) return "Error: no active and enabled Localization instances in scene.";
             return Instance.DoGetPhraseTranslation(phrase, locale);
@@ -158,20 +158,20 @@ namespace NoSuchStudio.Localization {
             Instance.DoProcessChangedTranslations();
         }
 
-        /// <summary>
-        /// Set the <see cref="currentLocale"/> to the system locale if the system locale is recognized and has been enabled in the localization service.
-        /// </summary>
-        /// <param name="useDefaultIfFailed"></param>
-        /// <returns>true if system locale was successfully applied, false otherwise.</returns>
+        
+        
+        
+        
+        
         public bool DetectAndApplySystemLocale(bool useDefaultIfFailed = false) {
             return IsReady ? Instance.DoDetectAndApplySystemLocale(useDefaultIfFailed) : false;
         }
 
-        /// <summary>
-        /// <para>Get the currently loaded locale database. Avoid modifying the database from code.</para>
-        /// <para>To modify the database, update the backing json file and reload the database from the Editor for <see cref="LocalizationService"/></para>
-        /// </summary>
-        /// <returns>The current locale database.</returns>
+        
+        
+        
+        
+        
         public LocaleDatabase GetLocaleDatabase() {
             return IsReady ? Instance.localeDatabase : null;
         }
