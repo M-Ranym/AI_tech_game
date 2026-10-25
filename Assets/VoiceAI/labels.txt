@@ -1,6 +1,0 @@
-down
-left
-right
-silence
-unknown
-up
