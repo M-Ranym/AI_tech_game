@@ -67,6 +67,24 @@ A **CNN-based offline speech recognizer** integrated into *Robot Path Planning* 
 
 ---
 
+## 🖼️ Presentation Slides
+
+| Slide | Slide | Slide |
+|-------|-------|-------|
+| ![Title](README_docs_images/slide_01_title.png) | ![Plan](README_docs_images/slide_02_plan.png) | ![Host Company](README_docs_images/slide_04_host_company.png) |
+| ![Why AI?](README_docs_images/slide_05_why_teach_ai.png) | ![Existing Solutions](README_docs_images/slide_06_existing_solutions.png) | ![Problem Statement](README_docs_images/slide_08_problem_statement.png) |
+| ![Proposed Solution](README_docs_images/slide_10_proposed_solution.png) | ![AI Pipeline](README_docs_images/slide_11_ai_pipeline.png) | |
+| **Mini-Game 1 — Data Gathering** | **Mini-Game 2 — Data Cleaning** | **Mini-Game 3 — Model Evaluation** |
+| ![Data Gathering](README_docs_images/slide_23_gameplay_data_gathering.png) | ![Data Cleaning](README_docs_images/slide_24_gameplay_data_cleaning.png) | ![Model Evaluation](README_docs_images/slide_25_gameplay_image_recognition.png) |
+| **Mini-Game 4 — Face Detection** | **Mini-Game 5 — AI Debugging** | **Mini-Game 6 — Path Planning** |
+| ![Face Detection](README_docs_images/slide_26_gameplay_face_detection.png) | ![AI Debugging](README_docs_images/slide_27_gameplay_ai_debugging.png) | ![Path Planning](README_docs_images/slide_28_gameplay_robot_path_planning.png) |
+| **Mini-Game 7 — Decision Making** | **Game Map** | **Voice Commands** |
+| ![Decision Making](README_docs_images/slide_29_gameplay_ai_decision_making.png) | ![Game Map](README_docs_images/slide_30_game_map.png) | ![Voice](README_docs_images/slide_31_voice_command.png) |
+| **Why CNN?** | **Task & Data** | **Conclusion** |
+| ![CNN](README_docs_images/slide_33_why_cnn.png) | ![Task](README_docs_images/slide_36_task_and_data.png) | ![Conclusion](README_docs_images/slide_41_conclusion.png) |
+
+---
+
 ## 📎 Supporting Documents
 
 - **Full presentation:** `AI tech game docs/Ai  teaching game presentation.pptx` (43 slides — architecture, methodology, requirements, results)
