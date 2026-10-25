@@ -100,3 +100,8 @@ InitTestScene*.unity*
 
 # Documentation (large files, not for repo)
 ../AI tech game docs/
+
+# Personal docs - not for repo
+Assets/Presentation Assets/Ai  teaching game presentation.pptx
+Assets/presentation.pptx
+README_docs_images/
