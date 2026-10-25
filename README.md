@@ -87,7 +87,9 @@ A **CNN-based offline speech recognizer** integrated into *Robot Path Planning* 
 
 | |
 |---|
-| ![AI Demo](README_docs_images/ai_demo.gif) |
+| <video src="README_docs/ai_demo.mp4" width="640" controls></video> |
+
+> 💡 **Can't see/hear it?** [Download ai_demo.mp4](README_docs/ai_demo.mp4) (24.7s, 37MB) — includes full audio
 
 ---
 
