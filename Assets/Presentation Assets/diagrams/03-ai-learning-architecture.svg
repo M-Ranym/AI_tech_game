@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 520" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+  <rect width="1280" height="520" fill="#FFFFFF"/>
+  <text x="640" y="38" text-anchor="middle" font-size="26" font-weight="700" fill="#1E293B">Figure 2.2 — AI Learning Architecture (Table 2.1)</text>
+  <text x="640" y="64" text-anchor="middle" font-size="14" fill="#64748B">The educational AI pipeline the player progresses through, from data to autonomous decisions</text>
+
+  <defs>
+    <marker id="arrow3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#2563EB"/>
+    </marker>
+  </defs>
+
+  <!-- Stage headers -->
+  <g text-anchor="middle" font-weight="700" font-size="17">
+    <rect x="40"  y="105" width="280" height="54" rx="10" fill="#2563EB"/>
+    <text x="180" y="139" fill="#FFFFFF">1. Data Preparation</text>
+
+    <rect x="340" y="105" width="280" height="54" rx="10" fill="#0D9488"/>
+    <text x="480" y="139" fill="#FFFFFF">2. Computer Vision</text>
+
+    <rect x="640" y="105" width="280" height="54" rx="10" fill="#D97706"/>
+    <text x="780" y="139" fill="#FFFFFF">3. AI Validation</text>
+
+    <rect x="940" y="105" width="300" height="54" rx="10" fill="#7C3AED"/>
+    <text x="1090" y="139" fill="#FFFFFF">4. Intelligent Robotics</text>
+  </g>
+
+  <!-- stage arrows -->
+  <g stroke="#94A3B8" stroke-width="2.5" marker-end="url(#arrow3)">
+    <line x1="322" y1="132" x2="338" y2="132"/>
+    <line x1="622" y1="132" x2="638" y2="132"/>
+    <line x1="922" y1="132" x2="938" y2="132"/>
+  </g>
+
+  <!-- concept/mini-game boxes -->
+  <g font-size="13.5" text-anchor="middle" fill="#1E293B">
+    <rect x="55"  y="200" width="250" height="72" rx="8" fill="#EFF6FF" stroke="#2563EB" stroke-width="2"/>
+    <text x="180" y="228" font-weight="700">Data Collection</text>
+    <text x="180" y="248">Mini-game: Data Gathering</text>
+
+    <rect x="55"  y="290" width="250" height="72" rx="8" fill="#EFF6FF" stroke="#2563EB" stroke-width="2"/>
+    <text x="180" y="318" font-weight="700">Data Cleaning</text>
+    <text x="180" y="338">Mini-game: Data Cleaning</text>
+
+    <rect x="355" y="200" width="250" height="72" rx="8" fill="#F0FDFA" stroke="#0D9488" stroke-width="2"/>
+    <text x="480" y="228" font-weight="700">Image Recognition</text>
+    <text x="480" y="248">Mini-game: Image Recognition Eval.</text>
+
+    <rect x="355" y="290" width="250" height="72" rx="8" fill="#F0FDFA" stroke="#0D9488" stroke-width="2"/>
+    <text x="480" y="318" font-weight="700">Face Detection</text>
+    <text x="480" y="338">Mini-game: Face Detection</text>
+
+    <rect x="655" y="245" width="250" height="72" rx="8" fill="#FFFBEB" stroke="#D97706" stroke-width="2"/>
+    <text x="780" y="273" font-weight="700">AI System Debugging</text>
+    <text x="780" y="293">Mini-game: AI Agent Debugging</text>
+
+    <rect x="955" y="200" width="270" height="72" rx="8" fill="#F5F3FF" stroke="#7C3AED" stroke-width="2"/>
+    <text x="1090" y="228" font-weight="700">Robot Path Planning</text>
+    <text x="1090" y="248">Mini-game: Robot Path Planning</text>
+
+    <rect x="955" y="290" width="270" height="72" rx="8" fill="#F5F3FF" stroke="#7C3AED" stroke-width="2"/>
+    <text x="1090" y="318" font-weight="700">AI Decision Making</text>
+    <text x="1090" y="338">Mini-game: AI Decision Making</text>
+  </g>
+
+  <text x="640" y="410" text-anchor="middle" font-size="14" fill="#334155">Learners begin by understanding how data is collected and prepared, discover computer vision,</text>
+  <text x="640" y="432" text-anchor="middle" font-size="14" fill="#334155">explore AI system debugging, then learn how intelligent robots plan paths and make decisions.</text>
+</svg>

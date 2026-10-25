@@ -71,10 +71,12 @@ public class LevelBoard : MonoBehaviour
     {
         for (int i = 0; i < subLevelButtons.Length; i++)
         {
-            int status = GameProgressManager.Instance != null
-                ? GameProgressManager.Instance.GetLevelStatus(gameIndex, i)
-                : PlayerPrefs.GetInt($"Game_{gameIndex}_Level_{i}",
-                    i == 0 ? GameProgressManager.UNLOCKED : GameProgressManager.LOCKED);
+            int status = GameProgressManager.TestMode
+                ? GameProgressManager.UNLOCKED
+                : (GameProgressManager.Instance != null
+                    ? GameProgressManager.Instance.GetLevelStatus(gameIndex, i)
+                    : PlayerPrefs.GetInt($"Game_{gameIndex}_Level_{i}",
+                        i == 0 ? GameProgressManager.UNLOCKED : GameProgressManager.LOCKED));
 
             switch (status)
             {
@@ -115,10 +117,12 @@ public class LevelBoard : MonoBehaviour
             return;
         }
 
-        int status = GameProgressManager.Instance != null
-            ? GameProgressManager.Instance.GetLevelStatus(gameIndex, index)
-            : PlayerPrefs.GetInt($"Game_{gameIndex}_Level_{index}",
-                index == 0 ? GameProgressManager.UNLOCKED : GameProgressManager.LOCKED);
+        int status = GameProgressManager.TestMode
+            ? GameProgressManager.UNLOCKED
+            : (GameProgressManager.Instance != null
+                ? GameProgressManager.Instance.GetLevelStatus(gameIndex, index)
+                : PlayerPrefs.GetInt($"Game_{gameIndex}_Level_{index}",
+                    index == 0 ? GameProgressManager.UNLOCKED : GameProgressManager.LOCKED));
 
         if (status == GameProgressManager.LOCKED)
         {

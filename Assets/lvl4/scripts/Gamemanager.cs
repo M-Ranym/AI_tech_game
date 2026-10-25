@@ -52,6 +52,7 @@ public class AgentManager : MonoBehaviour
     private List<Image> shadowImages = new List<Image>();
 
     private bool feedbackShowing = false;
+    private bool feedbackArmed = false;
 
     private GameFinishTrigger _trigger;
 
@@ -80,6 +81,14 @@ public class AgentManager : MonoBehaviour
     {
         _trigger = FindObjectOfType<GameFinishTrigger>();
 
+        // Level 0 is the tutorial (handled by AgentTutorialManager) — this is
+        // the real round-based game, level 1.
+        if (_trigger != null && _trigger.GetStartLevel() != 1)
+        {
+            enabled = false;
+            return;
+        }
+
         if (feedbackPanel != null) feedbackPanel.SetActive(false);
         if (darkOverlay != null) darkOverlay.gameObject.SetActive(false);
         if (handImage != null) handImage.gameObject.SetActive(false);
@@ -98,8 +107,18 @@ public class AgentManager : MonoBehaviour
 
     void Update()
     {
-        if (feedbackShowing && Input.GetMouseButtonDown(0))
+        if (feedbackShowing && feedbackArmed && Input.GetMouseButtonDown(0))
             HideFeedback();
+    }
+
+    // Guards against the same click that opened the panel (via the submit
+    // button's onClick) being immediately re-read here on the same frame,
+    // which used to close the panel instantly and skip straight ahead.
+    IEnumerator ArmFeedbackNextFrame()
+    {
+        yield return null;
+        yield return new WaitForSeconds(0.15f);
+        feedbackArmed = true;
     }
 
     void SaveOriginalPositions()
@@ -191,6 +210,13 @@ public class AgentManager : MonoBehaviour
 
     public void OnSubmitButtonClicked()
     {
+        // submitButton's onClick is wired in the Inspector, which still fires
+        // even while this component is disabled (enabled=false only stops
+        // automatic Unity callbacks, not manually-wired UnityEvents) — guard
+        // explicitly so a tutorial-level click can't run real-game logic
+        // against the never-populated allAgentImages/agentTypes lists.
+        if (_trigger != null && _trigger.GetStartLevel() != 1) return;
+
         if (Game_Over_2_AudioManager.audioManInstance != null)
             Game_Over_2_AudioManager.audioManInstance.Play_Sfx("AgentSubmit");
 
@@ -220,6 +246,8 @@ public class AgentManager : MonoBehaviour
         if (feedbackText != null) feedbackText.text = GetRandomMessage(badRatio, goodPenalty, goodMistakes);
         if (feedbackPanel != null) feedbackPanel.SetActive(true);
         feedbackShowing = true;
+        feedbackArmed = false;
+        StartCoroutine(ArmFeedbackNextFrame());
     }
 
     string GetRandomMessage(float badRatio, float goodPenalty, int goodMistakes)
@@ -370,9 +398,9 @@ public class AgentManager : MonoBehaviour
     {
         if (currentRound >= totalRounds)
         {
-            Debug.Log($"[AgentManager] All rounds done. Calling FinishLevel(0)");
+            Debug.Log($"[AgentManager] All rounds done. Calling FinishLevel(1)");
             if (_trigger != null)
-                _trigger.FinishLevel(0);
+                _trigger.FinishLevel(1); // level 1 of 2 (level 0 is the tutorial)
             else
                 Debug.LogError("[AgentManager] No GameFinishTrigger in scene!");
         }

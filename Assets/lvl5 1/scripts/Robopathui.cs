@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.UI;
 using ArabicSupport;
 using UPersian.Components;
@@ -24,6 +25,8 @@ public class RoboPathUI : MonoBehaviour
     private const string MSG_LEVEL_DONE = "أحسنت! انتقل إلى المرحلة التالية";
 
     private bool isFinalWin = false;
+    private bool wrongPanelArmed = false;
+    private bool levelCompletePanelArmed = false;
 
     void Awake()
     {
@@ -56,6 +59,8 @@ public class RoboPathUI : MonoBehaviour
         levelCompletePanel.SetActive(true);
         SetText(levelCompleteMessage, MSG_LEVEL_DONE);
         isFinalWin = false;
+        levelCompletePanelArmed = false;
+        StartCoroutine(ArmPanelNextFrame(setArmed: v => levelCompletePanelArmed = v));
 
         if (Game_Over_2_AudioManager.audioManInstance != null)
             Game_Over_2_AudioManager.audioManInstance.Play_Sfx("RoboGoalReached");
@@ -67,6 +72,8 @@ public class RoboPathUI : MonoBehaviour
         levelCompletePanel.SetActive(true);
         SetText(levelCompleteMessage, MSG_WIN);
         isFinalWin = true;
+        levelCompletePanelArmed = false;
+        StartCoroutine(ArmPanelNextFrame(setArmed: v => levelCompletePanelArmed = v));
 
         if (Game_Over_2_AudioManager.audioManInstance != null)
             Game_Over_2_AudioManager.audioManInstance.Play_Sfx("RoboGoalReached");
@@ -76,9 +83,21 @@ public class RoboPathUI : MonoBehaviour
     {
         levelCompletePanel.SetActive(false);
         wrongPanel.SetActive(true);
+        wrongPanelArmed = false;
+        StartCoroutine(ArmPanelNextFrame(setArmed: v => wrongPanelArmed = v));
 
         if (Game_Over_2_AudioManager.audioManInstance != null)
             Game_Over_2_AudioManager.audioManInstance.Play_Sfx("RoboWrongAnswer");
+    }
+
+    // Guards against the click/action that triggered a panel being immediately
+    // re-read in Update() on the same frame, which used to close the panel
+    // instantly and skip straight to the next step.
+    private IEnumerator ArmPanelNextFrame(System.Action<bool> setArmed)
+    {
+        yield return null;
+        yield return new WaitForSeconds(0.15f);
+        setArmed(true);
     }
 
     public void ShowWin() => ShowAllLevelsComplete();
@@ -94,7 +113,7 @@ public class RoboPathUI : MonoBehaviour
     void Update()
     {
         // Wrong panel - click to retry
-        if (wrongPanel.activeSelf)
+        if (wrongPanel.activeSelf && wrongPanelArmed)
         {
             if (Input.GetMouseButtonDown(0) ||
                 (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began))
@@ -105,7 +124,7 @@ public class RoboPathUI : MonoBehaviour
         }
 
         // Success panel - click to continue (except final win)
-        if (levelCompletePanel.activeSelf)
+        if (levelCompletePanel.activeSelf && levelCompletePanelArmed)
         {
             if (Input.GetMouseButtonDown(0) ||
                 (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began))

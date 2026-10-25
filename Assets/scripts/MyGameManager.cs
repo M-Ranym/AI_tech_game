@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UPersian.Components;
 
 public class MyGameManager : MonoBehaviour
@@ -15,6 +16,7 @@ public class MyGameManager : MonoBehaviour
 
     private GameFinishTrigger _trigger;
     private bool _gameFinished = false;
+    private bool _successArmed = false;
     private bool _tutorialDone = false;   // set to true by TutorialManager when done
 
     void Awake()
@@ -59,12 +61,25 @@ public class MyGameManager : MonoBehaviour
         if (resultText != null)
             resultText.text = "ممتاز! لقد قمت بفرز جميع الحيوانات بشكل صحيح!";
         _gameFinished = true;
+        _successArmed = false;
+        StartCoroutine(ArmSuccessNextFrame());
+    }
+
+    // Guards against the drop/tap that triggered the panel being immediately
+    // re-read here on the same frame, which used to close the panel instantly
+    // and skip straight to the next step.
+    IEnumerator ArmSuccessNextFrame()
+    {
+        yield return null;
+        yield return new WaitForSeconds(0.15f);
+        _successArmed = true;
     }
 
     void Update()
     {
         if (!_gameFinished) return;
         if (!_tutorialDone) return;   // don't intercept taps during tutorial
+        if (!_successArmed) return;
         if (Input.GetMouseButtonDown(0) || (Input.touchCount > 0
             && Input.GetTouch(0).phase == TouchPhase.Began))
         {

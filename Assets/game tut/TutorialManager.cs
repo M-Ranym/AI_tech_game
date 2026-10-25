@@ -455,12 +455,24 @@ public class TutorialManager : MonoBehaviour
         if (feridRect != null) feridRect.gameObject.SetActive(false);
         if (darkOverlay != null) darkOverlay.SetActive(false);
 
-        // Tutorial is its own level — finish it and return to map
-        GameFinishTrigger trigger = FindObjectOfType<GameFinishTrigger>();
-        if (trigger != null)
-            trigger.FinishLevel(0);
+        // Only the 3 demo items were ever switched on (ShowOnlyTutorialObjects),
+        // and Start() also blocked raycasts/interaction on the full real set --
+        // turn everything back on now so the actual game is visible and playable.
+        foreach (var go in allBubbles)
+            if (go != null) go.SetActive(true);
+        foreach (var go in allContainers)
+            if (go != null) go.SetActive(true);
+
+        SetInteractable(allBubbles, true);
+        SetInteractable(allContainers, true);
+
+        // Hand off to the real game in this same scene/level — don't finish
+        // the level here, MyGameManager does that once the player actually
+        // finishes gathering the animals.
+        if (MyGameManager.instance != null)
+            MyGameManager.instance.OnTutorialFinished();
         else
-            Debug.LogError("[Tutorial] No GameFinishTrigger found in scene!");
+            Debug.LogError("[Tutorial] No MyGameManager instance found in scene!");
     }
 
     public bool IsTutorialActive() => !_tutorialFinished;

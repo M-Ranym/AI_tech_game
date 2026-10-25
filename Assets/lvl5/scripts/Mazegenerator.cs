@@ -9,17 +9,22 @@ using Unity.Sentis;
 
 public class MazeGenerator : MonoBehaviour
 {
-    private static readonly int[] LEVEL_SIZES = { 2, 3, 4, 5 };
-    private static readonly float[] LEVEL_ROBOT_SIZES = { 200f, 150f, 100f, 90f };
+    // Index 0 is the tutorial round — it deliberately duplicates index 1's
+    // size/goal (and, via GenerateMaze's seed below, its exact maze layout)
+    // so "the tutorial maze" and "real level 1" are the same maze. Real
+    // levels are now at indices 1-4 (was 0-3).
+    private static readonly int[] LEVEL_SIZES = { 2, 2, 3, 4, 5 };
+    private static readonly float[] LEVEL_ROBOT_SIZES = { 200f, 200f, 150f, 100f, 90f };
     private static readonly Vector2Int[] LEVEL_GOALS = {
+        new Vector2Int(1, 0),
         new Vector2Int(1, 0),
         new Vector2Int(1, 1),
         new Vector2Int(2, 1),
         new Vector2Int(3, 3),
     };
 
-    private const int TOTAL_LEVELS = 4;
-    private const int ROUNDS_PER_LEVEL = 2;
+    private const int TOTAL_LEVELS = 5;
+    private const int ROUNDS_PER_LEVEL = 1;
 
     private int currentLevel = 0;
     private int currentRound = 0;
@@ -51,7 +56,7 @@ public class MazeGenerator : MonoBehaviour
     [Header("Voice AI Model")]
     public ModelAsset modelAsset;
     public TextAsset labelsFile;
-    public float confidenceThreshold = 0.6f;
+    public float confidenceThreshold = 0f;
 
     [Header("Mic Button")]
     public Button micButton;
@@ -106,6 +111,7 @@ public class MazeGenerator : MonoBehaviour
     private bool lastRunFailed = false;
 
     private GameFinishTrigger _trigger;
+    private bool _resultPanelArmed = false;
 
     void Start()
     {
@@ -158,12 +164,29 @@ public class MazeGenerator : MonoBehaviour
     void OnDestroy()
     {
         worker?.Dispose();
+
+        if (activeDevice != null && Microphone.IsRecording(activeDevice))
+            Microphone.End(activeDevice);
     }
 
     // ─── Volume meter while recording ────────────────────────────────────────
 
     void Update()
     {
+        // Click/tap anywhere to dismiss the fail result panel (wall hit / missed
+        // goal) and retry — mirrors the manual Play/Reset button's dismiss branch.
+        if (resultPanel != null && resultPanel.activeSelf && _resultPanelArmed && lastRunFailed)
+        {
+            if (Input.GetMouseButtonDown(0) ||
+                (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began))
+            {
+                resultPanel.SetActive(false);
+                lastRunFailed = false;
+                ResetRobotToStart();
+                FindObjectOfType<UIManager>()?.SetPlayLabel();
+            }
+        }
+
         if (!isRecording || recordingClip == null) return;
 
         string device = activeDevice;
@@ -320,7 +343,7 @@ public class MazeGenerator : MonoBehaviour
 
         var shape = new TensorShape(1, 1, MelSpectrogram.NumFrames, MelSpectrogram.NMels);
 
-        using (Tensor<float> inputTensor = new Tensor<float>(shape, features))
+        using (Tensor inputTensor = new Tensor<float>(shape, features))
         {
             worker.Schedule(inputTensor);
 
@@ -339,11 +362,11 @@ public class MazeGenerator : MonoBehaviour
             float bestProb = probs[bestIdx];
             string label = bestIdx < labels.Length ? labels[bestIdx] : "unknown";
 
-            Debug.Log($"[VoiceAI] heard '{label}' ({bestProb:P0})");
+            Debug.Log($"[VoiceAI] heard '{label}'");
 
             if (bestProb < confidenceThreshold || label == "silence" || label == "unknown")
             {
-                Debug.LogWarning($"[VoiceAI] Rejected: '{label}' at {bestProb:P0} (threshold {confidenceThreshold:P0})");
+                Debug.LogWarning($"[VoiceAI] Rejected: '{label}'");
                 return;
             }
 
@@ -465,7 +488,10 @@ public class MazeGenerator : MonoBehaviour
     void UpdateLevelLabel()
     {
         if (levelLabel == null) return;
-        levelLabel.text = "المستوى " + (currentLevel + 1);
+        // currentLevel 0 is the tutorial round; real levels (1..4) keep the
+        // same kid-facing numbering (1-4) they had before the tutorial was
+        // inserted, so the label uses currentLevel directly, not +1.
+        levelLabel.text = currentLevel == 0 ? "تجربة" : ("المستوى " + currentLevel);
         var tmp = levelLabel.GetComponent<TMPro.TextMeshProUGUI>();
         if (tmp != null) tmp.alignment = TMPro.TextAlignmentOptions.Center;
     }
@@ -480,139 +506,57 @@ public class MazeGenerator : MonoBehaviour
 
     void GenerateMaze()
     {
-        if (currentRound == 0)
+        // Seed by the *real* difficulty index, not the raw level slot — this
+        // makes the tutorial (index 0) generate the exact same maze as real
+        // level 1 (index 1), and keeps every real level's maze identical to
+        // what it was before the tutorial slot was inserted at index 0.
+        UnityEngine.Random.InitState(Mathf.Max(currentLevel - 1, 0));
+
+        int w = width * 2 + 1;
+        int h = height * 2 + 1;
+
+        mazeGrid = new int[h, w];
+        for (int r = 0; r < h; r++)
+            for (int c = 0; c < w; c++)
+                mazeGrid[r, c] = 1;
+
+        var stack = new Stack<Vector2Int>();
+        var seed = new Vector2Int(1, 1);
+        mazeGrid[seed.y, seed.x] = 0;
+        stack.Push(seed);
+
+        Vector2Int[] dirs = {
+            new Vector2Int(0,  2), new Vector2Int(2,  0),
+            new Vector2Int(0, -2), new Vector2Int(-2,  0)
+        };
+
+        while (stack.Count > 0)
         {
-            UnityEngine.Random.InitState(currentLevel);
-
-            int w = width * 2 + 1;
-            int h = height * 2 + 1;
-
-            mazeGrid = new int[h, w];
-            for (int r = 0; r < h; r++)
-                for (int c = 0; c < w; c++)
-                    mazeGrid[r, c] = 1;
-
-            var stack = new Stack<Vector2Int>();
-            var seed = new Vector2Int(1, 1);
-            mazeGrid[seed.y, seed.x] = 0;
-            stack.Push(seed);
-
-            Vector2Int[] dirs = {
-                new Vector2Int(0,  2), new Vector2Int(2,  0),
-                new Vector2Int(0, -2), new Vector2Int(-2,  0)
-            };
-
-            while (stack.Count > 0)
+            var cur = stack.Peek();
+            var neighbors = new List<Vector2Int>();
+            foreach (var d in dirs)
             {
-                var cur = stack.Peek();
-                var neighbors = new List<Vector2Int>();
-                foreach (var d in dirs)
-                {
-                    var n = cur + d;
-                    if (n.x > 0 && n.x < w - 1 && n.y > 0 && n.y < h - 1 && mazeGrid[n.y, n.x] == 1)
-                        neighbors.Add(n);
-                }
-                if (neighbors.Count > 0)
-                {
-                    var next = neighbors[UnityEngine.Random.Range(0, neighbors.Count)];
-                    var wall = (cur + next) / 2;
-                    mazeGrid[next.y, next.x] = 0;
-                    mazeGrid[wall.y, wall.x] = 0;
-                    stack.Push(next);
-                }
-                else stack.Pop();
+                var n = cur + d;
+                if (n.x > 0 && n.x < w - 1 && n.y > 0 && n.y < h - 1 && mazeGrid[n.y, n.x] == 1)
+                    neighbors.Add(n);
             }
-
-            startGCol = 1;
-            startGRow = h - 2;
-
-            Vector2Int g = LEVEL_GOALS[currentLevel];
-            goalGCol = g.x * 2 + 1;
-            goalGRow = g.y * 2 + 1;
+            if (neighbors.Count > 0)
+            {
+                var next = neighbors[UnityEngine.Random.Range(0, neighbors.Count)];
+                var wall = (cur + next) / 2;
+                mazeGrid[next.y, next.x] = 0;
+                mazeGrid[wall.y, wall.x] = 0;
+                stack.Push(next);
+            }
+            else stack.Pop();
         }
-        else
-        {
-            GenerateRound2Maze();
-        }
-    }
 
-    void GenerateRound2Maze()
-    {
-        switch (currentLevel)
-        {
-            case 0: GenerateLevel0Round2(); break;
-            case 1: GenerateLevel1Round2(); break;
-            case 2: GenerateLevel2Round2(); break;
-            case 3: GenerateLevel3Round2(); break;
-        }
-    }
+        startGCol = 1;
+        startGRow = h - 2;
 
-    void GenerateLevel0Round2()
-    {
-        mazeGrid = new int[5, 5]
-        {
-            { 1,1,1,1,1 },
-            { 1,0,1,0,1 },
-            { 1,0,1,1,1 },
-            { 1,0,0,0,1 },
-            { 1,1,1,1,1 },
-        };
-        startGCol = 1; startGRow = 1;
-        goalGCol = 3; goalGRow = 3;
-    }
-
-    void GenerateLevel1Round2()
-    {
-        mazeGrid = new int[7, 7]
-        {
-            { 1,1,1,1,1,1,1 },
-            { 1,0,1,0,0,0,1 },
-            { 1,0,1,1,1,0,1 },
-            { 1,0,0,0,1,0,1 },
-            { 1,1,1,0,1,0,1 },
-            { 1,0,0,0,0,0,1 },
-            { 1,1,1,1,1,1,1 },
-        };
-        startGCol = 1; startGRow = 5;
-        goalGCol = 5; goalGRow = 1;
-    }
-
-    void GenerateLevel2Round2()
-    {
-        mazeGrid = new int[9, 9]
-        {
-            { 1,1,1,1,1,1,1,1,1 },
-            { 1,0,0,0,1,0,0,0,1 },
-            { 1,0,1,0,1,0,1,1,1 },
-            { 1,0,1,0,0,0,0,0,1 },
-            { 1,0,1,1,1,1,1,0,1 },
-            { 1,0,0,0,1,0,0,0,1 },
-            { 1,1,1,0,1,0,1,1,1 },
-            { 1,0,0,0,0,0,0,0,1 },
-            { 1,1,1,1,1,1,1,1,1 },
-        };
-        startGCol = 1; startGRow = 7;
-        goalGCol = 7; goalGRow = 1;
-    }
-
-    void GenerateLevel3Round2()
-    {
-        mazeGrid = new int[11, 11]
-        {
-            { 1,1,1,1,1,1,1,1,1,1,1 },
-            { 1,0,0,0,0,0,0,0,1,0,1 },
-            { 1,0,1,1,1,1,1,0,1,0,1 },
-            { 1,0,1,0,0,0,1,0,0,0,1 },
-            { 1,0,1,0,1,0,1,1,1,0,1 },
-            { 1,0,0,0,1,0,0,0,1,0,1 },
-            { 1,1,1,0,1,1,1,0,1,0,1 },
-            { 1,0,0,0,0,0,0,0,1,0,1 },
-            { 1,0,1,1,1,1,1,1,1,0,1 },
-            { 1,0,0,0,0,0,0,0,0,0,1 },
-            { 1,1,1,1,1,1,1,1,1,1,1 },
-        };
-        startGCol = 1; startGRow = 9;
-        goalGCol = 7; goalGRow = 1;
+        Vector2Int g = LEVEL_GOALS[currentLevel];
+        goalGCol = g.x * 2 + 1;
+        goalGRow = g.y * 2 + 1;
     }
 
     IEnumerator InitAfterLayout()
@@ -823,9 +767,20 @@ public class MazeGenerator : MonoBehaviour
         lastRunFailed = failed;
         if (resultMessageLabel) resultMessageLabel.text = msg;
         if (resultPanel) resultPanel.SetActive(true);
+        _resultPanelArmed = false;
+        StartCoroutine(ArmResultPanelNextFrame());
 
         if (Game_Over_2_AudioManager.audioManInstance != null)
             Game_Over_2_AudioManager.audioManInstance.Play_Sfx(failed ? "MazeFail" : "MazeSuccess");
+    }
+
+    // Guards against the same click that triggered the failure (e.g. a stray
+    // tap) being immediately re-read here on the same frame.
+    private IEnumerator ArmResultPanelNextFrame()
+    {
+        yield return null;
+        yield return new WaitForSeconds(0.15f);
+        _resultPanelArmed = true;
     }
 
     public bool IsResultShowing() => resultPanel != null && resultPanel.activeSelf;
@@ -833,4 +788,5 @@ public class MazeGenerator : MonoBehaviour
     public bool LastRunFailed() => lastRunFailed;
     public int GetCurrentLevel() => currentLevel;
     public int GetTotalLevels() => TOTAL_LEVELS;
+    public bool IsTutorialLevel() => currentLevel == 0;
 }

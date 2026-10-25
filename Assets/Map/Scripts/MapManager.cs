@@ -1,13 +1,16 @@
 ﻿using System.Collections;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using UPersian.Components;
 
 
 public class MapManager : MonoBehaviour
 {
     [SerializeField] private bool resetProgressOnStart = false;
+
+    [Header("Test Mode")]
+    [Tooltip("Check this to unlock every game and level so you can click anything to test it.")]
+    [SerializeField] private bool testMode = false;
+    private bool _lastTestMode;
 
     [Header("Drone")]
     public RectTransform drone;
@@ -45,33 +48,26 @@ public class MapManager : MonoBehaviour
     public float lockFadeDuration = 0.5f;
     public float colorRestoreDuration = 0.7f;
 
-    [Header("Unlock Reward Panel")]
-    public GameObject rewardPanel;
-    public RtlText rewardGameNameText;
-    public TextMeshProUGUI rewardGameIndexText;
-
-    private string[] gameNames = {
-        "جمع البيانات",
-        "تنظيف البيانات",
-        "التعرف على الصور",
-        "رصد الوجوه",
-        "تصحيح النظام",
-        "لعبة المتاهة",
-        "محاكاة اتخاذ القرار"
-    };
-
     static readonly Color LOCKED_COLOR = new Color32(56, 56, 56, 255);
     bool isHovering;
     Vector2 hoverBase;
 
     void Start()
     {
+        // A mini-game's pause menu can leave Time.timeScale at 0 -- it's a
+        // global engine setting that survives scene loads on its own. Reset
+        // it here so nothing on the map ends up silently frozen.
+        Time.timeScale = 1f;
+
         if (resetProgressOnStart)
         {
             PlayerPrefs.DeleteAll();
             PlayerPrefs.Save();
             Debug.Log("[MapManager] Progress reset");
         }
+
+        GameProgressManager.TestMode = testMode;
+        _lastTestMode = testMode;
 
         int unlockedCount = PlayerPrefs.GetInt("UnlockedLevels", 0);
         int droneOnLevel = PlayerPrefs.GetInt("DroneOnLevel", -1);
@@ -103,9 +99,6 @@ public class MapManager : MonoBehaviour
             levelBoards[justFinishedGame].Show();
         }
 
-        // Make sure reward panel starts hidden
-        if (rewardPanel != null) rewardPanel.SetActive(false);
-
         if (droneOnLevel < 0)
         {
             drone.anchoredPosition = droneGroundPosition;
@@ -119,7 +112,7 @@ public class MapManager : MonoBehaviour
             bool nextIsLocked = next < levelPositions.Length && next >= nextUnlocked;
 
             if (nextIsLocked)
-                StartCoroutine(ShowRewardThenFly(next));
+                StartCoroutine(FlyToAndUnlock(next));
             else
                 StartHover(drone.anchoredPosition);
         }
@@ -132,6 +125,12 @@ public class MapManager : MonoBehaviour
 
     void Update()
     {
+        if (testMode != _lastTestMode)
+        {
+            _lastTestMode = testMode;
+            OnTestModeToggleChanged(testMode);
+        }
+
         if (!isHovering) return;
         drone.anchoredPosition = hoverBase +
             new Vector2(0f, Mathf.Sin(Time.time * bobSpeed) * bobAmount);
@@ -141,7 +140,7 @@ public class MapManager : MonoBehaviour
     {
         for (int i = 0; i < levelIconImages.Length; i++)
         {
-            bool unlocked = i < unlockedCount;
+            bool unlocked = GameProgressManager.TestMode || i < unlockedCount;
             levelIconImages[i].color = unlocked ? Color.white : LOCKED_COLOR;
             if (lockIcons[i] != null) lockIcons[i].SetActive(!unlocked);
             levelButtons[i].interactable = unlocked;
@@ -153,6 +152,19 @@ public class MapManager : MonoBehaviour
             if (unlocked && GameProgressManager.Instance != null)
                 GameProgressManager.Instance.UnlockFirstSub(i);
         }
+    }
+
+    // Wire a UI Toggle's OnValueChanged(bool) to this to flip test mode live.
+    public void OnTestModeToggleChanged(bool isOn)
+    {
+        if (GameProgressManager.Instance != null)
+            GameProgressManager.Instance.SetTestMode(isOn);
+
+        SetupVisuals(PlayerPrefs.GetInt("UnlockedLevels", 0));
+
+        if (levelBoards != null)
+            foreach (var board in levelBoards)
+                if (board != null) board.RefreshButtonStatesPublic();
     }
 
     void OpenBoard(int levelIndex)
@@ -170,42 +182,11 @@ public class MapManager : MonoBehaviour
         levelBoards[levelIndex].Show();
     }
 
-    // ── Reward panel ──────────────────────────────────────────────────────────
-
-    IEnumerator ShowRewardThenFly(int levelIndex)
-    {
-        if (rewardPanel != null && levelIndex > 0)
-        {
-            int justFinishedIndex = levelIndex - 1;
-            if (rewardGameNameText != null && justFinishedIndex < gameNames.Length)
-                rewardGameNameText.text = gameNames[justFinishedIndex];
-            if (rewardGameIndexText != null)
-                rewardGameIndexText.text = (justFinishedIndex + 1).ToString();
-
-            rewardPanel.SetActive(true);
-
-            // Play win sound when reward panel appears
-            if (Game_Over_2_AudioManager.audioManInstance != null)
-                Game_Over_2_AudioManager.audioManInstance.Play_Sfx("LevelWin");
-
-            yield return new WaitUntil(() =>
-                Input.GetMouseButtonDown(0) ||
-                (Input.touchCount > 0 &&
-                 Input.GetTouch(0).phase == TouchPhase.Began));
-
-            rewardPanel.SetActive(false);
-            yield return new WaitForSeconds(0.2f);
-        }
-
-        yield return FlyToAndUnlock(levelIndex);
-    }
-
-
     IEnumerator FirstTimeSequence()
     {
         yield return MoveTo(new Vector2(droneGroundPosition.x, levelPositions[0].y), riseSpeed);
         yield return new WaitForSeconds(0.25f);
-        yield return ShowRewardThenFly(0);
+        yield return FlyToAndUnlock(0);
     }
 
     IEnumerator FlyToAndUnlock(int levelIndex)

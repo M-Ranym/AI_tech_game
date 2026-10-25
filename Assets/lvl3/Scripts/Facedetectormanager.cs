@@ -39,6 +39,7 @@ public class FaceDetectorManager : MonoBehaviour
     private bool _robotWasCorrect = false;
     private bool _draggingEnabled = false;
     private bool _panelDismissed = false;
+    private bool _panelArmed = false;
     private Vector2 _currentFaceCenter;
     private Canvas _canvas;
     private float _dragSoundCooldown = 0f;
@@ -51,6 +52,14 @@ public class FaceDetectorManager : MonoBehaviour
     private void Start()
     {
         _trigger = FindObjectOfType<GameFinishTrigger>();
+
+        // Level 0 is the tutorial (handled by FaceTutorialManager) — this is
+        // the real 6-round game, level 1.
+        if (_trigger != null && _trigger.GetStartLevel() != 1)
+        {
+            enabled = false;
+            return;
+        }
 
         _canvas = FindObjectOfType<Canvas>();
         _robotHome = robot.anchoredPosition;
@@ -77,7 +86,7 @@ public class FaceDetectorManager : MonoBehaviour
 
     private void Update()
     {
-        if (feedbackPanel.activeSelf && !_panelDismissed)
+        if (feedbackPanel.activeSelf && _panelArmed && !_panelDismissed)
         {
             if (Input.GetMouseButtonDown(0) || (Input.touchCount > 0
                 && Input.GetTouch(0).phase == TouchPhase.Began))
@@ -86,6 +95,16 @@ public class FaceDetectorManager : MonoBehaviour
                 feedbackPanel.SetActive(false);
             }
         }
+    }
+
+    // Guards against the same click/tap that opened the panel (via a button's
+    // onClick) being immediately re-read here on the same frame, which used
+    // to close the panel instantly and skip straight to the next step.
+    private IEnumerator ArmPanelNextFrame()
+    {
+        yield return null;
+        yield return new WaitForSeconds(0.15f);
+        _panelArmed = true;
     }
 
     private IEnumerator RunRound()
@@ -246,12 +265,16 @@ public class FaceDetectorManager : MonoBehaviour
             Game_Over_2_AudioManager.audioManInstance.Play_Sfx("SquareConfirm");
 
         _draggingEnabled = false;
-        _draggingEnabled = false;
         confirmButton.gameObject.SetActive(false);
 
         float dist = Vector2.Distance(square.anchoredPosition, _currentFaceCenter);
-        if (dist <= closeThreshold) _trainingScore += 2;
+        bool corrected = dist <= closeThreshold;
+        if (corrected) _trainingScore += 2;
 
+        // Show feedback on the correction itself -- this was missing, so the
+        // game used to skip straight to the next round with no response to
+        // the player's fix.
+        ShowPanel(corrected ? "أحسنت! لقد صححت الروبوت!" : "لم تكن قريبا بما فيه الكفاية، حاول في الجولة القادمة");
         StartCoroutine(WaitForDismissThenContinue());
     }
 
@@ -260,6 +283,8 @@ public class FaceDetectorManager : MonoBehaviour
         feedbackText.text = message;
         feedbackPanel.SetActive(true);
         _panelDismissed = false;
+        _panelArmed = false;
+        StartCoroutine(ArmPanelNextFrame());
     }
 
     private void ShowResults()
@@ -268,7 +293,7 @@ public class FaceDetectorManager : MonoBehaviour
         resultsPanel.SetActive(true);
         resultsText.text = "ممتاز";
 
-        // 1 level, finish it = go to map, drone unlocks next game
+        // level 1 of 2 (level 0 is the tutorial) — finish it = go to map
         StartCoroutine(DelayedFinish());
     }
 
@@ -276,7 +301,7 @@ public class FaceDetectorManager : MonoBehaviour
     {
         yield return new WaitForSeconds(2.5f);
         if (_trigger != null)
-            _trigger.FinishLevel(0); // level 0 of 1 total
+            _trigger.FinishLevel(1); // level 1 of 2 total
         else
             Debug.LogError("[FaceDetectorManager] No GameFinishTrigger in scene!");
     }

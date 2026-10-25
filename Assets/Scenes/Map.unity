@@ -2966,6 +2966,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resetProgressOnStart: 0
+  testMode: 1
   drone: {fileID: 1886078778}
   levelIconImages:
   - {fileID: 96685798}
@@ -3014,9 +3015,6 @@ MonoBehaviour:
   bobSpeed: 2.2
   lockFadeDuration: 0.5
   colorRestoreDuration: 0.7
-  rewardPanel: {fileID: 1000947537}
-  rewardGameNameText: {fileID: 1000947535}
-  rewardGameIndexText: {fileID: 1000947536}
 --- !u!1 &551192676
 GameObject:
   m_ObjectHideFlags: 0
@@ -5838,22 +5836,6 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: 
   active: 1
---- !u!114 &1000947536 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7541873434494652297, guid: 57f50fe4a2c339e42ac8259cb0887da3, type: 3}
-  m_PrefabInstance: {fileID: 1000947532}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!1 &1000947537 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 269401876125938647, guid: 57f50fe4a2c339e42ac8259cb0887da3, type: 3}
-  m_PrefabInstance: {fileID: 1000947532}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1089184596
 GameObject:
   m_ObjectHideFlags: 0

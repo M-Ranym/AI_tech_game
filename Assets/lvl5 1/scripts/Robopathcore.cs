@@ -30,7 +30,9 @@ public class RoboPathCore : MonoBehaviour
         public DecisionPoint[] decisionPoints;
     }
 
-    private const int TOTAL_LEVELS = 6;
+    // Level 0 is the tutorial round (see AiDecisionTutorialManager); levels
+    // 1-6 are the 6 real rounds — bumped from 6 to 7 to make room for it.
+    private const int TOTAL_LEVELS = 7;
 
     [Header("References")]
     public RoboPathMover mover;

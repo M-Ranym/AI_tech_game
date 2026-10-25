@@ -12,6 +12,16 @@ public class HealthBar : MonoBehaviour
 
     private float _currentFill = 0f;
 
+    void Awake()
+    {
+        // In the Hierarchy panel these sit UNDER (below) the fill bar --
+        // which in Unity means a later sibling index, which is what makes
+        // them render ON TOP of the fill bar in the actual game view.
+        if (sadFace != null) sadFace.transform.SetAsLastSibling();
+        if (normalFace != null) normalFace.transform.SetAsLastSibling();
+        if (happyFace != null) happyFace.transform.SetAsLastSibling();
+    }
+
     void Start()
     {
         // Set to starting accuracy (30%) instantly on game start

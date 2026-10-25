@@ -8,6 +8,17 @@ public class GameProgressManager : MonoBehaviour
     public const int UNLOCKED = 1;
     public const int FINISHED = 2;
 
+    // Test mode — when on, every game/level reports as unlocked so everything
+    // can be clicked and tested directly from the map, without touching how
+    // progress is normally tracked/saved.
+    public static bool TestMode
+    {
+        get => PlayerPrefs.GetInt("TestMode", 0) == 1;
+        set { PlayerPrefs.SetInt("TestMode", value ? 1 : 0); PlayerPrefs.Save(); }
+    }
+
+    public void SetTestMode(bool isOn) => TestMode = isOn;
+
     void Awake()
     {
         if (Instance != null) { Destroy(gameObject); return; }
@@ -17,6 +28,7 @@ public class GameProgressManager : MonoBehaviour
 
     public int GetLevelStatus(int gameIndex, int levelIndex)
     {
+        if (TestMode) return UNLOCKED;
         int def = (levelIndex == 0) ? UNLOCKED : LOCKED;
         return PlayerPrefs.GetInt($"Game_{gameIndex}_Level_{levelIndex}", def);
     }

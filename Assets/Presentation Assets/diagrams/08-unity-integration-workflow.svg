@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 900" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+  <rect width="1000" height="900" fill="#FFFFFF"/>
+  <text x="500" y="38" text-anchor="middle" font-size="24" font-weight="700" fill="#1E293B">Figure 2.15 — Integration of the Speech Model within Unity</text>
+
+  <defs>
+    <marker id="arrow8" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#475569"/>
+    </marker>
+  </defs>
+
+  <g font-size="14" fill="#1E293B">
+    <rect x="280" y="70" width="440" height="64" rx="10" fill="#EFF6FF" stroke="#2563EB" stroke-width="2.2"/>
+    <text x="500" y="95" text-anchor="middle" font-weight="700">ONNX Model loaded via Unity Sentis</text>
+    <text x="500" y="116" text-anchor="middle" font-size="12.5" fill="#334155">ModelLoader.Load — CPU backend, fully offline</text>
+
+    <rect x="280" y="160" width="440" height="64" rx="10" fill="#F0FDFA" stroke="#0D9488" stroke-width="2.2"/>
+    <text x="500" y="185" text-anchor="middle" font-weight="700">Learner Holds Microphone Button</text>
+    <text x="500" y="206" text-anchor="middle" font-size="12.5" fill="#334155">records up to 3 s, stops on release</text>
+
+    <rect x="280" y="250" width="440" height="64" rx="10" fill="#F0FDFA" stroke="#0D9488" stroke-width="2.2"/>
+    <text x="500" y="275" text-anchor="middle" font-weight="700">Center / Pad to 1-second Window</text>
+
+    <rect x="280" y="340" width="440" height="64" rx="10" fill="#FFFBEB" stroke="#D97706" stroke-width="2.2"/>
+    <text x="500" y="365" text-anchor="middle" font-weight="700">Log-Mel Spectrogram (MelSpectrogram.cs)</text>
+    <text x="500" y="386" text-anchor="middle" font-size="12.5" fill="#334155">same pipeline as PyTorch training</text>
+
+    <rect x="280" y="430" width="440" height="64" rx="10" fill="#FFFBEB" stroke="#D97706" stroke-width="2.2"/>
+    <text x="500" y="455" text-anchor="middle" font-weight="700">Sentis Inference → Softmax (C#)</text>
+    <text x="500" y="476" text-anchor="middle" font-size="12.5" fill="#334155">raw scores converted to probabilities</text>
+
+    <!-- decision -->
+    <polygon points="500,530 610,590 500,650 390,590" fill="#FFF7ED" stroke="#EA580C" stroke-width="2.2"/>
+    <text x="500" y="580" text-anchor="middle" font-weight="700">Confidence</text>
+    <text x="500" y="598" text-anchor="middle" font-weight="700">≥ 60% and</text>
+    <text x="500" y="616" text-anchor="middle" font-weight="700">not silence/unknown?</text>
+
+    <rect x="60" y="720" width="330" height="80" rx="10" fill="#FEF2F2" stroke="#DC2626" stroke-width="2.2"/>
+    <text x="225" y="750" text-anchor="middle" font-weight="700" fill="#DC2626">Prediction Discarded</text>
+    <text x="225" y="772" text-anchor="middle" font-size="12.5" fill="#7F1D1D">no action taken</text>
+
+    <rect x="610" y="720" width="360" height="90" rx="10" fill="#F0FDF4" stroke="#16A34A" stroke-width="2.2"/>
+    <text x="790" y="750" text-anchor="middle" font-weight="700" fill="#16A34A">Command Mapped to Movement Block</text>
+    <text x="790" y="772" text-anchor="middle" font-size="12.5" fill="#166534">added to robot's program panel — same as</text>
+    <text x="790" y="790" text-anchor="middle" font-size="12.5" fill="#166534">a manually dragged block</text>
+  </g>
+
+  <g stroke="#475569" stroke-width="2.2" marker-end="url(#arrow8)">
+    <line x1="500" y1="134" x2="500" y2="158"/>
+    <line x1="500" y1="224" x2="500" y2="248"/>
+    <line x1="500" y1="314" x2="500" y2="338"/>
+    <line x1="500" y1="404" x2="500" y2="428"/>
+    <line x1="500" y1="494" x2="500" y2="528"/>
+  </g>
+  <line x1="425" y1="620" x2="225" y2="718" stroke="#475569" stroke-width="2.2" marker-end="url(#arrow8)"/>
+  <text x="290" y="680" font-size="12" fill="#64748B">no</text>
+  <line x1="575" y1="620" x2="775" y2="718" stroke="#475569" stroke-width="2.2" marker-end="url(#arrow8)"/>
+  <text x="700" y="680" font-size="12" fill="#64748B">yes</text>
+</svg>

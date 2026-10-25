@@ -215,6 +215,12 @@ MonoBehaviour:
   - {fileID: 1360917903}
   - {fileID: 869864664}
   - {fileID: 1821110902}
+  - {fileID: 2063530529}
+  - {fileID: 33181970}
+  - {fileID: 1961280100}
+  - {fileID: 1196261561}
+  - {fileID: 1028195358}
+  - {fileID: 1777574520}
   tutorialDogBubble: {fileID: 869864664}
   tutorialCatBubble: {fileID: 1360917903}
   tutorialBirdBubble: {fileID: 1821110902}
@@ -997,10 +1003,10 @@ RectTransform:
   - {fileID: 1821110903}
   - {fileID: 1777574521}
   - {fileID: 8990052190236284311}
-  - {fileID: 1110091115}
   - {fileID: 1320861443}
   - {fileID: 1358926203}
   - {fileID: 1613380928}
+  - {fileID: 1110091115}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
